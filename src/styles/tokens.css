@@ -1,0 +1,13 @@
+@theme {
+  --color-brand-red: #ce142b;
+  --color-brand-dark: #ac1023;
+  --color-brand-gold: #b99a5d;
+  --color-ink: #18191b;
+  --color-muted: #555b63;
+  --color-surface: #f4f5f6;
+  --color-surface-deep: #e9ebee;
+  --color-line: #dfe2e6;
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-display: Arial, Helvetica, sans-serif;
+  --font-brand: Georgia, 'Times New Roman', serif;
+}

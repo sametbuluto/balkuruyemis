@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+@import '../styles/tokens.css';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7.5rem;
+  }
+
+  body {
+    background: white;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-brand-red);
+    color: white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-red);
+    outline-offset: 5px;
+  }
+
+  [id='main-content']:focus {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-[0.65rem] leading-5 font-bold tracking-[0.22em] uppercase;
+  }
+
+  .button-primary {
+    @apply inline-flex min-h-13 items-center justify-center gap-5 border border-brand-red bg-brand-red px-7 py-3.5 text-sm font-bold text-white transition-colors hover:border-brand-dark hover:bg-brand-dark;
+  }
+
+  .button-secondary {
+    @apply inline-flex min-h-13 items-center justify-center gap-5 border border-ink bg-white px-6 py-3.5 text-sm font-bold text-ink transition-colors hover:bg-ink hover:text-white;
+  }
+
+  .text-link {
+    @apply inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-brand-red underline decoration-brand-red/30 underline-offset-5 transition-colors hover:text-brand-dark;
+  }
+
+  .section-space {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .display-heading {
+    @apply font-display text-3xl leading-[1.12] font-bold tracking-[-0.04em] sm:text-4xl lg:text-5xl;
+  }
+}
