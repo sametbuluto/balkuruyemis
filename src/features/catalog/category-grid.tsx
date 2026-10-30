@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { StaticImage } from '@/components/ui/static-image';
 import Link from 'next/link';
 import { ArrowIcon } from '@/components/ui/arrow-icon';
 import { LineIcon, type LineIconName } from '@/components/ui/line-icon';
@@ -24,9 +24,8 @@ export function CategoryGrid({ categories }: { categories: readonly ProductCateg
           >
             <div className="relative flex aspect-[1.6] items-center justify-center overflow-hidden bg-surface">
               {category.image ? (
-                <Image
-                  src={category.image.url}
-                  alt={category.image.alt}
+                <StaticImage
+                  asset={category.image}
                   fill
                   sizes="(min-width: 1280px) 380px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   loading="lazy"

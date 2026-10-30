@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { StaticImage } from '@/components/ui/static-image';
 import { brandAssets, site } from '@/config/site';
 
 export function BrandMark({
@@ -12,11 +12,9 @@ export function BrandMark({
 
   if (logo) {
     return (
-      <Image
-        src={logo.url}
+      <StaticImage
+        asset={logo}
         alt={site.name}
-        width={logo.width}
-        height={logo.height}
         sizes={large ? '(min-width: 1024px) 360px, 240px' : '176px'}
         className={
           large

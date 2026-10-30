@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "next build --webpack",
-    "start": "next start",
+    "build": "next build --webpack && node scripts/verify-export.mjs",
+    "start": "npm run preview --",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
     "format": "prettier --write .",
@@ -18,7 +18,9 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build"
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:static",
+    "preview": "node scripts/serve-static.mjs",
+    "test:static": "node --test tests/static/*.test.mjs"
   },
   "dependencies": {
     "next": "16.4.3",

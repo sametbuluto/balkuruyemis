@@ -33,7 +33,7 @@ export default defineConfig({
   webServer: {
     command: isDevelopment
       ? `npm run dev -- --hostname 127.0.0.1 --port ${port}`
-      : `npm run start -- --hostname 127.0.0.1 --port ${port}`,
+      : `npm run preview -- --hostname 127.0.0.1 --port ${port}`,
     url: baseURL,
     reuseExistingServer: isDevelopment,
     timeout: 60_000,

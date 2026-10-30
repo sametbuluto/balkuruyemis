@@ -41,11 +41,27 @@ Bu içerikler için açık bekleme durumları ve örnek etiketleri bulunur.
 WebKit/Firefox kurulu değil; bu tarayıcı sonuçları eksik. Gerçek marka ve fotoğraf
 varlıkları hâlâ bekleniyor. [Kalite raporu](QUALITY_REPORT.md).
 
-## Faz 3 — Veri ve admin · Başlatılmadı
+## Tarihsel Faz 3 önerisi — Veri ve admin · Yeni kararla kapsam dışı
 
 PostgreSQL, migration/ORM seçimi, sunucu veri erişimi, güvenli giriş, yetki
 modeli, ürün/kategori/şube/duyuru/içerik yönetimi ve dosya yükleme.
-Ayrı ürün sahibi talimatı gerekir.
+Bu eski öneri uygulanmadı; Faz 3 statik site kararıyla ilk sürümden çıkarıldı.
+
+## Faz 3 — Static-first migration ve gerçek konumlar · Tamamlandı
+
+- [x] Onaylı yerel Faz 2.1 geri dönüş commit'i `b844bad` ve tam kaynak arşivi.
+- [x] Static export, runtime gerektirmeyen kategori seçimi ve statik HTTP önizleme.
+- [x] Tek tipli içerik kaynağı; doğrulama, türetilmiş şube sayısı, AVIF/WebP desteği.
+- [x] Dört gerçek koordinat; Google Haritalar ve API=1 yol tarifi; detay/schema ayrımı.
+- [x] Boş static params kısıtına sahte slug üretmeden çözüm; izole gerçek-şube fixture build'i.
+- [x] SEO noindex/preview koruması, gerçek PNG dosyaları ve Cloudflare Pages dokümantasyonu.
+- [x] Son statik HTTP, tarayıcı, responsive ve kalite sonuçlarını kaydet.
+
+Sonuç: 25/25 Vitest, 3/3 statik HTTP, 36/36 statik Playwright; typecheck/lint/
+Prettier/export başarılı. 20 axe taramasında otomatik ihlal 0; eksik WebKit/Firefox
+ve otomatik ölçülemeyen hero kontrastı kalite raporunda WARNING olarak kayıtlı.
+
+Bu fazda GitHub, Cloudflare hesabı, domain, push ve deployment yoktur.
 
 ## Faz 4 — İçerik ve yayına hazırlık · Başlatılmadı
 
@@ -56,6 +72,6 @@ Deployment için ayrıca onay gerekir. Gerçek içerik daha erken gelirse mevcut
 
 ## Bekleyen kararlar
 
-Gerçek şube bilgileri ve görseller; ürünler; sosyal hesaplar; arama, ek dil ve
-iletişim formu; admin rolleri ve yayınlama akışı; depolama/DB/hosting/alan adı.
+Şube ad/adres/telefon/saat eşleşmeleri ve gerçek görseller; ürünler; sosyal hesaplar;
+alan adı ve yayın onayı. Dört gerçek koordinat alındı. DB/admin ilk sürüm kapsamı değildir.
 Fiyat, sepet, ödeme ve sipariş kapsam dışıdır.

@@ -6,17 +6,22 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 ## Kapsam ve kaynaklar
 
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
-- Aktif kapsam Faz 2.1: marka kimliği revizyonudur. Sonraki fazlara kendiliğinden geçme.
-- Faz 2.1'de rotaları, veri modellerini, işlevleri ve mevcut testleri koru.
+- Aktif kapsam Faz 3: static-first migration ve işletme sahibinin sağladığı gerçek konumlar.
+- İlk sürüm statik kurumsal sitedir; DB, özel backend, CMS ve admin kapsam dışıdır.
+- Sonraki fazlara kendiliğinden geçme.
+- Kırmızı/siyah/beyaz tasarımı, rotaları, etkileşimleri ve testlerin amaçlarını koru.
 - Veritabanı, ORM, kimlik doğrulama, admin ve deployment başlatma.
 - `plan.md` fazların, yapılan işlerin, teknik kararların ve doğrulama sonuçlarının
   ana kaydıdır. Her fazda güncelle. `docs/ARCHITECTURE.md` teknik ayrıntıları,
   `docs/ROADMAP.md` kısa kapsam özetini tutar; bu belgeler birbiriyle tutarlı olmalı.
-- Gerçek olduğu bilinen bilgiler: marka adı, slogan, İzmir Buca ve dört şube.
+- Doğrulanmış bilgiler: marka adı, slogan, İzmir Buca ve dört gerçek koordinat.
+- Koordinatlar Konum 1–4 olarak tutulur; işletme adı/adres eşleşmesi doğrulanmadı.
+- Ahmet Yesevi/Gediz veya başka şube adlarıyla eşleştirme.
+- `location` kayıtlarını detay, sitemap ve LocalBusiness şeması olarak yayımlama.
 - Şube adı, adres, telefon, saat, ürün, sosyal hesap, marka tarihi, sertifika
   veya kalite iddiası uydurma. Bilinmeyenleri boş tut; arayüzde açık durum mesajı göster.
 - Demo içerik zorunlu olursa görünür biçimde “Örnek içerik” olarak işaretle.
-- Faz 2 için istenen dört örnek şube kartını doğrulanmış şube kayıtlarından ayrı tut.
+- Tarihsel örnek şubeleri gerçek konumlarla karıştırma; canlı grid örnek kaynağı kullanmaz.
   Örnek kaydı gerçek şube detayında, sitemap'te veya yapılandırılmış veride yayımlama.
 - Başlangıç kategorileri: Kuruyemiş, Kahve, Lokum, Baharat, Aktar ve Kozmetik.
 - Gerçek görseller gelene kadar mağaza, ürün veya logo fotoğrafı üretme.
@@ -30,9 +35,11 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - App Router sayfalarını ince tut; işlevleri `src/features`, ortak arayüzü
   `src/components`, içerik sözleşmelerini `src/types` altında tut.
 - Server Component varsayılandır. `use client` yalnızca etkileşim gerektiğinde eklenir.
-- Marka değerlerini `src/config/site.ts`, renk ve tipografi tokenlarını
+- İçerikleri tek kaynak olarak `src/content/` altında tut. `src/config/site.ts` ve
+  eski feature data modülleri yalnızca uyumluluk re-export noktalarıdır. Şube sayısını
+  kayıt listesinden türet; UI içine sabit sayı yazma. Renk ve tipografi tokenlarını
   `src/styles/tokens.css` üzerinden yönet.
-- İçerik kimlikleri ile URL slug'larını ayır; ileride veritabanına taşınabilecek
+- İçerik kimlikleri ile URL slug'larını ayır; Git üzerinden yönetilen tipli
   düz veri modelleri kullan. Bilinmeyen alanlarda uydurma metin yerine `null` kullan.
 - Gereksiz bağımlılık, soyutlama veya genel amaçlı framework ekleme.
 - Sürümler kararlı, birbiriyle ve mevcut Node.js ile uyumlu olmalı.
@@ -52,16 +59,24 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
   odak dönüşünü koru. Klavye odağını gizli öğelerde bırakma.
 - Hareket azaltma tercihini gözet; gerekli olmayan animasyon ekleme.
 - Smooth scroll kullanıldığında HTML'de Next.js'in `data-scroll-behavior` işaretini koru.
-- Gerçek görseller için `next/image`, doğru `sizes`, boyut/alt bilgisi ve lazy loading kullan.
+- Görsellerde `StaticImage` üzerinden unoptimized Next Image ve hazır AVIF/WebP
+  varyantları kullan. Boyut, alt, responsive sizes, lazy ve hero önceliğini koru.
+- `output: export` korunmalı; request searchParams, cookies, Server Actions,
+  runtime API, next start veya sunucu görsel optimizasyonu ekleme.
+- Şube detay şablonu `page.branch.tsx`, yalnızca `getPublishedBranches()` boş değilken
+  next.config içindeki özel uzantıyla etkinleşir. Sahte static parametre üretme.
 - Onaylanmış alan adı gelene kadar canonical/sitemap adresi uydurma.
 
 ## Doğrulama ve teslim
 
 - Önemli aşamalarda ilgili kontrolleri çalıştır; hatanın nedenini düzelt.
 - Teslimden önce `npm run check` çalıştır. Bu komut typecheck, ESLint,
-  Prettier, bileşen testleri ve production build içerir.
-- Build sonrasında `npm run test:e2e` çalıştır. Playwright production sunucusunu
-  kendisi açar; masaüstü ve mobil Chromium projeleri bulunur.
+  Prettier, bileşen testleri, static export ve statik HTTP testlerini içerir.
+- Build sonrasında `npm run test:e2e` çalıştır. Playwright `out/` sunan statik
+  HTTP sunucusunu açar; masaüstü/mobil/tablet projeleri bulunur.
+- Yeni şube export davranışı için `node scripts/test-branch-export.mjs` izole fixture
+  build'i kullanılabilir. Sentetik kaydı gerçek içeriğe veya çıktıya ekleme.
+- Next typegen/typecheck ve build aynı çalışma dizininde eşzamanlı çalıştırılmaz.
 - Mobil ve tablet görünümünü özellikle 320, 393 ve 768 px genişliklerde kontrol et.
 - Yeni davranışlar için anlamlı testler yaz. CSS sınıflarını veya basit uygulama
   ayrıntılarını tekrar eden testler ekleme.

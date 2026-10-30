@@ -1,4 +1,5 @@
-import Image from 'next/image';
+import { site } from '@/content/site';
+import { StaticImage } from '@/components/ui/static-image';
 import { BrandMark } from '@/components/brand/brand-mark';
 import { brandGallery } from '@/features/gallery/data';
 
@@ -7,9 +8,8 @@ export function HeroVisual() {
   return (
     <div className="relative isolate flex min-h-96 w-full min-w-0 flex-col overflow-hidden bg-ink text-white sm:min-h-[30rem] lg:min-h-[34rem]">
       {photo ? (
-        <Image
-          src={photo.url}
-          alt={photo.alt}
+        <StaticImage
+          asset={photo}
           fill
           sizes="(min-width: 1280px) 530px, (min-width: 1024px) 45vw, 100vw"
           preload
@@ -42,7 +42,9 @@ export function HeroVisual() {
           </p>
         </div>
         <div className="flex items-center bg-brand-red px-4 py-6 sm:px-6">
-          <span className="eyebrow max-w-20 text-white">Dört şubede</span>
+          <span className="eyebrow max-w-20 text-white">
+            {site.branchCountCapitalized} şubede
+          </span>
         </div>
       </div>
     </div>

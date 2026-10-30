@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { site, siteUrl } from '@/config/site';
+import { site, siteUrl, seo } from '@/config/site';
 import './globals.css';
+import { assertSiteContent } from '@/content/content.server';
 
 export const metadata: Metadata = {
   ...(siteUrl ? { metadataBase: siteUrl } : {}),
@@ -13,12 +14,13 @@ export const metadata: Metadata = {
     icon: [{ url: '/icon', sizes: '32x32', type: 'image/png' }],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
-  robots: { index: Boolean(siteUrl), follow: Boolean(siteUrl) },
+  robots: { index: seo.indexable, follow: seo.indexable },
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  assertSiteContent();
   return (
     <html lang="tr" data-scroll-behavior="smooth">
       <body className="flex min-h-dvh flex-col">

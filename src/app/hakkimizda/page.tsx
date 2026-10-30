@@ -1,3 +1,4 @@
+import { site } from '@/content/site';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { PageIntro } from '@/components/ui/page-intro';
@@ -10,7 +11,7 @@ import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata = createPageMetadata(
   'Hakkımızda',
-  'Lezzetin Doğal Adresi Bal Kuruyemiş ile tanışın. İzmir Buca’da dört fiziksel şube ve altı başlangıç kategorisi.',
+  `Lezzetin Doğal Adresi Bal Kuruyemiş ile tanışın. İzmir Buca’da ${site.branchCountText} fiziksel şube ve başlangıç kategorilerimiz.`,
   '/hakkimizda',
 );
 
@@ -20,7 +21,7 @@ export default function AboutPage() {
       <PageIntro
         eyebrow="Hakkımızda"
         title="Buca’dan, sizin için."
-        description="Bal Kuruyemiş, İzmir’in Buca ilçesinde dört fiziksel şubesiyle hizmet veren bir perakende markasıdır."
+        description={`Bal Kuruyemiş, İzmir’in Buca ilçesinde ${site.branchCountText} fiziksel şubesiyle hizmet veren bir perakende markasıdır.`}
       />
       <section className="section-space" aria-labelledby="about-story-heading">
         <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
@@ -40,8 +41,9 @@ export default function AboutPage() {
               araya getiriyor.
             </p>
             <p className="mt-5 text-base leading-8 text-muted">
-              İzmir Buca’daki dört fiziksel şubemizde sizinle buluşuyoruz. Mağazalarımızı
-              ve ürün kategorilerimizi keşfederek bizi daha yakından tanıyabilirsiniz.
+              İzmir Buca’daki {site.branchCountText} fiziksel şubemizde sizinle
+              buluşuyoruz. Mağazalarımızı ve ürün kategorilerimizi keşfederek bizi daha
+              yakından tanıyabilirsiniz.
             </p>
             <Link href="/subelerimiz" className="text-link mt-7">
               Şubelerimizi keşfedin <ArrowIcon />

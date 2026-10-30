@@ -1,4 +1,4 @@
-/** Kalıcı kimlikler, sıralama ve yayın durumu ileride veritabanına taşınabilir. */
+/** Git üzerinden yönetilen statik içerik sözleşmeleri. */
 export type PublicationStatus = 'draft' | 'published';
 
 export interface MediaAsset {
@@ -7,6 +7,11 @@ export interface MediaAsset {
   alt: string;
   width: number;
   height: number;
+  variants?: readonly {
+    url: string;
+    width: number;
+    format: 'image/avif' | 'image/webp';
+  }[];
 }
 
 export interface ProductCategory {
@@ -44,7 +49,33 @@ export interface Branch {
   sortOrder: number;
   status: PublicationStatus;
   contentKind: 'verified' | 'example';
+  coordinates?: Coordinates | null;
 }
+
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+/** Konum gerçek; işletme adı/adres eşleşmesi henüz doğrulanmadı. Detay URL'si yok. */
+export interface BranchLocation {
+  id: string;
+  slug: null;
+  name: string;
+  description: string;
+  coordinates: Coordinates | null;
+  address: string | null;
+  phone: string | null;
+  openingHours: string | null;
+  googleMapsUrl: string | null;
+  whatsappUrl: string | null;
+  images: readonly MediaAsset[];
+  sortOrder: number;
+  status: PublicationStatus;
+  contentKind: 'location';
+}
+
+export type BranchCardEntry = Branch | BranchLocation;
 
 export interface BrandAssets {
   logo: MediaAsset | null;

@@ -1,3 +1,4 @@
+import { site } from '@/content/site';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { ArrowIcon } from '@/components/ui/arrow-icon';
@@ -18,7 +19,8 @@ export function Hero() {
           </h1>
           <p className="mt-7 max-w-md text-base leading-8 text-muted sm:text-lg">
             Günlük molalara, paylaşılan sofralara. <br />
-            Bal Kuruyemiş ile tanışın; İzmir Buca’daki dört şubemizde buluşalım.
+            Bal Kuruyemiş ile tanışın; İzmir Buca’daki {site.branchCountText} şubemizde
+            buluşalım.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link href="/urunlerimiz" className="button-primary">
@@ -30,10 +32,10 @@ export function Hero() {
           </div>
           <div className="mt-10 flex items-center gap-4 border-t border-line pt-6">
             <span className="font-display text-4xl font-bold tracking-tight text-brand-red">
-              04
+              {site.branchCountPadded}
             </span>
             <p className="text-xs leading-5 text-muted">
-              Aynı marka, dört buluşma noktası. <br />
+              Aynı marka, {site.branchCountText} buluşma noktası. <br />
               <span className="font-semibold text-ink">Buca, İzmir</span>
             </p>
           </div>

@@ -4,11 +4,17 @@ import { Container } from '@/components/ui/container';
 import { ContentNotice } from '@/components/ui/content-notice';
 import { PageIntro } from '@/components/ui/page-intro';
 import { PhotoGallery } from '@/components/gallery/photo-gallery';
-import { getPublishedBranch } from '@/features/branches/data';
+import { getPublishedBranch, getPublishedBranches } from '@/features/branches/data';
 import { createPageMetadata } from '@/lib/metadata';
 
 interface BranchPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getPublishedBranches().map((branch) => ({ slug: branch.slug }));
 }
 
 export async function generateMetadata({ params }: BranchPageProps): Promise<Metadata> {

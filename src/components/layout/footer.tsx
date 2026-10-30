@@ -1,5 +1,6 @@
+import { site } from '@/content/site';
 import Link from 'next/link';
-import { navigation, site } from '@/config/site';
+import { navigation } from '@/config/site';
 import { Brand } from '@/components/ui/brand';
 import { Container } from '@/components/ui/container';
 import { getPublishedCategories } from '@/features/catalog/data';
@@ -15,7 +16,8 @@ export function Footer() {
               {site.slogan}.
             </p>
             <p className="mt-4 max-w-60 text-xs leading-6 text-white/55">
-              İzmir Buca’daki dört fiziksel şubemizde sizinle buluşuyoruz.
+              İzmir Buca’daki {site.branchCountText} fiziksel şubemizde sizinle
+              buluşuyoruz.
             </p>
           </div>
           <div>
@@ -51,7 +53,9 @@ export function Footer() {
           </div>
           <div>
             <p className="eyebrow text-brand-gold">Bizi ziyaret edin</p>
-            <p className="mt-6 font-display text-2xl">Buca’da dört şube.</p>
+            <p className="mt-6 font-display text-2xl">
+              Buca’da {site.branchCountText} şube.
+            </p>
             <Link
               href="/subelerimiz"
               className="mt-3 inline-flex min-h-11 items-center text-sm text-white/80 underline decoration-white/30 underline-offset-4 hover:text-white"

@@ -1,11 +1,14 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { StaticImage } from '@/components/ui/static-image';
 import { LineIcon } from '@/components/ui/line-icon';
 import { ArrowIcon } from '@/components/ui/arrow-icon';
-import type { Branch } from '@/types/content';
+import type { BranchCardEntry } from '@/types/content';
+import { getMapsLinks } from '@/content/maps';
 
-export function BranchCard({ branch }: { branch: Branch }) {
+export function BranchCard({ branch }: { branch: BranchCardEntry }) {
   const isExample = branch.contentKind === 'example';
+  const isLocation = branch.contentKind === 'location';
+  const maps = getMapsLinks(branch);
   const image = branch.images[0];
 
   return (
@@ -15,9 +18,8 @@ export function BranchCard({ branch }: { branch: Branch }) {
     >
       <div className="relative flex aspect-[1.6] items-center justify-center overflow-hidden bg-ink">
         {image && !isExample ? (
-          <Image
-            src={image.url}
-            alt={image.alt}
+          <StaticImage
+            asset={image}
             fill
             sizes="(min-width: 1280px) 280px, (min-width: 640px) 50vw, 100vw"
             loading="lazy"
@@ -37,6 +39,11 @@ export function BranchCard({ branch }: { branch: Branch }) {
         {isExample ? (
           <span className="absolute right-3 bottom-3 border border-line bg-white px-2.5 py-1 text-[0.65rem] font-semibold text-muted">
             Örnek içerik
+          </span>
+        ) : null}
+        {isLocation ? (
+          <span className="absolute right-3 bottom-3 border border-line bg-white px-2.5 py-1 text-[0.65rem] font-semibold text-muted">
+            {branch.coordinates ? 'Gerçek konum' : 'Konum bekleniyor'}
           </span>
         ) : null}
       </div>
@@ -67,18 +74,37 @@ export function BranchCard({ branch }: { branch: Branch }) {
         </dl>
         {!isExample && branch.status === 'published' ? (
           <div className="mt-auto pt-6">
-            <Link href={`/subelerimiz/${branch.slug}`} className="text-link">
-              Şubeyi keşfedin <ArrowIcon />
-            </Link>
-            <div className="flex flex-wrap gap-x-4">
-              {branch.googleMapsUrl ? (
+            {branch.contentKind === 'verified' ? (
+              <Link href={`/subelerimiz/${branch.slug}`} className="text-link">
+                Şubeyi keşfedin <ArrowIcon />
+              </Link>
+            ) : (
+              <p className="mb-3 text-xs leading-6 text-muted">
+                {branch.coordinates
+                  ? 'Şube adı ve açık adres eşleşmesi bekleniyor.'
+                  : 'Bu şubenin konumu henüz sağlanmadı. Daha sonra eklenecek.'}
+              </p>
+            )}
+            <div className="flex flex-col items-start gap-x-4">
+              {maps ? (
                 <a
-                  href={branch.googleMapsUrl}
+                  href={maps.view}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-link"
                 >
-                  Yol tarifi<span className="sr-only"> (yeni sekmede açılır)</span>
+                  Google Haritalar’da Aç
+                  <span className="sr-only"> (yeni sekmede açılır)</span>
+                </a>
+              ) : null}
+              {maps?.directions ? (
+                <a
+                  href={maps.directions}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-link"
+                >
+                  Yol Tarifi Al<span className="sr-only"> (yeni sekmede açılır)</span>
                 </a>
               ) : null}
               {branch.whatsappUrl ? (

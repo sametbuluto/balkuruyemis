@@ -1,3 +1,4 @@
+import { site } from '@/content/site';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { PageIntro } from '@/components/ui/page-intro';
@@ -9,7 +10,7 @@ import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata = createPageMetadata(
   'İletişim',
-  'Bal Kuruyemiş ile bağlantıda kalın. İzmir Buca’daki dört şubemiz, Instagram ve WhatsApp iletişim alanlarımız.',
+  `Bal Kuruyemiş ile bağlantıda kalın. İzmir Buca’daki ${site.branchCountText} şubemiz, Instagram ve WhatsApp iletişim alanlarımız.`,
   '/iletisim',
 );
 
@@ -28,15 +29,16 @@ export default function ContactPage() {
               id="visit-heading"
               eyebrow="Bizi ziyaret edin"
               title="Buca’da buluşalım."
-              description="Bal Kuruyemiş, İzmir Buca’da dört fiziksel şubesiyle hizmet veriyor."
+              description={`Bal Kuruyemiş, İzmir Buca’da ${site.branchCountText} fiziksel şubesiyle hizmet veriyor.`}
             />
           </div>
           <div className="border border-line bg-surface p-7 sm:p-10">
             <LineIcon name="location" className="text-brand-dark" />
             <h3 className="mt-6 font-display text-3xl">İzmir, Buca</h3>
             <p className="mt-4 max-w-lg text-sm leading-8 text-muted">
-              Şube bazında adres, telefon, çalışma saatleri ve Google Maps yol tarifi
-              bilgileri, gerçek bilgiler tamamlandığında paylaşılacak.
+              Paylaşılan gerçek konumları şubelerimiz sayfasında haritada açabilir veya
+              yol tarifi alabilirsiniz. Şube adı, açık adres, telefon ve çalışma saatleri
+              henüz tamamlanmadı.
             </p>
             <Link href="/subelerimiz" className="button-primary mt-7">
               Şubelerimiz <ArrowIcon />

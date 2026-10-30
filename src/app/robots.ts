@@ -1,8 +1,10 @@
 import type { MetadataRoute } from 'next';
-import { siteUrl } from '@/config/site';
+import { siteUrl, seo } from '@/config/site';
+
+export const dynamic = 'force-static';
 
 export default function robots(): MetadataRoute.Robots {
-  if (!siteUrl) return { rules: { userAgent: '*', disallow: '/' } };
+  if (!siteUrl || !seo.indexable) return { rules: { userAgent: '*', disallow: '/' } };
 
   return {
     rules: { userAgent: '*', allow: '/' },

@@ -1,3 +1,102 @@
+# Mimari — Faz 3 / Static-first
+
+30 Ekim 2026 mimari kararı: ilk sürüm Next.js Static Export; DB, özel backend,
+CMS, admin ve auth yok. Önceki öneriler aşağıda tarihsel kayıt olarak korunur.
+[Master plan](../plan.md), [kurallar](../AGENTS.md), [içerik rehberi](CONTENT_GUIDE.md).
+
+## Build ve çalışma sınırı
+
+`next.config.ts`: `output: 'export'`, `images.unoptimized: true`. Next Server
+Components yalnızca build sırasında çalışır. `npm run build` HTML/RSC, JS/CSS ve
+PNG üretir; `verify-export.mjs` dosyaları doğrular ve `out/_headers` yazar.
+Üretimde yalnızca `out/` yayımlanır. Node/Next runtime veya API sunucusu yoktur.
+Yerel `serve-static.mjs` sadece statik QA aracıdır; Pages'e gönderilmez.
+
+Beş ana route korunur. `robots`, `sitemap`, `icon` ve PNG GET yolları force-static
+olarak export edilir. Tanımsız yollar root `404.html` ile HTTP 404 verir.
+Pages'in extensionless HTML ve düz `.txt` RSC sunumu yerel QA sunucusunda taklit
+edilir; Pages'e canlı dağıtım henüz yapılmadığı için hosting doğrulaması bekler.
+
+## Şube detayları: boş parametre kısıtlaması
+
+Next 16.4.3 deneme build'i, boş `generateStaticParams()` listesini `output: export`
+ile reddetti. Sahte slug veya örnek şube üretilmedi. Mevcut şablon
+`src/app/subelerimiz/[slug]/page.branch.tsx` olarak korunur. `next.config.ts`
+`getPublishedBranches()` boş değilse `branch.tsx` özel page uzantısını etkinleştirir.
+Şablondaki `generateStaticParams()` yalnızca `verified/published` kayıtları üretir;
+`dynamicParams=false` ile diğerleri 404 kalır. İlk gerçek, kimliği doğrulanmış kayıt
+eklendiğinde dosya taşıma veya config düzenleme gerekmez; yeniden build yeterlidir.
+
+Bu davranış `test-branch-export.mjs` ile izole kopyada sentetik doğrulanmış şube
+üzerinden test edilir. Sentetik kayıt gerçek `src/content` veya `out/` içine girmez.
+Next sürüm yükseltmelerinde bu test yeniden çalıştırılmalıdır.
+
+## Tek içerik kaynağı ve yayın güvenliği
+
+Akış: **content → build-time doğrulama/sorgular → sayfa/özellik → statik dosyalar**.
+`src/content/`: kategori, ürün, şube, galeri, marka, sosyal kaynaklar; seçim, harita,
+sayım ve SEO yardımcıları. `src/types/content.ts` ortak sözleşmeleri tanımlar.
+Eski feature data ve config modülleri veri kopyası değil re-export'tur.
+
+- `location`: gerçek koordinat veya henüz konumu beklenen fiziksel kayıt; `slug:null`.
+- `verified`: işletme adı/adres kimliği ürün sahibince doğrulanmış şube; gerçek slug.
+- `example`: test/tasarım örneği; canlı liste, detay, sitemap veya schema kaynağı olmaz.
+- `getVisibleBranches()` published ve örnek olmayan kayıtları sayar/gösterir.
+- `getPublishedBranches()` yalnızca verified/published detay kayıtlarını döndürür.
+- Şube sayıları, ana sayfa/metin/ikon çıktıları kaynak listesinden türetilir.
+- Dört gerçek Konum 1–4 vardır; hepsinin adı/adres eşleşmesi beklenir. Detay sayısı 0.
+- Harita linkleri kaynak URL ve koordinattan, yol tarifi Google URLs API formatıyla üretilir.
+  Koordinat yoksa link yok; işletme adı/semt eşleştirme veya reverse-geocoding yapılmaz.
+
+Root server layout `assertSiteContent()` çağırır: kimlik/slug/sıra, kategori referansı,
+örnek yayın durumu, koordinat aralığı/Maps eşleşmesi, URL host/protokolü, yerel medya
+alt/boyut/varyant ve gerçek dosya varlığı denetlenir. Hatalı içerik build'i durdurur.
+Bu denetim build-time dosya okumasıdır; tarayıcıya fs veya backend taşınmaz.
+
+## Katalog ve statik metadata
+
+Request-time `searchParams` kaldırıldı. Katalog Server Page genel metadata ve
+Suspense fallback üretir; `CatalogBrowser` `useSearchParams()` ile aynı tipli
+kategorileri/ürünleri filtreler. Next Link query, geri/ileri ve yenileme korunur.
+Bilinmeyen/yinelenen query açık durum mesajıyla tüm kategorilere döner.
+Sadece yayımlanmış kategorilerin yayımlanmış ürünleri görünür.
+
+Query başına ayrı HTML üretilmez. Statik HTTP ve hydration sonrası DOM genel katalog
+başlığını/açıklamasını taşır; canonical katalog ana route'udur. Kategori seçimi sayfa
+başlığı yerine görünür H2, içerik ve aria-current ile belirtilir. Request-time
+kategori title ve yanlış-query noindex üretimi kaldırılmıştır; query URL'leri genel
+katalog canonical'ına işaret eder. Varsayılan build tüm sayfalarda noindex kalır.
+Client kod document.head değiştirmez; Next metadata sahipliği korunur. JS kapalıyken
+genel kategori listesi görünür, filtreleme çalışmaz. Bu statik sınır testlerde belgelenir.
+
+## Görseller ve SEO
+
+`StaticImage`: unoptimized Next Image fallback + isteğe bağlı AVIF/WebP `<source>`
+srcset/sizes. Boyut ve alt korunur; kartlar fill + sabit oran, galeri lazy,
+hero eager/high priority veya tek görselde preload kullanır. Sunucu optimizasyonu yok;
+görseller build öncesi optimize edilir. Gerçek fotoğraf yokken sahte fotoğraf eklenmez.
+Dosya düzeni ve bütçeler CONTENT_GUIDE içindedir. Gerçek medya performansı henüz ölçülemez.
+
+`resolveSeo`: geçerli HTTPS origin, açık indeksleme bayrağı ve production dalı gerekir.
+Geçici hosting/IP adresleri dışlanır. Varsayılan noindex + robots disallow + boş sitemap.
+Pages geçici hostlarında ek X-Robots-Tag korunur. Domain ayarı canonical üretir;
+indeksleme ayrıca açılır. Hiçbir location/example şube detay veya LocalBusiness üretmez.
+Üç PNG gerçek export dosyasıdır; boyut/MIME testleri vardır. Pages extensionless PNG
+MIME için `_headers` kuralları üretilir. Yeni ortam değerleri yeniden build gerektirir.
+
+## Kalite ve korunmuş sınırlar
+
+Strict TypeScript, paket sürümleri/lockfile ve kırmızı/siyah/beyaz tasarım korunur.
+Vitest, statik HTTP testleri ve gerçek `out/` üzerindeki Playwright kullanılır.
+Next typegen ile aynı dizindeki build sırayla çalıştırılmalıdır.
+Eksik WebKit/Firefox ve gerçek cihaz kontrolleri başarı sayılmaz.
+Yayın, GitHub push veya Cloudflare bağlantısı yapılmaz. İlk yerel geri dönüş commit'i
+`b844bad`; sonraki değişiklikler çalışma ağacındadır.
+
+---
+
+## Tarihsel mimari — Faz 2.1 (aşağıdaki kararlar güncel değildir)
+
 # Mimari — Faz 2.1
 
 Ana faz ve uygulama kaydı: [plan.md](../plan.md). Geliştirme kuralları: [AGENTS.md](../AGENTS.md).

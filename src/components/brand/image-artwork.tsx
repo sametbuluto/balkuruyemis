@@ -71,7 +71,7 @@ export function BrandShareArtwork() {
           color: palette.white,
         }}
       >
-        Buca’da dört fiziksel şube.
+        Buca’da {site.branchCountText} fiziksel şube.
       </div>
     </div>
   );

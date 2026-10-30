@@ -1,13 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-const categories = [
-  { name: 'Kuruyemiş', slug: 'kuruyemis' },
-  { name: 'Kahve', slug: 'kahve' },
-  { name: 'Lokum', slug: 'lokum' },
-  { name: 'Baharat', slug: 'baharat' },
-  { name: 'Aktar', slug: 'aktar' },
-  { name: 'Kozmetik', slug: 'kozmetik' },
-];
+import { site } from '../../src/content/site';
+import { getPublishedCategories } from '../../src/content/queries';
+
+const categories = getPublishedCategories();
 const routes = ['/', '/hakkimizda', '/urunlerimiz', '/subelerimiz', '/iletisim'];
 
 test('ana sayfa Türkçe açılır, bölümlerini sunar ve klavyeyle içeriğe geçilir', async ({
@@ -25,12 +21,12 @@ test('ana sayfa Türkçe açılır, bölümlerini sunar ve klavyeyle içeriğe g
   );
   await expect(
     page.getByRole('region', { name: 'Her buluşmaya bir eşlikçi.' }).getByRole('article'),
-  ).toHaveCount(6);
+  ).toHaveCount(categories.length);
   await expect(
     page
-      .getByRole('region', { name: 'Buca’da dört buluşma noktası.' })
+      .getByRole('region', { name: `Buca’da ${site.branchCountText} buluşma noktası.` })
       .getByRole('article'),
-  ).toHaveCount(4);
+  ).toHaveCount(site.branchCount);
   await expect(
     page.getByRole('heading', { name: 'Bal Kuruyemiş’ten anlar.' }),
   ).toBeVisible();
@@ -63,7 +59,7 @@ test('altı kategori URL ile seçilir, geri dönüş ve bilinmeyen kategori güv
     await expect(
       page.getByRole('heading', { name: `${category.name} ürünleri hazırlanıyor.` }),
     ).toBeVisible();
-    await expect(page).toHaveTitle(`${category.name} — Ürünlerimiz | Bal Kuruyemiş`);
+    await expect(page).toHaveTitle('Ürünlerimiz | Bal Kuruyemiş');
   }
   await page.goBack();
   await expect(page).toHaveURL('/urunlerimiz?kategori=aktar');
@@ -97,11 +93,11 @@ test('temel rotalar açılır; örnekler gerçek şube detayına dönüşmez', a
   }
   await page.goto('/subelerimiz');
   const cards = page.getByRole('article');
-  await expect(cards).toHaveCount(4);
+  await expect(cards).toHaveCount(site.branchCount);
   for (const card of await cards.all()) {
-    await expect(card.getByText('Örnek içerik')).toBeVisible();
+    await expect(card.getByText('Örnek içerik')).toHaveCount(0);
     await expect(card.getByText('Adres bilgisi hazırlanıyor.')).toBeVisible();
-    await expect(card.getByRole('link')).toHaveCount(0);
+    await expect(card.getByRole('link')).toHaveCount(2);
   }
   for (const slug of ['olmayan-sube', 'ornek-sube-1']) {
     expect((await request.get(`/subelerimiz/${slug}`)).status()).toBe(404);
@@ -112,14 +108,12 @@ test('temel rotalar açılır; örnekler gerçek şube detayına dönüşmez', a
   ).toBeVisible();
 });
 
-test('doğrulanmamış sosyal, harita ve telefon yönlendirmesi yayımlanmaz', async ({
-  page,
-}) => {
+test('doğrulanmamış sosyal ve telefon yönlendirmesi yayımlanmaz', async ({ page }) => {
   for (const path of routes) {
     await page.goto(path);
     await expect(
       page.locator(
-        'a[href="#"], a[href=""], a[href^="tel:"], a[href*="wa.me"], a[href*="instagram.com"], a[href*="maps.google"]',
+        'a[href="#"], a[href=""], a[href^="tel:"], a[href*="wa.me"], a[href*="instagram.com"]',
       ),
     ).toHaveCount(0);
   }
@@ -227,7 +221,9 @@ test('sticky menü, responsive düzen ve içerik görünürlüğü korunur', asy
       expect(clippedText, `${path} — ${viewport.width}px kırpılmış metin`).toEqual([]);
     }
     await page.goto('/');
-    const caption = page.getByText('Dört şubede', { exact: true });
+    const caption = page.getByText(`${site.branchCountCapitalized} şubede`, {
+      exact: true,
+    });
     await caption.scrollIntoViewIfNeeded();
     await expect(caption).toBeInViewport({ ratio: 1 });
     const headerBox = await page.getByRole('banner').boundingBox();

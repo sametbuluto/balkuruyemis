@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { StaticImage } from '@/components/ui/static-image';
 import { MediaPlaceholder } from '@/components/ui/media-placeholder';
 import type { MediaAsset } from '@/types/content';
 
@@ -37,11 +37,8 @@ export function PhotoGallery({
     >
       {images.map((image) => (
         <figure key={image.id} className="overflow-hidden border border-line bg-surface">
-          <Image
-            src={image.url}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
+          <StaticImage
+            asset={image}
             sizes="(min-width: 1280px) 370px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             loading="lazy"
             className="aspect-[4/3] h-auto w-full object-cover"

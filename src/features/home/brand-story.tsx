@@ -1,3 +1,4 @@
+import { site } from '@/content/site';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { ArrowIcon } from '@/components/ui/arrow-icon';
@@ -21,8 +22,9 @@ export function BrandStory() {
         </div>
         <div className="border-t border-white/30 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12">
           <p className="text-lg leading-9 text-white">
-            Bal Kuruyemiş, İzmir Buca’daki dört fiziksel şubesiyle sizinle buluşuyor.
-            Günün küçük molalarında, bir fincan kahvenin yanında, paylaşılan sofralarda.
+            Bal Kuruyemiş, İzmir Buca’daki {site.branchCountText} fiziksel şubesiyle
+            sizinle buluşuyor. Günün küçük molalarında, bir fincan kahvenin yanında,
+            paylaşılan sofralarda.
           </p>
           <p className="mt-5 text-xl font-semibold text-white">Lezzetin Doğal Adresi.</p>
           <Link

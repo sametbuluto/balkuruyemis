@@ -1,7 +1,7 @@
+import { site } from '@/content/site';
 import { Container } from '@/components/ui/container';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { BranchGrid } from '@/features/branches/branch-grid';
-import { getPublishedBranches } from '@/features/branches/data';
 
 export function BranchesSection() {
   return (
@@ -10,16 +10,14 @@ export function BranchesSection() {
         <SectionHeading
           id="branches-heading"
           eyebrow="Şubelerimiz"
-          title="Buca’da dört buluşma noktası."
-          description="İzmir Buca’daki dört şubemizde sizinle buluşalım."
+          title={`Buca’da ${site.branchCountText} buluşma noktası.`}
+          description={`İzmir Buca’daki ${site.branchCountText} şubemizde sizinle buluşalım.`}
           action={{ href: '/subelerimiz', label: 'Şubelerimizi keşfedin' }}
         />
-        {getPublishedBranches().length === 0 ? (
-          <p className="mb-6 max-w-2xl text-sm leading-7 text-muted">
-            Aşağıdaki kartlar örnek içeriktir. Gerçek şube adları, adresler ve ziyaret
-            bilgileri eklendiğinde güncellenecek.
-          </p>
-        ) : null}
+        <p className="mb-6 max-w-2xl text-sm leading-7 text-muted">
+          İşletme sahibinin paylaştığı {site.knownLocationCountText} gerçek konum aşağıda
+          yer alıyor. Şube isimleri ve açık adres eşleştirmeleri henüz tamamlanmadı.
+        </p>
         <BranchGrid />
       </Container>
     </section>

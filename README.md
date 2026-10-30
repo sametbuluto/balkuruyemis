@@ -1,185 +1,169 @@
 # Bal Kuruyemiş
 
-İzmir Buca'da dört fiziksel şubesi bulunan Bal Kuruyemiş için Türkçe kurumsal
-web sitesi. Slogan: **Lezzetin Doğal Adresi**.
+**Faz 3: statik kurumsal site.** Next.js Static Export ile `out/` üretilir;
+ziyaretçiye yalnızca HTML, CSS, JavaScript ve medya dosyaları servis edilir.
+Node.js build/geliştirme/test için gerekir; yayında Next sunucusu gerekmez.
+İlk sürümde veritabanı, özel backend, CMS, admin, üyelik ve e-ticaret yoktur.
+Kırmızı/siyah/beyaz kimlik ve beş temel sayfa korunur.
 
-Aktif kapsam **Faz 2.1: marka kimliği revizyonu**. Faz 1 altyapısı korunur.
-E-ticaret, veritabanı, kimlik doğrulama, admin ve deployment bu fazın dışında.
+[Master plan](plan.md) · [Mimari](docs/ARCHITECTURE.md) ·
+[İçerik rehberi](docs/CONTENT_GUIDE.md) · [Kalite raporu](docs/QUALITY_REPORT.md)
 
-Faz geçmişi, teknik kararlar, yapılan ve sıradaki işler için ana referans: **[plan.md](plan.md)**.
+## Yerelde açma
 
-## Gereksinimler
-
-- Node.js `^20.19.0`, `^22.13.0` veya `>=24.0.0`; yeni kurulumda Node.js 24 LTS tercih edin.
-- npm ve Git.
-- Mevcut ortam Node.js 20.20.0 ile doğrulanır. Paketlerin minimum Node gereksinimleri
-  nedeniyle her 20.x veya 22.x sürümü desteklenmez.
-
-## Yerel başlatma
-
-Terminali proje kökünde açın:
+Node.js aralığı: `^20.19.0 || ^22.13.0 || >=24.0.0`; mevcut ortam 20.20.0.
+Paketler mevcutsa tekrar kurmanız gerekmez. Temiz kurulumda `npm ci` kullanın.
 
 ```bash
-npm ci
 npm run dev
 ```
 
-Tarayıcıda [http://localhost:3000](http://localhost:3000) adresini açın.
-Paketler zaten kuruluysa yalnızca `npm run dev` yeterlidir. Durdurmak için `Ctrl+C`.
-
-Production sürümünü yerelde denemek için:
+Geliştirme: http://localhost:3000. Gerçek statik çıktıyı denemek için:
 
 ```bash
 npm run build
-npm run start
+npm run preview
 ```
 
-Varsayılan yerel kullanımda ortam değişkeni veya harici servis gerekmez.
+Statik önizleme: http://127.0.0.1:4173. `npm start` aynı statik önizlemeyi açar;
+`next start` kullanılmaz. Sunucuyu `Ctrl+C` ile durdurun.
+Yerel önizleme betiği yalnızca QA aracıdır; hosting ortamına dağıtılacak backend değildir.
+Varsayılan kullanımda ortam değişkeni veya harici servis gerekmez.
 
-## Teknolojiler
+## Komutlar ve doğrulama
 
-Next.js 16 App Router, React 19, TypeScript 6 strict, Tailwind CSS 4,
-ESLint 9, Prettier 3, Vitest 4, React Testing Library ve Playwright.
-Tam sürümler `package.json` ve `package-lock.json` içinde sabittir.
-
-ESLint 10 yerine 9, Next.js lint eklentilerinin peer dependency uyumu için
-seçilmiştir. TypeScript 6.0, typescript-eslint'in `<6.1` sınırı nedeniyle;
-Vitest 4 ve jsdom 27 ise mevcut Node.js 20 ortamıyla uyum için kullanılır.
-
-Geliştirme ve production build, Next.js'in desteklediği `--webpack` seçeneğini
-kullanır. Bu geliştirme ortamında Turbopack'in PostCSS yardımcı sürecinin yerel port
-açması engellendiği için Webpack ile doğrulama yapılmıştır.
-
-## Komutlar
-
-| Komut                  | İşlev                                                           |
-| ---------------------- | --------------------------------------------------------------- |
-| `npm run dev`          | Yerel geliştirme sunucusu                                       |
-| `npm run typecheck`    | Next.js rota tiplerini üretir, TypeScript kontrolünü çalıştırır |
-| `npm run lint`         | ESLint; uyarılar da başarısızlık sayılır                        |
-| `npm run format`       | Kaynakları Prettier ile biçimlendirir                           |
-| `npm run format:check` | Biçim kontrolü                                                  |
-| `npm test`             | Vitest + React Testing Library testleri                         |
-| `npm run test:watch`   | Bileşen testlerini izleme modunda açar                          |
-| `npm run build`        | Production build                                                |
-| `npm run check`        | Typecheck → lint → biçim → bileşen testleri → build             |
-| `npm run test:e2e`     | Production build üzerinde masaüstü ve mobil Playwright testleri |
-| `npm run test:e2e:ui`  | Playwright test arayüzü                                         |
-
-Playwright'ın ilk kurulumunda:
+| Komut                                 | İşlev                                                                     |
+| ------------------------------------- | ------------------------------------------------------------------------- |
+| `npm run typecheck`                   | Next rota tipleri + strict TypeScript                                     |
+| `npm run lint`                        | ESLint, sıfır uyarı                                                       |
+| `npm run format:check`                | Prettier                                                                  |
+| `npm test`                            | Vitest + React Testing Library                                            |
+| `npm run build`                       | Webpack static export + dosya/PNG/SEO doğrulaması + Cloudflare `_headers` |
+| `npm run test:static`                 | `out/` üzerinde statik HTTP, 404, RSC, MIME ve geçici alan adı başlıkları |
+| `npm run check`                       | Yukarıdaki kontroller, sırayla; build dahil                               |
+| `npm run test:e2e`                    | `out/` üzerinden masaüstü, mobil ve tablet Playwright                     |
+| `node scripts/test-branch-export.mjs` | Geçici kopyada doğrulanmış şube detay export testi                        |
 
 ```bash
-npx playwright install chromium
 npm run check
-npm run test:e2e
-```
-
-Kurulu Google Chrome'u kullanmak için alternatif:
-
-```bash
 PLAYWRIGHT_CHANNEL=chrome npm run test:e2e
 ```
 
-E2E öncesi `npm run build` tamamlanmış olmalı. Testler `127.0.0.1:3100`
-üzerindeki production sunucusunu kendisi açar ve kapatır; bu port boş olmalıdır.
-Test çıktıları `test-results/`, HTML raporu `playwright-report/` altındadır.
-Masaüstü, mobil ve tablet projeleri bulunur. 1280, 768, 393 ve 320 px ekran
-görüntüleri ilgili test sonuç klasörüne kaydedilir.
-Bu dizinler Git'e eklenmez.
+Playwright 3100 portunda statik sunucuyu açıp kapatır; port boş olmalıdır.
+Chrome kurulu değilse `npx playwright install chromium` ardından channelsız komut kullanılabilir.
+Testler 320, 393, 768 ve 1280 px kontrol eder. Çıktılar `test-results/`,
+HTML raporu `playwright-report/` altındadır; Git'e eklenmez.
+Build/typecheck aynı dizinde eşzamanlı çalıştırılmamalıdır.
 
-## Klasörler
-
-```text
-src/
-  app/                 # App Router sayfaları, layout, metadata, 404
-    hakkimizda/
-    urunlerimiz/
-    subelerimiz/
-      [slug]/          # Doğrulanmış şube kaydı yoksa 404
-    iletisim/
-  components/
-    layout/            # Header ve Footer
-    ui/                # Container, bölüm başlığı, çizgi ikonlar ve ortak arayüz
-    brand/             # Değiştirilebilir logo, tipografik ikon/paylaşım görseli
-    gallery/           # Next Image ile fotoğraf galerisi
-    contact/           # Yapılandırılabilir iletişim kanalları
-  config/              # Marka ve navigasyon bilgileri
-  features/
-    home/              # Ana sayfanın bölümleri
-    catalog/           # Altı kategori, URL tabanlı seçim ve ürün arayüzü
-    branches/          # Gerçek ve örnek şube ayrımı, şube kartları
-    gallery/           # Gerçek fotoğraflar için boş veri kaynağı
-  lib/                 # Ortak metadata üretimi
-  styles/              # Merkezi tasarım tokenları
-  types/               # Veritabanından bağımsız içerik modelleri
-tests/
-  setup.ts             # React Testing Library kurulumu
-  e2e/                 # Playwright senaryoları
-docs/
-  ARCHITECTURE.md
-  ROADMAP.md
-```
-
-## İçerik, logo ve görsel yönetimi
-
-- Ana sayfa: sticky navbar, hero, kategoriler, marka tanıtımı, dört örnek şube,
-  galeri, Instagram/WhatsApp alanları ve footer.
-- Başlangıç kategorileri: Kuruyemiş, Kahve, Lokum, Baharat, Aktar ve Kozmetik.
-  Ürünler henüz boş; fiyat, sepet ve ödeme alanı bulunmaz.
-- Kategori bağlantıları `/urunlerimiz?kategori=kahve` biçimindedir.
-  Bilinmeyen kategori tüm kategorilere güvenli dönüş mesajı gösterir.
-- Örnek şubeler `exampleBranches` içinde tutulur; kartlarda **Örnek içerik** görünür.
-  Gerçek kayıt kaynağı `branches` boştur. Örnek slug'ları 404 döner.
-- Bilinmeyen şube adresi, telefon, saat, harita ve WhatsApp alanları `null` kalır.
-- Sosyal bağlantılar `src/config/site.ts` içinde `contactChannels` üzerinden yönetilir.
-  URL yokken link veya çalışmayan düğme gösterilmez.
-- Renk ve fontlar `src/styles/tokens.css` içindedir. Harici font indirmesi yoktur.
-
-Orijinal logo geldiğinde dosyayı `public/brand/` içine ekleyin; `src/config/site.ts`
-içindeki `brandAssets.logo` alanına `MediaAsset` kaydını (URL, boyutlar, alt metin)
-girin. Koyu zemin için `inverseLogo` kullanılabilir. Header, hero, Hakkımızda ve
-Footer aynı `BrandMark` bileşenini kullanır. Logo yokken tipografik marka korunur.
-
-Gerçek fotoğraflar geldiğinde yerel yolları, boyutları ve alternatif metinleriyle
-`src/features/gallery/data.ts` içine ekleyin. Kategori/ürün/şube görselleri de
-`MediaAsset` kullanır. `next/image`, responsive `sizes` ve lazy loading hazırdır.
-Uzak depolama sağlayıcısı seçilmediği için harici görsel hostları açılmamıştır.
-Gerçek fotoğraf yokken açıklamalı bekleme alanları gösterilir; stok veya üretilmiş
-mağaza/ürün fotoğrafı bulunmaz.
-
-## İkon ve kaydırma düzeltmeleri
-
-- `/apple-touch-icon.png`: 180×180 PNG; root metadata bu gerçek adrese bağlıdır.
-- `/icon`: 32×32 tipografik favicon; metadata bağlantısı açıkça tanımlıdır.
-- `/opengraph-image`: 1200×630 tipografik paylaşım PNG'si.
-- İkonlar geçici tipografik varlıklardır; orijinal marka varlıklarıyla güncellenebilir.
-- HTML'deki `data-scroll-behavior="smooth"`, Next.js'e smooth scroll tercihini bildirir.
-  Sticky navbar için scroll padding ve reduced-motion desteği korunur.
-
-Varsayılan E2E testleri production sunucusundadır. Geliştirme modundaki kaydırma
-uyarısını ayrıca kontrol etmek için:
+İsteğe bağlı dev QA (statik QA yerine geçmez):
 
 ```bash
 PLAYWRIGHT_SERVER=dev PLAYWRIGHT_CHANNEL=chrome npm run test:e2e -- --project=desktop-chromium --grep 'sticky menü'
 ```
 
-Dev QA 3000 portundaki mevcut geliştirme sunucusunu yeniden kullanır; yoksa
-kendisi açıp kapatır. Kullanıcının çalışan sunucusunu durdurmaz. Varsayılan
-production testleri 3100 portunu kullanır. Hiçbiri deployment yapmaz.
+Dev QA mevcut 3000 sunucusunu koruyarak yeniden kullanır.
 
-## Alan adı ve SEO
+## Mimari ve içerik
 
-`.env.example` içindeki `NEXT_PUBLIC_SITE_URL`, yalnızca gerçek alan adı ürün sahibi
-tarafından doğrulandıktan sonra ayarlanmalıdır. Değişken boşken:
+```text
+src/
+  app/                  # Beş sayfa, layout, 404, build-time SEO/PNG
+    subelerimiz/[slug]/page.branch.tsx  # Yalnızca doğrulanmış şube varsa etkin
+  content/              # Tek Git içerik kaynağı, sorgular ve doğrulama
+  types/                # İçerik sözleşmeleri
+  components/           # Layout, marka, iletişim, galeri ve StaticImage
+  features/             # Ana sayfa, katalog ve şube arayüzleri
+  config/               # Geriye uyumlu re-export
+  styles/               # Kırmızı/siyah/beyaz tasarım tokenları
+scripts/                # Statik QA sunucusu, çıktı doğrulama, izole export testi
+tests/e2e/              # Gerçek statik HTTP üzerinde tarayıcı testleri
+tests/static/           # Statik dosya sunumu testleri
+public/images/          # Gerçek ve önceden optimize edilmiş yerel medya
+docs/                   # Mimari, içerik, yol haritası ve kalite
+out/                    # Üretilir; Git'e alınmaz
+```
 
-- Sayfaların Türkçe başlıkları, açıklamaları, Open Graph ve Twitter metinleri bulunur.
-- Canonical adres üretilmez; sitemap boş olur.
-- Robots meta ve `robots.txt` indekslemeyi kapatır.
+Next.js 16.4.3, React 19.3.1, TypeScript 6.0.3 strict, Tailwind 4.3.3,
+ESLint 9, Prettier 3, Vitest 4, RTL ve Playwright korunur; yeni paket eklenmedi.
+Ortamın Turbopack yardımcı süreç kısıtlaması nedeniyle resmî `--webpack` seçeneği kullanılır.
 
-Alan adı ayarlandığında canonical adresleri ve temel sayfalardan oluşan sitemap
-üretilir, indekslemeye izin verilir. Paylaşım PNG adresi de yalnızca gerçek alan
-adı yapılandırıldığında metadata içine eklenir. Örnek şubeler sitemap’e girmez. Bu bir dağıtım işlemi değildir; canlıya çıkış
-ayrı onay gerektirir. Önizleme ortamlarında bu değişkeni boş bırakın.
+Dört gerçek koordinat işletme sahibince sağlandı. `src/content/branches.ts` içindeki
+Konum 1–4 henüz şube adı/adres eşleşmesi bekler. Hepsinde haritada açma ve
+Google Maps URLs API `api=1&destination=...` yol tarifi vardır; adres/telefon/saat
+uydurulmaz. Bu kayıtlar detay sayfası, sitemap veya LocalBusiness verisi üretmez.
+Tarihsel örnek kayıtlar ayrı tutulur ve canlı gride girmez.
+
+Kategoriler `src/content/categories.ts`, ürünler `products.ts`, sosyal kanallar
+`social.ts`, marka/logo `site.ts`, galeri `gallery.ts` üzerinden yönetilir.
+Değişiklik sonrası yeniden build gerekir; şube sayısı görünür kayıtlardan türetilir.
+Yeni kayıt ve fotoğraf ekleme adımları [CONTENT_GUIDE](docs/CONTENT_GUIDE.md) içindedir.
+
+Kategori query seçimi JavaScript ile çalışır; doğrudan URL, yenileme, geri/ileri ve
+hatalı seçim mesajı korunur. Statik HTML tüm query'lerde genel katalog metadata'sını
+taşır; sekme ve paylaşım metinleri de genel katalog kimliğinde kalır.
+JavaScript kapalıyken genel kategori listesi kalır. Canonical katalog ana URL'sidir.
+
+## SEO ve ortam değişkenleri
+
+`.env.example` referanstır; gerçek değerleri Git'e eklemeyin. Hiçbiri sır değildir.
+
+| Değişken                     | Davranış                                                         |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`       | Ürün sahibince doğrulanmış HTTPS origin; varsayılan boş          |
+| `NEXT_PUBLIC_ALLOW_INDEXING` | Varsayılan `false`; domain tek başına indeksleme açmaz           |
+| `SITE_PRODUCTION_BRANCH`     | Varsayılan `main`; Pages production dalıyla eşleşmeli            |
+| `CF_PAGES_BRANCH`            | Cloudflare tarafından verilir; diğer dallarda indeksleme kapanır |
+
+URL, kimlik bilgisi/yol/query/hash içeremez. Geçici `.pages.dev`, `.vercel.app`,
+`.netlify.app`, localhost/IP/test adresleri canonical kaynağı olarak kabul edilmez.
+Alan adı yokken canonical ve absolute paylaşım görseli yok; noindex, robots disallow
+ve boş sitemap vardır. Domain ayarı canonical/OG URL üretir; indeksleme için ayrıca
+`NEXT_PUBLIC_ALLOW_INDEXING=true` ve production dalı gerekir. Her değişiklikte build alınır.
+
+`out/_headers` tüm `.pages.dev` ve dal önizlemelerinde ayrıca `X-Robots-Tag: noindex`
+verir; domain yanlışlıkla ayarlansa bile geçici host korunur. Alan adı olmayan build
+bütün hostlarda noindex başlığı taşır. Bu başlıkların gerçekten uygulanması hosta bağlıdır.
+PNG'ler build'de oluşur: `/icon`, `/apple-touch-icon.png`, `/opengraph-image`.
+Bilinmeyen yollar kök `404.html` ile gerçek HTTP 404 olmalıdır; SPA fallback açılmamalıdır.
+
+## Cloudflare Pages hazırlığı — yayın yapılmadı
+
+| Ayar              | Beklenen değer                                             |
+| ----------------- | ---------------------------------------------------------- |
+| Framework preset  | Next.js (Static HTML Export)                               |
+| Build command     | `npm run build` (çıktı doğrulayıcısını da çalıştırır)      |
+| Build output      | `out`                                                      |
+| Root directory    | Proje kökü                                                 |
+| Production branch | `main` veya `SITE_PRODUCTION_BRANCH` ile aynı seçilmiş dal |
+| Node              | Desteklenen aralıkta sabit sürüm; mevcut doğrulama 20.20.0 |
+
+GitHub bağlantısı ileride ayrıca yetkilendirilirse: repository'ye push → Pages
+build → `out/` statik yayın. PR/dal build'lerinde noindex korunur. Bu fazda GitHub
+repository, push, Cloudflare bağlantısı, domain veya deployment yapılmadı.
+
+Yayın öncesi: gerçek içerikleri doğrula; yerel check/E2E'yi çalıştır; domain/indeksleme
+için ürün sahibi onayı al; Pages'te 404, PNG MIME ve `_headers` davranışını yeniden
+test et; fiziksel cihaz ve eksik tarayıcıları tamamla. Faz 4 kendiliğinden başlatılmaz.
+
+Kaynaklar: [Next.js Static Export](https://nextjs.org/docs/app/guides/static-exports),
+[Cloudflare statik Next.js](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/),
+[Pages yönlendirme/404](https://developers.cloudflare.com/pages/configuration/serving-pages/),
+[Pages başlıkları](https://developers.cloudflare.com/pages/configuration/headers/),
+[Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started).
+
+## Faz 3 doğrulama sonucu
+
+TypeScript, ESLint, Prettier, **25/25 Vitest**, static export, **3/3 statik HTTP** ve
+**36/36 Playwright** geçti. `out/`: 68 dosya, yaklaşık 1.9 MiB. 320/393/768/1280 px
+incelendi; 20 axe taramasında otomatik ihlal 0. WebKit/Firefox binary dosyaları yok;
+bu tarayıcılar ve fiziksel cihaz testi eksik. Hero kontrastındaki otomatik ölçüm
+sınırı [kalite raporunda](docs/QUALITY_REPORT.md) kayıtlıdır.
+
+## Tarihsel doğrulamalar — önceki fazların davranışıdır
+
+Aşağıdaki kayıtların eski sunucu/SEO/Git kararları Faz 3 tarafından güncellenmiştir.
+Faz 2.1 geri dönüş commit'i ürün sahibi onayıyla yerelde `b844bad` olarak oluşturuldu.
+Faz 3 değişiklikleri henüz commit edilmedi; harici remote yoktur.
 
 ## Faz 1 doğrulama kaydı
 
@@ -228,11 +212,3 @@ kategori/şube kartları ve galeri yeni kimliğe taşındı. İşlevler ve rotal
 - Yeni paket, özellik, DB/admin/auth veya deployment yok; mevcut testler silinmedi.
 
 Ayrıntılar: [kalite raporu](docs/QUALITY_REPORT.md) ve [master plan §11](plan.md).
-
-## Sonraki çalışmalar
-
-Önce [master planı](plan.md) okuyun. Kısa kapsam özeti için [ROADMAP](docs/ROADMAP.md), teknik kararlar
-için [ARCHITECTURE](docs/ARCHITECTURE.md), geliştirme kuralları için
-[AGENTS](AGENTS.md) dosyalarını okuyun. Sonraki fazlara ürün sahibinin talimatıyla geçilir.
-
-Yerel Git deposu kullanılacak; harici GitHub deposu ve canlı dağıtım Faz 2.1'in parçası değildir.

@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **30 Ekim 2026**. Aktif faz: **Faz 2.1 — Marka kimliği revizyonu tamamlandı, değerlendirmeye hazır**.
+Son güncelleme: **30 Ekim 2026**. Aktif faz: **Faz 3 — Static-first migration ve dört gerçek konum tamamlandı, değerlendirmeye hazır**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -24,7 +24,7 @@ doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte
 | Faz 1 — Proje altyapısı  | Tamamlandı   | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
 | Faz 2 — Kurumsal tasarım | Tamamlandı   | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
 | Faz 2.1 — Marka kimliği  | Tamamlandı   | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
-| Faz 3 — Veri ve yönetim  | Başlatılmadı | PostgreSQL, kimlik doğrulama ve admin; ayrıca talimat gerekir                       |
+| Faz 3 — Statik mimari    | Tamamlandı   | Static export, Git içerik kaynakları ve dört gerçek konum                           |
 | Faz 4 — Yayına hazırlık  | Başlatılmadı | Gerçek içerik ve yayın kontrolleri; ayrıca canlıya çıkış onayı gerekir              |
 
 ## 3. Faz 1 — Neler yapıldı?
@@ -186,11 +186,12 @@ commit veya remote işlemi yapılmadı; başlangıç kaynakları ayrıca yerel s
 
 ## 7. Sonraki fazlarda ne yapılacak?
 
-### Faz 3 — Veri ve admin (henüz yetkilendirilmedi)
+### Tarihsel Faz 3 önerisi — Veri ve admin (uygulanmadı, yeni kararla kapsam dışı)
 
 PostgreSQL, ORM/migration seçimi, sunucu veri erişimi, güvenli giriş, rol/yetki
 modeli, ürün/kategori/şube/duyuru/içerik yönetimi ve dosya yükleme.
 Güvenlik, yayınlama ve yedekleme senaryoları gereksinimler netleşince tasarlanır.
+Bu eski öneri Faz 3 static-first kararıyla ilk sürümden çıkarılmıştır; güncel kapsam §12’dir.
 
 ### Faz 4 — Gerçek içerik ve yayına hazırlık (henüz yetkilendirilmedi)
 
@@ -395,3 +396,152 @@ noindex ve boş sitemap bilinçli olarak korunur.
 - Önceki örnek kayıt ayrımı, tüm iç bağlantılar, SEO, robots/sitemap, 404, ikon ve
   menü kontrolleri yeniden geçti. Git `main`, ilk commit öncesi; commit/remote/deploy yok.
 - Faz 3 başlatılmadı. Sıradaki adım ürün sahibinin görsel değerlendirmesi.
+
+## 12. Faz 3 — Static-first mimari geçişi ve gerçek konumlar
+
+### 12.1. Güncel ürün kararı ve güvenli başlangıç
+
+İlk sürüm statik kurumsal site olarak devam eder. PostgreSQL, özel backend, CMS,
+admin ve auth ilk sürümden çıkarıldı. Önceki fazların teknik kayıtları tarihseldir;
+Faz 3 için esas karar bu bölümdür. Tasarım revizyonu veya yeni satış özelliği yoktur.
+
+- Git ön kontrolde ilk commit öncesindeydi. Tam 77 dosyalık Faz 2.1 arşivi:
+  `/private/tmp/balproject-phase3-baseline-oomg3jvg/phase21-complete.tar.gz`;
+  SHA-256 manifesti aynı klasörde `manifest.json`.
+- Ürün sahibinden açık onay alındı: “Evet, yerel başlangıç commit’ini oluştur ve
+  geçişe devam et.” Yerel baseline commit: **`b844bad`**.
+- Mevcut kaynaklar korundu; reset/force/remote/push/deployment yapılmadı.
+  Faz 3 değişiklikleri henüz commit edilmedi.
+- Sonradan paylaşılan ek Faz 3 dosyası ilk talep ile birebir karşılaştırıldı;
+  aynı static-first kapsamı doğrulandı. Son konum mesajı bu göreve dahil edildi.
+
+### 12.2. Uyumsuzluklar ve çözümler
+
+| Önceki davranış                  | Faz 3 çözümü                                               |
+| -------------------------------- | ---------------------------------------------------------- |
+| Runtime `searchParams` katalog   | Suspense + client URL seçimi; statik genel HTML            |
+| `next start` production sunucusu | `out/` statik HTTP sunumu, `preview` komutu                |
+| Varsayılan image optimizer       | Unoptimized Next Image + hazır AVIF/WebP srcset            |
+| Boş dinamik şube parametreleri   | Özel `page.branch.tsx` uzantısı; gerçek kayıt varsa etkin  |
+| Dağınık yerel veri               | Tek `src/content` kaynakları ve eski modüllerden re-export |
+| Hardcoded şube sayıları          | Görünür gerçek kayıtlardan türetilen sayım ve metinler     |
+| Domain tek başına indeksleme     | Domain + açık bayrak + production dalı; Pages host noindex |
+
+Next 16.4.3 export denemesi boş `generateStaticParams()` listesini reddetti.
+Örnek/sahte slug üretilmedi. Gerçek verified/published şube eklenince config özel
+uzantıyı açar; mevcut template build-time detay üretir. Bu yol geçici kopyaya
+sentetik doğrulanmış kayıt eklenerek test edildi; gerçek kaynak/out etkilenmedi.
+Başarılı izole kanıt: `/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-branch-export-cK71BE`.
+
+### 12.3. İçerik ve gerçek koordinatlar
+
+`src/content/`: categories, products, branches, site, social, gallery; merkezi
+queries/maps/seo/validation. Root layout yalnızca build sırasında dosya ve veri
+kurallarını denetler. Özel backend veya API yoktur. `BranchLocation` ile konum
+kimliği, `Branch` ile doğrulanmış şube kimliği ayrılır; example kaynağı ayrı kalır.
+
+| Kayıt   | Latitude  | Longitude | Yayın durumu                                     |
+| ------- | --------- | --------- | ------------------------------------------------ |
+| Konum 1 | 38.362633 | 27.148943 | Gerçek konum; isim/adres eşleşmesi bekliyor      |
+| Konum 2 | 38.374462 | 27.183882 | Gerçek konum; isim/adres eşleşmesi bekliyor      |
+| Konum 3 | 38.367344 | 27.148973 | Gerçek konum; isim/adres eşleşmesi bekliyor      |
+| Konum 4 | 38.378593 | 27.163704 | Sonradan sağlandı; isim/adres eşleşmesi bekliyor |
+
+Başlangıçta dördüncü konum bekleniyordu; çalışma sırasında ürün sahibi paylaştı ve
+kayıt Konum 4 olarak güncellendi. Dördünde de sahibin maps.google.com URL'si ve
+Google Maps URLs API `api=1&destination=lat,lon` yol tarifi vardır. Adres/telefon/saat
+null; semt/şube adı eşleştirmesi yapılmadı. Şu an detay üretilecek verified kayıt **0**.
+Konumlar LocalBusiness, sitemap veya indekslenebilir şube detayına dönüşmez.
+Koordinat yokken link üretilmeme davranışı fixture testinde korunur.
+
+### 12.4. Statik çıktı, SEO ve medya
+
+`npm run build`: Next Webpack export → `out/` → dosya doğrulama ve `_headers`.
+Beş ana sayfa, root 404, robots/sitemap, RSC/JS/CSS ve üç PNG fiziksel dosyadır.
+Next runtime gerekmez. Yerel QA sunucusu extensionless HTML, düz TXT, 404 ve Pages
+başlık kurallarını test eder; uygulama backend'i değildir ve out/ içine girmez.
+
+Domain boşken noindex, robots disallow, boş sitemap ve canonical yok. HTTPS origin
+verilince canonical/OG URL üretilebilir; indekslemek için ayrıca
+`NEXT_PUBLIC_ALLOW_INDEXING=true` gerekir. CF_PAGES_BRANCH production dalından
+farklıysa indeksleme kapanır; geçici Pages hostlarında ayrıca X-Robots-Tag vardır.
+
+Statik HTTP ve hydration sonrası DOM bütün kategori query'lerinde genel katalog
+metadata'sını korur. Kategori H2/içerik/aria-current ile gösterilir. Request-time
+kategori title ve yanlış-query noindex yerine canonical ana katalog URL'si kullanılır.
+Client document.head müdahalesi yoktur. İlk istemci metadata denemesinde hydration
+ve sayfa geçişi uyuşmazlıkları E2E ile bulundu; statik metadata sahipliği Next'te
+bırakıldı. JS kapalıyken kategori listesi kalır; query filtrelemesi yoktur.
+Bu bilinçli statik sınırdır ve test beklentileri bu mimariye göre güncellenmiştir.
+
+StaticImage hazır AVIF/WebP varyantlarını destekler; gerçek fotoğraflar henüz yoktur.
+Alt/boyut/lazy/hero önceliği korunur; sunucu optimizasyonu veya görsel servisi yok.
+İçerik/dosya düzeni ve performans hedefleri `docs/CONTENT_GUIDE.md` içindedir.
+
+### 12.5. Kontrol ve sorun kaydı
+
+- İlk export kontrolü boş static params yüzünden başarısız oldu; özel uzantı çözümü geçti.
+- Unoptimized Next Image tek fallback için sizes attribute üretmiyordu; eski galeri
+  testi responsive varyant fixture'ı ile gerçek source sizes/lazy/alt davranışını denetler.
+- İlk genişletilmiş E2E: 30/33; doğrudan query metadata hydration sorunu bulundu.
+  Sonraki metadata eşitleme denemesi sayfa geçişinde 33/36 verdi. Client head
+  müdahalesi kaldırılıp statik genel metadata kararı uygulandı; testlerin filtre,
+  title ve navigasyon amaçları yeni render modeline göre korunarak güncellendi.
+- İlk izole fixture build'inde tests/setup kopyası eksikti; tam test setup kopyalanınca geçti.
+- Eşzamanlı typegen/build bir kez üretilmiş tipleri değiştirerek kontrolü bozdu;
+  kontroller sıraya alındı. Aynı çalışma dizininde paralel çalıştırılmaz.
+- `.next/types` altında `routes.d 2.ts` vb. kopyalar yeniden görüldü; kaynağa dokunmadan
+  `/private/tmp/bal-generated-copies-vem547gq` içine taşınarak korundu.
+  Strict TS ayarları gevşetilmedi; tekrar typecheck geçti.
+
+Son kontrol sonuçları, 30 Ekim 2026:
+
+| Kontrol                                      | Sonuç                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------ |
+| `npm run check`                              | Başarılı; sırayla typecheck, lint, Prettier, Vitest, build, statik HTTP  |
+| Vitest                                       | **25/25**, 9 dosya                                                       |
+| Production build                             | Static export başarılı; `out/` içinde **68 dosya**, yaklaşık **1.9 MiB** |
+| `npm run test:static`                        | **3/3**; HTML/query/RSC, HTTP 404, MIME/HEAD, geçici Pages host noindex  |
+| `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` | **36/36**; gerçek statik HTTP üzerinde                                   |
+| Responsive                                   | **320, 393, 768, 1280 px**; DOM sınır ve ekran görüntüsü kontrolü        |
+| İzole şube export build'i                    | Başarılı; gerçek kaynak/out değişmeden detay sayfası ve beş şube sayımı  |
+| Axe 4.14.0                                   | Statik HTTP, 5 sayfa × 4 genişlik; **20 taramada otomatik ihlal 0**      |
+| JavaScript kapalı katalog                    | Genel title + 6 kategori + tüm kategoriler seçimi doğrulandı             |
+
+PASS: dört konumun özgün Maps URL’leri ve API=1 yol tarifleri doğru koordinatları
+kullanıyor. Geçici adlar korunuyor; detay URL veya LocalBusiness yok. Bütün iç linkler,
+metadata, robots/sitemap, 404, ikonlar, kategori ve navbar akışları statik çıktıda geçti.
+Lockfile, strict TS ve renk/CSS dosyaları baseline ile aynı. E2E testleri sayımları
+merkezi kaynaktan alır; doğrulanmış koordinat beklentileri ayrıca açık olarak testlidir.
+
+WARNING: Firefox 1555 ve WebKit 2370 başlatma denemelerinde executable bulunamadı;
+Safari/Firefox ve fiziksel cihazlar test edilmedi. Axe hero geometrik zeminde üç öğe
+için kontrastı otomatik ölçemedi; aynı alanın ekran görüntüsü ve değişmeyen Faz 2.1
+palet hesapları incelendi. Otomatik tarama tam WCAG sertifikası değildir. Gerçek
+fotoğraf performansı ve Cloudflare üzerindeki canlı hosting davranışı henüz test edilmedi.
+Katalog query metadata’sı genel tutulur; filtreleme JavaScript gerektirir.
+
+FAIL: son doğrulamada başarısız test veya açık kritik hata yok.
+
+Kanıt: `playwright-report/index.html`, `test-results/.last-run.json`,
+`test-results/axe-phase3.json`, `.next/static-export-report.json` ve responsive PNG’ler.
+Axe yedeği `/private/tmp/bal-phase3-axe.json`. QA çıktıları Git’e alınmaz.
+Güncel kısa rapor: [QUALITY_REPORT](docs/QUALITY_REPORT.md).
+
+### 12.6. Dosyalar ve teslim sınırları
+
+- `next.config.ts`, package scripts ve Playwright config: statik export/preview.
+- `src/content/*`, içerik tipleri, eski data/config re-export'ları: tek kaynak ve doğrulama.
+- Katalog page/browser/content/selection: statik URL filtreleme.
+- Şube page, card/grid, `page.branch.tsx`: gerçek konumlar ve güvenli detay ayrımı.
+- `StaticImage`, galeri/logo/ürün/kategori/hero: statik medya entegrasyonu.
+- Home/footer/about/contact/PNG: merkezi şube sayımı; tasarım tokenları değişmedi.
+- Robots/sitemap/root metadata: statik SEO ve noindex korumaları.
+- `scripts/*`, tests/static, ek E2E ve içerik testleri: gerçek out/ doğrulaması.
+- AGENTS, README, ARCHITECTURE, ROADMAP, CONTENT_GUIDE, QUALITY_REPORT ve bu plan.
+
+Yeni bağımlılık yok; lockfile ve TypeScript strict ayarları korunur. out/ Git'e girmez.
+Yerel önizleme: `npm run build` ardından `npm run preview`, http://127.0.0.1:4173.
+Cloudflare Pages için npm run build / out ayarları README'de hazır; bağlantı yapılmadı.
+Sonraki adım Faz 4 için gerçek kimlik/görsel/iletişim/domain kabulü ve yayın öncesi
+kontrollerdir; bu faz veya deployment kendiliğinden başlatılmaz.

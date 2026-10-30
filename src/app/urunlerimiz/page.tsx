@@ -1,46 +1,21 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Container } from '@/components/ui/container';
-import { ContentNotice } from '@/components/ui/content-notice';
+import { Suspense } from 'react';
 import { PageIntro } from '@/components/ui/page-intro';
-import { LineIcon } from '@/components/ui/line-icon';
-import { CategoryGrid } from '@/features/catalog/category-grid';
-import { ProductGrid } from '@/features/catalog/product-grid';
-import {
-  getCategoryBySlug,
-  getPublishedCategories,
-  getPublishedProducts,
-} from '@/features/catalog/data';
+import { CatalogContent } from '@/features/catalog/catalog-content';
+import { CatalogBrowser } from '@/features/catalog/catalog-browser';
+import { getPublishedCategories, getPublishedProducts } from '@/content/queries';
+import { site } from '@/content/site';
 import { createPageMetadata } from '@/lib/metadata';
 
-interface CatalogPageProps {
-  searchParams: Promise<{ kategori?: string | string[] }>;
-}
+const description =
+  'Bal Kuruyemiş ürün dünyası: kategori ve ürün tanıtımlarını keşfedin.';
+export const metadata = createPageMetadata('Ürünlerimiz', description, '/urunlerimiz');
 
-export async function generateMetadata({
-  searchParams,
-}: CatalogPageProps): Promise<Metadata> {
-  const { kategori } = await searchParams;
-  const category = typeof kategori === 'string' ? getCategoryBySlug(kategori) : undefined;
-  return {
-    ...createPageMetadata(
-      category ? `${category.name} — Ürünlerimiz` : 'Ürünlerimiz',
-      category?.description ??
-        'Bal Kuruyemiş ürün dünyası: kuruyemiş, kahve, lokum, baharat, aktar ve kozmetik kategorilerini keşfedin.',
-      '/urunlerimiz',
-    ),
-    ...(kategori !== undefined && !category
-      ? { robots: { index: false, follow: true } }
-      : {}),
+export default function ProductsPage() {
+  const props = {
+    categories: getPublishedCategories(),
+    products: getPublishedProducts(),
+    branchCountText: site.branchCountText,
   };
-}
-
-export default async function ProductsPage({ searchParams }: CatalogPageProps) {
-  const { kategori } = await searchParams;
-  const categories = getPublishedCategories();
-  const selected = typeof kategori === 'string' ? getCategoryBySlug(kategori) : undefined;
-  const visibleProducts = getPublishedProducts(selected?.id);
-
   return (
     <>
       <PageIntro
@@ -48,87 +23,9 @@ export default async function ProductsPage({ searchParams }: CatalogPageProps) {
         title="Her buluşmaya bir eşlikçi."
         description="Kuruyemişten kahveye, lokumdan baharata. Ürün dünyamızın başlangıç kategorilerini keşfedin."
       />
-      <section className="section-space" aria-labelledby="catalog-heading">
-        <Container>
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <h2 id="catalog-heading" className="font-display text-3xl">
-              Ürün kategorileri
-            </h2>
-            <p className="text-xs leading-6 text-muted">
-              Gerçek ürün bilgileri ve fotoğraflar yakında.
-            </p>
-          </div>
-          <nav
-            aria-label="Ürün kategorileri"
-            className="mb-10 flex flex-wrap gap-2 border-b border-line pb-7"
-          >
-            <Link
-              href="/urunlerimiz"
-              scroll={false}
-              aria-current={!selected ? 'page' : undefined}
-              className={`inline-flex min-h-11 items-center border px-4 py-2 text-sm transition-colors ${!selected ? 'border-brand-dark bg-brand-dark text-white' : 'border-line hover:border-brand-dark'}`}
-            >
-              Tüm kategoriler
-            </Link>
-            {categories.map((category) => (
-              <Link
-                key={category.id}
-                href={`/urunlerimiz?kategori=${category.slug}`}
-                scroll={false}
-                aria-current={selected?.id === category.id ? 'page' : undefined}
-                className={`inline-flex min-h-11 items-center border px-4 py-2 text-sm transition-colors ${selected?.id === category.id ? 'border-brand-dark bg-brand-dark text-white' : 'border-line hover:border-brand-dark'}`}
-              >
-                {category.name}
-              </Link>
-            ))}
-          </nav>
-          {kategori !== undefined && !selected ? (
-            <p
-              role="status"
-              className="mb-8 border-l-2 border-brand-gold bg-surface px-5 py-4 text-sm leading-7"
-            >
-              Kategori bulunamadı. Tüm kategorileri görüntülüyorsunuz.
-            </p>
-          ) : null}
-          {selected ? (
-            <div className="mb-10 grid gap-6 border border-line bg-surface p-7 sm:p-10 md:grid-cols-[1fr_1.2fr]">
-              <div>
-                <p className="eyebrow text-brand-red">Seçili kategori</p>
-                <h2 className="mt-4 font-display text-4xl">{selected.name}</h2>
-              </div>
-              <p className="self-center text-base leading-8 text-muted">
-                {selected.description}
-              </p>
-            </div>
-          ) : (
-            <CategoryGrid categories={categories} />
-          )}
-          {visibleProducts.length > 0 ? (
-            <div className="mt-12">
-              <ProductGrid products={visibleProducts} />
-            </div>
-          ) : (
-            <div className="mt-12">
-              <ContentNotice
-                title={
-                  selected
-                    ? `${selected.name} ürünleri hazırlanıyor.`
-                    : 'Ürünlerle yakında tanışın.'
-                }
-              >
-                <p>
-                  Ürün açıklamaları ve gerçek ürün fotoğrafları tamamlandığında bu alanda
-                  yer alacak.
-                </p>
-              </ContentNotice>
-            </div>
-          )}
-          <p className="mt-7 flex items-start gap-3 text-xs leading-6 text-muted">
-            <LineIcon name="location" className="h-5 w-5 shrink-0 text-brand-red" />
-            Bal Kuruyemiş ile İzmir Buca’daki dört şubemizde buluşabilirsiniz.
-          </p>
-        </Container>
-      </section>
+      <Suspense fallback={<CatalogContent {...props} />}>
+        <CatalogBrowser {...props} />
+      </Suspense>
     </>
   );
 }

@@ -24,6 +24,7 @@ describe('PhotoGallery', () => {
             alt: 'Test fotoğrafı',
             width: 1200,
             height: 900,
+            variants: [{ url: '/test-photo-640.webp', width: 640, format: 'image/webp' }],
           },
         ]}
       />,
@@ -31,7 +32,8 @@ describe('PhotoGallery', () => {
     const image = screen.getByRole('img', { name: 'Test fotoğrafı' });
     expect(image).toHaveAttribute('loading', 'lazy');
     expect(image).toHaveAttribute('width', '1200');
-    expect(image).toHaveAttribute('sizes');
+    expect(image.closest('picture')?.querySelector('source')).toHaveAttribute('sizes');
+    expect(image.getAttribute('src')).not.toContain('/_next/image');
     expect(
       screen.queryByText('Mağazalarımızdan gerçek fotoğraflar eklenecek.'),
     ).not.toBeInTheDocument();

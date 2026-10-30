@@ -96,18 +96,23 @@ test('teslim: robots, sitemap ve bütün örnek şube 404 yanıtları SEO durumu
     .locator('link[rel="canonical"]')
     .getAttribute('href', { timeout: 1000 })
     .catch(() => null);
-  if (!canonical) {
+  const noindex = (
+    await page.locator('meta[name="robots"]').getAttribute('content')
+  )?.includes('noindex');
+  if (noindex) {
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
       'content',
       /noindex/,
     );
     expect(robotsText).toMatch(/^Disallow: \/$/m);
     expect(sitemapText).not.toMatch(/<loc>/);
-    await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
+    if (!canonical)
+      await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
   } else {
     expect(robotsText).toMatch(/^Allow: \/$/m);
     expect(sitemapText).toContain('<loc>');
-    expect(new URL(canonical).protocol).toMatch(/^https?:$/);
+    expect(canonical).toBeTruthy();
+    expect(new URL(canonical ?? '').protocol).toBe('https:');
   }
   for (const path of [
     '/olmayan-sayfa',

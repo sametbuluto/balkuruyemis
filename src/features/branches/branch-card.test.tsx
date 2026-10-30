@@ -23,7 +23,7 @@ const verifiedFixture: Branch = {
 
 describe('Şube kartları', () => {
   it('dört örneği açıkça etiketler ve gerçek şube bağlantısı yayımlamaz', () => {
-    render(<BranchGrid />);
+    render(<BranchGrid entries={exampleBranches} />);
     expect(screen.getAllByRole('article')).toHaveLength(4);
     expect(screen.getAllByText('Örnek içerik')).toHaveLength(4);
     expect(screen.getAllByText('Adres bilgisi hazırlanıyor.')).toHaveLength(4);

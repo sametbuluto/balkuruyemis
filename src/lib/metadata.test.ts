@@ -21,9 +21,24 @@ describe('SEO ortam ayrımı', () => {
     expect(sitemap()).toEqual([]);
   });
 
+  it('domain tek başına canonical üretir ama indekslemeyi açmaz', async () => {
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://example.com');
+    vi.stubEnv('NEXT_PUBLIC_ALLOW_INDEXING', 'false');
+    vi.resetModules();
+    const { createPageMetadata } = await import('@/lib/metadata');
+    const { default: robots } = await import('@/app/robots');
+    const { default: sitemap } = await import('@/app/sitemap');
+    expect(createPageMetadata('İletişim', 'Açıklama', '/iletisim').alternates).toEqual({
+      canonical: 'https://example.com/iletisim',
+    });
+    expect(robots()).toEqual({ rules: { userAgent: '*', disallow: '/' } });
+    expect(sitemap()).toEqual([]);
+  });
+
   it('alan adı yapılandırıldığında canonical ve gerçek sayfaları üretir, örnekleri dışarıda tutar', async () => {
     // Yalnızca test kapsamındaki ayrılmış örnek alan adı; işletme ayarı değiştirilmez.
     vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://example.com');
+    vi.stubEnv('NEXT_PUBLIC_ALLOW_INDEXING', 'true');
     vi.resetModules();
     const { createPageMetadata } = await import('@/lib/metadata');
     const { default: robots } = await import('@/app/robots');
