@@ -10,7 +10,7 @@ export function BrandMark({
 }) {
   const logo = inverse ? (brandAssets.inverseLogo ?? brandAssets.logo) : brandAssets.logo;
 
-  if (logo) {
+  if (logo && logo.status !== 'draft') {
     return (
       <StaticImage
         asset={logo}

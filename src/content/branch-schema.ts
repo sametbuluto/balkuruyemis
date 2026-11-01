@@ -1,3 +1,4 @@
+import { selectPublishedMedia } from './media-selection';
 import type {
   Branch,
   BranchCardEntry,
@@ -248,7 +249,8 @@ export function selectVisibleBranches(
 ): BranchCardEntry[] {
   return branches
     .filter((branch) => branch.status === 'published' && branch.contentKind !== 'example')
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((branch) => ({ ...branch, images: selectPublishedMedia(branch.images) }));
 }
 
 export function selectPublishedBranches(branches: readonly BranchCardEntry[]): Branch[] {
@@ -257,5 +259,6 @@ export function selectPublishedBranches(branches: readonly BranchCardEntry[]): B
       (branch): branch is Branch =>
         branch.contentKind === 'verified' && branch.status === 'published',
     )
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((branch) => ({ ...branch, images: selectPublishedMedia(branch.images) }));
 }

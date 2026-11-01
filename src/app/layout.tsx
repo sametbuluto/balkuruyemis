@@ -17,10 +17,10 @@ export const metadata: Metadata = {
   robots: { index: seo.indexable, follow: seo.indexable },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  assertSiteContent();
+  await assertSiteContent();
   return (
     <html lang="tr" data-scroll-behavior="smooth">
       <body className="flex min-h-dvh flex-col">

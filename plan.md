@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **1 Kasım 2026**. Aktif durum: **Faz 4.1-c2 — Şube JSON geçişi tamamlandı, yerel Git teslimi**.
+Son güncelleme: **1 Kasım 2026**. Aktif durum: **Faz 4.1-c3 — Galeri/medya altyapısı tamamlandı, CMS entegrasyonu bekliyor**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -1046,3 +1046,129 @@ sayfayı yenileyin; yayın için build gerekir. Yeni WebKit/Firefox/fiziksel cih
 CMS/CI/Cloudflare testi yapılmadı. FAIL: Son kontrolde başarısız test veya kritik hata yok.
 .pages.yml, galeri/site metni geçişi, backend/admin/DB/secret/hesap/deployment yok.
 Faz 4.1-c3 başlatılmadı; sonraki çalışma ayrıca talimat gerektirir.
+
+## 18. Faz 4.1-c3 — Galeri/medya mimarisi ve güvenli statik çıktı
+
+### 18.1. Başlangıç, kapsam ve ürün kabulü
+
+1 Kasım 2026. Başlangıç Git main/0507348, çalışma ağacı temizdi. Faz 4.1-a/b/c1/c2
+kaydı korundu; 141 kaynak dosyası snapshot ve manifesti
+`/private/tmp/bal-phase41c3-z6h_8nuw/` içinde. Bu görev yalnız galeri/medya katmanıdır.
+Galeri önce TS boş listeydi, şimdi content/gallery/.gitkeep ile boş JSON koleksiyonu;
+gerçek fotoğraf ve ürün eklenmedi. Dört şube ve altı kategori JSON'u byte eşit.
+38 kritik kaynak (tüm önceki JSON, şube kimlik onayı, policy, strict ana TS/Next config,
+StaticImage/PhotoGallery, stiller ve diğer korunan dosyalar) arşivle byte eşit doğrulandı.
+
+Ürün sahibinin kesin kabul ölçütü plana işlendi: Ali Abi gerçek panelden ürün adını,
+fotoğrafı veya ana sayfa metnini değiştirir; otomatik kontroller ve korunan aktarım
+geçer; Cloudflare'da yeni içerik ve kaynak SHA kanıtlanır. Kullanıcı kod/piksel ölçüsü
+girmez. Üç gerçek uçtan uca akış geçmeden CMS tamamlandı denmez. Bu faz hesap/CI/
+push/yayın kurmaz; yerel fixture testleri bu kabulün yerine geçmez.
+
+### 18.2. Veri ve dosya mimarisi
+
+Ayrıntılı sözleşme ve resmî CMS kaynakları: [MEDIA_GUIDE](docs/MEDIA_GUIDE.md).
+
+- content/gallery/<id>.json: id/url/alt/width/height/sortOrder/status/usages ve isteğe
+  bağlı responsive variants. usages: home-hero / brand-gallery / branches-gallery;
+  aynı görsel bir kayıtla birden çok global yüzeyde kullanılabilir.
+- Ürün/kategori/şube görselleri kendi JSON kaynaklarında kalır; ikinci medya registry'si yok.
+  MediaAsset'e optional status/sortOrder eklendi; eski kayıtlar published/dizi sırası
+  varsayımını korur. Galeride bu iki alan zorunludur. Draft medya ebeveyn published
+  olsa bile render/props ve statik dosya çıktısından çıkarılır.
+- public/images/{brand,products,categories,branches,gallery}/ yalnız .gitkeep ile hazır.
+  Fiziksel dosya sahipliği görünürdür; örnek işletme fotoğrafı konmadı.
+- gallery-schema/server, media-selection ve uyumluluk gallery erişimi. Hero ayrı
+  kullanım alanını seçer, yoksa ortak galerinin ilk published görseline döner.
+- StaticImage ve PhotoGallery dosyaları değişmedi; srcset/sizes, lazy ve hero yükleme
+  önceliği korunur. Root async build-time doğrular; backend/runtime API yoktur.
+
+### 18.3. Dosya güvenliği ve gerçekten çalışanlar
+
+Sharp 0.35.5 Next ile zaten kurulu ve lockfile'da bulunan sürümdü; exact doğrudan
+bağımlılık oldu. Yeni sürüm/native binary yüklenmedi. İmza + decoder MIME + gerçek
+pixel decode uygulanır. JPEG/PNG/WebP/AVIF dışında dosya reddedilir; SVG bu fazda
+marka klasöründe de kapalıdır. Güvenli ASCII yerel yol, traversal/query/hash/yüzde
+kodlama/backslash/symlink reddi, eksik dosya ve global medya ID tekrarı kontrolleri var.
+
+Politika: dosya/çıktı 5 MiB, toplam 20 MiB, en fazla 128 kaynak görsel, 8000 px kenar,
+24 MP. JSON genişlik/yükseklik EXIF orientation uygulanmış gerçek boyutla; varyantlar
+format/genişlik/oranla eşleşir. Metadata header okumakla yetinilmez; stats full decode
+bozuk/truncated dosyayı reddeder. Draft/orphan dosyalar da kaynakta doğrulanır.
+
+Standart build: media:check → Next static export → temiz medya export → verify-export.
+TS CLI Node 20 için .generated/media-tools altında strict CJS derlenir; ana TS ayarı
+aynıdır. Yardımcı eski Node resolution için TS6 deprecation uyumluluğu ayrı config'tedir;
+TS7 öncesi yeniden değerlendirilmelidir. .generated Git/lint/format/hosting dışında.
+
+Next public dosyalarını ham kopyaladığı için yalnız üretilmiş out/images yeniden
+oluşturulur. Published referanslar auto-orient/sRGB/re-encode edilip EXIF/XMP/IPTC/ICC'siz
+yazılır; draft ve orphan raw dosyalar 404 olur. Kaynak görsel/JSON değiştirilmez.
+Input fingerprint değişirse build reddedilir; bu yerel kapı gerçek exact Git SHA
+candidate/CI güvenliğinin yerine geçmez. Başarısız build out'u yayımlanmaz.
+
+### 18.4. Henüz çalışmayan/entegrasyon bekleyenler
+
+CMS hesabı, .pages.yml, upload ekranı, action/CI, GitHub push veya Cloudflare yoktur.
+CMS image alanı yalnız dosya yolunu seçer; MediaAsset object list'e eşleme ve güvenilir
+width/height yazan upload adaptörü henüz kurulmadı. Ali Abi'den piksel ölçüsü istemeyen
+editörün gerçek round-trip testi bekler. Mevcut sözleşmede ölçüler zorunlu ve doğrulanır.
+
+Yeniden encoding/sıkıştırma vardır ama dosyanın daima küçülmesi vaat edilmez. Otomatik
+resize/kadraj veya responsive varyant üretimi yoktur; hazırlanmış varyantlar doğrulanır.
+Kaynak/Git EXIF temizlenmez; public repo'ya gerçek dosya yüklemeden önce kaynak
+mahremiyet kontrolü ayrıca gerekir. Yerel dev ham public dosyalarını sunar; temiz
+üretim davranışı build + preview ile görülür. Gerçek fotoğraf performansı ölçülmedi.
+
+### 18.5. Testler ve sorun kaydı
+
+| Kontrol                             | Sonuç                                                                 |
+| ----------------------------------- | --------------------------------------------------------------------- |
+| TypeScript strict, ESLint, Prettier | Başarılı                                                              |
+| Vitest                              | **262/262**, 18 dosya; önceki 210 + 52 galeri/medya testi             |
+| Production static export            | **67 dosya**, noindex true, aynı rotalar                              |
+| Static HTTP                         | **3/3**                                                               |
+| Playwright / sistem Chrome          | **48/48**, gerçek out/ üzerinde                                       |
+| Responsive                          | **320, 393, 768, 1280 px**; gerçek boş site ve izole görsel fixture   |
+| Kategori / ürün / şube export       | **3/3, 4/4, 5/5**, gerçek npm build pipeline'ıyla                     |
+| Medya export                        | **5/5**; üç negatif build, temiz yayın/responsive ve drift reddi      |
+| Kaynak / Git fotoğraf kurtarma      | Orijinaller byte eşit; geçici repoda 3 commit'li kurtarma testi geçti |
+
+67 dosya önceki 68'e göre bir adet az: raw public/images/.gitkeep de artık out'a
+bırakılmaz; ana HTML/SEO/PNG/RSC dosyaları korunur. Gerçek galeri/medya dosyası 0.
+Yeni medya unit testleri missing alt/path/MIME/dimensions/file/ID, status/sıra, decode,
+symlink, limits, variant oranı, EXIF/rotation ve Git kurtarmayı kapsar.
+
+Medya fixture'ı yalnız temp kopyada geometrik test görüntüleri, ürün ve branch image
+metadata'sı üretir. Hero eager/high, galeri lazy/srcset/sizes, iki ebeveynde fotoğraf
+render'ı, dört genişlik, doğru MIME ve draft/orphan kaynak dosyaları 404 doğrulanır.
+EXIF/ICC'siz çıktı ve orijinal byte eşitliği testlidir. Bozuk JSON, eksik alt ve bozuk
+fotoğraf build'i durdurur. Sonradan dosya değişikliği fingerprint reddi testlidir.
+
+İlk testlerde mock binding/fixture ID hataları giderildi. İlk browser beklemesi ekran
+dışındaki lazy şube fotoğrafını yüklenmiş varsaydığı için durdu; her görsel görünür
+alana alınarak gerçek decode test edildi. Üretilmiş JS ilk lint'e dahil olmuştu;
+yalnız .generated ignore edildi, kaynak kuralları gevşetilmedi. Yardımcı derleyicide
+Node resolution uyumluluğu ayarlandı. Önceki .next/types/routes.d 2.ts generated kopya
+hatası bir kez tekrarlandı; ana strict/exclude değiştirilmeden sırayla kontrol tekrar geçti.
+
+Kanıtlar:
+
+- Ana arşiv/loglar/preservation-report: /private/tmp/bal-phase41c3-z6h_8nuw/.
+- Medya: bal-media-export-VqSdAU; kategori: bal-category-export-jzYa4n;
+  ürün: bal-product-export-J6CMEO; şube: bal-branch-export-FHnWBP temp dizinleri.
+- playwright-report/ ve test-results/ Git dışında. .generated medya raporları Git dışında.
+
+### 18.6. Teslim, Git ve sıradaki öneri
+
+Başlangıç 0507348 üzerine mevcut değişiklikler korunup yalnız yerel anlamlı commit
+oluşturulur: `feat: add CMS-ready gallery and validated static media pipeline`.
+Commit hash'i teslim yanıtında/git log'da raporlanır. Gerçek env, node_modules,
+.next, out, .generated ve test raporları commit'e girmez; bilinen sır desenleri taranır.
+
+PASS: Yerel galeri/medya altyapısı ve regresyon tamamlandı. WARNING: gerçek fotoğraf,
+CMS metadata adaptörü, editör/CI/Cloudflare ve Firefox/WebKit/fiziksel cihaz testleri
+beklenir; yeni axe taraması yapılmadı. FAIL: Son kontrollerde başarısız test veya kritik
+hata yok. Ana sayfa/kurumsal metinler, admin/backend/DB ve 4.1-c4 başlatılmadı.
+Önerilen c4: site/ana sayfa düz metin sözleşmesini ve upload metadata adaptörü tasarımını
+ayrı küçük işlere bölmek; sonra gerçek CMS round-trip ve otomatik yayın kabulünü yürütmek.

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": false,
+    "outDir": ".generated/media-tools",
+    "rootDir": "src",
+    "incremental": false,
+    "plugins": [],
+    "types": ["node"],
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["src/content/media-cli.ts"],
+  "exclude": ["node_modules", ".generated", "**/*.test.*"]
+}

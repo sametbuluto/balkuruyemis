@@ -1,3 +1,4 @@
+import { selectPublishedMedia } from './media-selection';
 import type { ProductCategory } from '../types/content';
 import {
   parseMediaAsset,
@@ -77,5 +78,9 @@ export function selectPublishedCategories(
 ): ProductCategory[] {
   return categories
     .filter((category) => category.status === 'published')
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((category) => ({
+      ...category,
+      image: (category.image && selectPublishedMedia([category.image])[0]) || null,
+    }));
 }

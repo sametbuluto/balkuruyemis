@@ -1,7 +1,7 @@
 # Pages CMS — V5 ön inceleme ve aşamalı kurulum planı
 
 30 Ekim 2026 araştırması; 1 Kasım 2026 yerel tamamlama. **Kurulu CMS veya gerçek editör testi değildir.** Bu belge master
-prompt V5'in ilk görevinin araştırma kaydıdır. Statik tasarım korunur. Faz 4.1-b kategori ve 4.1-c1 ürün ve 4.1-c2 şube JSON geçişi uygulandı; .pages.yml,
+prompt V5'in ilk görevinin araştırma kaydıdır. Statik tasarım korunur. Faz 4.1-b kategori ve 4.1-c1 ürün ve 4.1-c2 şube ve 4.1-c3 galeri JSON/medya doğrulaması uygulandı; .pages.yml,
 diğer içerik geçişleri ve workflow'lar sonraki küçük işlerdir.
 
 ## Mevcut durum
@@ -13,12 +13,12 @@ diğer içerik geçişleri ve workflow'lar sonraki küçük işlerdir.
   başarılı ve refs boş: kontrol anında yayımlanmış dal/etiket yok. Kullanıcının
   Private tercihi ayrıca soruldu; yanıt gelene kadar tercih kesinleşmiş sayılmaz.
 - package/lockfile exact sürümleri eşleşiyor: Next 16.4.3, React 19.3.1,
-  TS 6.0.3 strict, Tailwind 4.3.3; yeni bağımlılık yok.
+  TS 6.0.3 strict, Tailwind 4.3.3; c3 için mevcut Sharp 0.35.5 doğrudan exact bağımlılık oldu.
 - Kategoriler content/categories altında altı JSON dosyasında; ürünler content/products
-  altında boş JSON koleksiyonu. Dört fiziksel şube content/branches JSON kaynağında; galeri/metinler TS modüllerinde. Dört koordinat var;
+  altında boş JSON koleksiyonu. Dört fiziksel şube content/branches JSON kaynağında; galeri content/gallery JSON kaynağında, site metinleri TS modüllerinde. Dört koordinat var;
   gerçek ürün/galeri/logo/sosyal hesap yok. Başlıkların/metinlerin bir bölümü JSX'te.
 - Kategori/ürün/şube için strict JSON parse/schema, referans, kimlik onayı ve dosya denetimi uygulandı. Diğer
-  içeriklerde mevcut tipli iş kuralları geçerli; medya decode ve aktif CI silme farkı henüz yok.
+  içeriklerde mevcut tipli iş kuralları geçerli; medya decode c3 ile çalışır, aktif CI silme farkı henüz yok.
 
 ## Resmî destek ve sınırlar
 
@@ -69,11 +69,11 @@ Dal UI: [sabit kaynak](https://github.com/hunvreus/pagescms/blob/6f4e860a35d9344
 | Site Settings / Site Bilgileri    | content/settings.json         | Kamuya açık marka/Hakkımızda metinleri, logo; env/renk/CSS/SEO yayın anahtarı yok |
 | Social Links / Sosyal Bağlantılar | content/social.json           | Doğrulanmış URL veya null; teknik ayar yok                                        |
 
-Kategori, ürün ve şube yolları uygulamanın gerçek tek kaynakları oldu; diğer yollar henüz hedeflerdir.
+Kategori, ürün, şube ve galeri yolları uygulamanın gerçek tek kaynakları oldu; diğer yollar henüz hedeflerdir.
 TS modülleri yalnız tipli erişim sunar; ikinci kategori/ürün literal listesi yoktur.
 Ürün koleksiyonu gerçek kayıt beklediği için yalnız .gitkeep içerir. categoryId
 strict yüklenmiş kategori JSON kayıtlarına referans verir; draft ürün veya draft
-kategoriye bağlı ürün ziyaretçiye serialize edilmez. Medya upload/decode henüz kurulmadı.
+kategoriye bağlı ürün ziyaretçiye serialize edilmez. Medya decode c3 ile yerelde çalışır; CMS upload henüz kurulmadı.
 Strict server/build loader ve client'a props aktarımı pilotta yeterli olduğundan
 üretilmiş manifest eklenmedi. JSON dışı içerik tipleri tek tek taşınacak; bu tur
 Client tarafına fs veya yeni API taşınmadı. Unknown alan/tip/ID/slug/dosya adı
@@ -97,7 +97,8 @@ gösterim ihtiyacı ayrı işte ele alınır; bu tur boş duyuru veya yeni rota 
 | 4.1-b Kategori JSON pilotu         | Yerel pilot tamamlandı                   | Altı kayıt/id/slug/sıra birebir korunur; strict parser; statik/client kullanımı; bozuk JSON reddi; aynı UI ve kategori E2E |
 | 4.1-c1 Ürün JSON                   | Yerel uygulama                           | Boş koleksiyon; strict schema; kategori referansı; draft dışlama; negatif build ve statik E2E                              |
 | 4.1-c2 Şube JSON                   | Yerel uygulama                           | Dört konum/14 alan eşit; strict schema/Maps; korunan kimlik hash onayı; export/404/draft testleri                          |
-| 4.1-c3 ve diğer tipler             | Başlatılmadı                             | Galeri/metin geçişleri ayrı kapsam; medya/kimlik/yayın sınırları                                                           |
+| 4.1-c3 Galeri / medya              | Yerel altyapı tamamlandı                 | Strict JSON, decode, temiz statik çıktı; CMS upload hesabı yok                                                             |
+| 4.1-c4 ve diğer tipler             | Başlatılmadı                             | Site metinleri ve upload metadata adaptörü ayrı işler                                                                      |
 | 4.2-a Yerel .pages.yml prototipi   | Bekliyor                                 | Gerçek JSON kaynaklarına sekiz Türkçe giriş; silme/rename kapalı; schema ve fixture round-trip testleri                    |
 | 4.2-b Gerçek CMS bağlantısı        | Kullanıcı yetkisi bekler                 | Yalnız hedef repo App kurulumu; main kaydı reddi; editörün kod/ayar erişemediği negatif test                               |
 | 4.3-a Güvenilir candidate CI       | Bekliyor                                 | main kodu + yalnız veri; path/şema/medya/build/test; source/target SHA kaydı                                               |
@@ -105,8 +106,8 @@ gösterim ihtiyacı ayrı işte ele alınır; bu tur boş duyuru veya yeni rota 
 | 4.4 Pages önizleme                 | Ayrı deployment onayı                    | main üretim dalı; content-edit preview kapalı; noindex; HTTP/404/PNG ve geçmiş yayın kanıtı                                |
 | 4.5 Ali Bey gerçek kullanıcı testi | Davet için ayrı onay                     | Sekiz içerik/medya akışı ve destek prosedürü; yayın ve rollback kanıtı                                                     |
 
-4.1-b kategorileri, 4.1-c1 ürünleri, 4.1-c2 şubeleri taşıdı. Galeri/metin türleri
-sonraki ayrı işlerdir; 4.1-c3 başlatılmadı. Şube kimlik onayı korunan ID/hash kaydı
+4.1-b kategorileri, 4.1-c1 ürünleri, 4.1-c2 şubeleri, 4.1-c3 galeriyi taşıdı.
+Site metinleri ve CMS adaptörü sonraki ayrı işlerdir; 4.1-c4 başlatılmadı. Şube kimlik onayı korunan ID/hash kaydı
 üzerinden uygulanır; henüz hiçbir gerçek şube kimliği onaylanmadı. Kullanıcının kapsam sınırı gereği .pages.yml
 henüz oluşturulmadı; CMS hesabı/App/workflow/depoyla yazma veya deployment yoktur.
 4.2 tamamlandı sayılmaz. Önceki uyum matrisi 30 Ekim araştırma kaydıdır.
@@ -126,3 +127,17 @@ henüz oluşturulmadı; CMS hesabı/App/workflow/depoyla yazma veya deployment y
 Gerçek hosted CMS kaydetme/davet/dal/yeniden giriş davranışları, App izinleri ve
 Cloudflare yayın geçmişi hesap bağlantısı olmadığı için doğrulanamadı. Yerel test
 bu harici entegrasyonların yerine geçmez.
+
+## 4.1-c3 güncellemesi ve kalan entegrasyon
+
+Galeri, usages/status/sortOrder alanlarıyla tek JSON kaynağı oldu; embedded medya
+kendi ebeveyninde kalır. Resmî image + object-list alan eşlemesi ve güvenli dosya/
+build akışı [MEDIA_GUIDE](MEDIA_GUIDE.md) içinde. Eski matristeki “decode yok” ve
+hedef satırları araştırma tarihini gösterir; decode/EXIF'siz çıktı artık yerelde çalışır.
+Otomatik boyut yazan upload adaptörü, .pages.yml, gerçek hesap/round-trip/CI/Pages yoktur.
+4.1-c4/site metni geçişi ayrıca talimat gerektirir.
+
+Ürün sahibi kabulü: Ali Abi gerçek panelde ürün adını, fotoğrafı veya ana sayfa metnini
+düzenler; otomatik kontroller ve korunan aktarım geçer; Cloudflare'da yeni içerik ve
+source SHA görülür. Üç akış ve hatalı dosyanın eski yayını koruması gerçek hesaplarda
+kanıtlanmadan CMS tamamlandı denmez. Yerel fixture sonucu bu kabulün yerine geçmez.

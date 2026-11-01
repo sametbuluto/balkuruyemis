@@ -7,11 +7,21 @@ export interface MediaAsset {
   alt: string;
   width: number;
   height: number;
+  /** Gömülü eski kayıtlar için varsayılan published ve dizi sırası korunur. */
+  status?: PublicationStatus;
+  sortOrder?: number;
   variants?: readonly {
     url: string;
     width: number;
     format: 'image/avif' | 'image/webp';
   }[];
+}
+
+export type GalleryUsage = 'home-hero' | 'brand-gallery' | 'branches-gallery';
+export interface GalleryEntry extends MediaAsset {
+  status: PublicationStatus;
+  sortOrder: number;
+  usages: readonly GalleryUsage[];
 }
 
 export interface ProductCategory {

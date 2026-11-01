@@ -71,6 +71,7 @@ Dev QA mevcut 3000 sunucusunu koruyarak yeniden kullanır.
 content/categories/      # Tek düzenlenebilir kategori kaynağı (JSON)
 content/products/        # Tek ürün JSON kaynağı; gerçek ürün yokken .gitkeep ile boş
 content/branches/        # Dört fiziksel şube/konum JSON kaydı; ayrı teknik kimlik onayı
+content/gallery/         # Galeri/hero JSON; gerçek fotoğraf yokken boş
 src/
   app/                  # Beş sayfa, layout, 404, build-time SEO/PNG
     subelerimiz/[slug]/page.branch.tsx  # Yalnızca doğrulanmış şube varsa etkin
@@ -89,7 +90,8 @@ out/                    # Üretilir; Git'e alınmaz
 ```
 
 Next.js 16.4.3, React 19.3.1, TypeScript 6.0.3 strict, Tailwind 4.3.3,
-ESLint 9, Prettier 3, Vitest 4, RTL ve Playwright korunur; yeni paket eklenmedi.
+ESLint 9, Prettier 3, Vitest 4, RTL ve Playwright korunur; c3 için mevcut Sharp 0.35.5
+exact doğrudan bağımlılık oldu.
 Ortamın Turbopack yardımcı süreç kısıtlaması nedeniyle resmî `--webpack` seçeneği kullanılır.
 
 Dört gerçek koordinat işletme sahibince sağlandı. `content/branches/` içindeki
@@ -99,7 +101,7 @@ uydurulmaz. Bu kayıtlar detay sayfası, sitemap veya LocalBusiness verisi üret
 Tarihsel örnek kayıtlar ayrı tutulur ve canlı gride girmez.
 
 Kategoriler `content/categories/*.json`, ürünler `content/products/*.json`, sosyal kanallar
-`social.ts`, marka/logo `site.ts`, galeri `gallery.ts` üzerinden yönetilir.
+`social.ts`, marka/logo `site.ts`, galeri `content/gallery/*.json` üzerinden yönetilir.
 Değişiklik sonrası yeniden build gerekir; şube sayısı görünür kayıtlardan türetilir.
 Yeni kayıt ve fotoğraf ekleme adımları [CONTENT_GUIDE](docs/CONTENT_GUIDE.md) içindedir.
 
@@ -175,12 +177,12 @@ server/build doğrulaması var. Faz 4.1-c1 ürün JSON sözleşmesini ve gerçek
 referanslarını ekledi; boş ürün koleksiyonu geçerli, sahte ürün yok. Yalnız published
 ürün + published kategori ziyaretçiye gider. Faz 4.1-c2 dört fiziksel şubeyi JSON
 kaynağına taşıdı. Kimlik onayı ayrı korunan hash kaydıdır; location kayıtlar detay
-üretmez. Galeri/metinler TS olarak kalır.
+üretmez. c3 ile galeri JSON oldu; site metinleri TS olarak kalır.
 Ürün export kontrolü: `node scripts/test-product-export.mjs`; test verileri yalnız geçici kopyadadır.
 
 GitHub public API kontrolünde repo Public ve ref listesi boştu. Public/Private
 tercihi ve hesap planı, push öncesi kesinleştirilecek. Remote/push/App/davet/deploy yok.
-Güncel Faz 4.1-c2 raporu [QUALITY_REPORT](docs/QUALITY_REPORT.md); master kayıt plan.md §17.
+Güncel Faz 4.1-c3 raporu [QUALITY_REPORT](docs/QUALITY_REPORT.md); master kayıt plan.md §18.
 Önceki [görsel Faz 4 planı](docs/PHASE4_PLAN.md) tarihsel korunur; gerçek logo/fotoğraf
 çalışmaları V5'te Faz 5'e taşındı. Başarılı veri mimarisi kod/test ve teslim belgeleri yerel Git ile kaydedilir;
 harici push/remote/deployment yoktur. Commit kaydı plan.md §17 içindedir.
@@ -238,3 +240,14 @@ kategori/şube kartları ve galeri yeni kimliğe taşındı. İşlevler ve rotal
 - Yeni paket, özellik, DB/admin/auth veya deployment yok; mevcut testler silinmedi.
 
 Ayrıntılar: [kalite raporu](docs/QUALITY_REPORT.md) ve [master plan §11](plan.md).
+
+## Faz 4.1-c3 — Galeri ve medya
+
+Galeri tek JSON kaynağı, embedded medya yayın/sıra desteği, gerçek dosya decode ve
+sanitize edilmiş statik çıktı hazır. `npm run media:check` fiziksel dosyaları doğrular;
+`npm run build` bunu otomatik çalıştırıp EXIF'siz published out/images üretir.
+Kaynak JSON/fotoğraflar değişmez; SVG bu aşamada kapalıdır. Sharp 0.35.5 doğrudan
+exact bağımlılık oldu. Yeni gerçek fotoğraf veya ürün yoktur.
+[Medya sözleşmesi ve sınırlar](docs/MEDIA_GUIDE.md). CMS metadata adaptörü ve gerçek
+panel → otomatik kontrol → Cloudflare kabul testi henüz yapılmadı. Yerel inceleme
+build + preview üzerinden yapılır; yalnız Next CLI çalıştırmak tam yayın pipeline'ı değildir.

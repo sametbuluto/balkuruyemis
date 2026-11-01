@@ -19,6 +19,8 @@ import { createStaticServer } from './serve-static.mjs';
 const root = process.cwd();
 const directory = await mkdtemp(path.join(tmpdir(), 'bal-branch-export-'));
 for (const name of [
+  'scripts',
+  'tsconfig.media.json',
   'src',
   'content',
   'tests',
@@ -39,20 +41,16 @@ await symlink(
 const file = path.join(directory, 'content/branches/location-1.json');
 const original = JSON.parse(await readFile(file, 'utf8'));
 const build = async (name, indexable = false) => {
-  const result = spawnSync(
-    process.execPath,
-    [path.join(root, 'node_modules/next/dist/bin/next'), 'build', '--webpack'],
-    {
-      cwd: directory,
-      encoding: 'utf8',
-      env: {
-        ...process.env,
-        NEXT_PUBLIC_SITE_URL: indexable ? 'https://example.com' : '',
-        NEXT_PUBLIC_ALLOW_INDEXING: indexable ? 'true' : 'false',
-        NEXT_TELEMETRY_DISABLED: '1',
-      },
+  const result = spawnSync('npm', ['run', 'build'], {
+    cwd: directory,
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      NEXT_PUBLIC_SITE_URL: indexable ? 'https://example.com' : '',
+      NEXT_PUBLIC_ALLOW_INDEXING: indexable ? 'true' : 'false',
+      NEXT_TELEMETRY_DISABLED: '1',
     },
-  );
+  });
   const log = `${result.stdout ?? ''}\n${result.stderr ?? ''}`;
   await writeFile(path.join(directory, `${name}.log`), log);
   return { status: result.status, log };

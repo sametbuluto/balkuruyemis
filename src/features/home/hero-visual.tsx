@@ -1,10 +1,10 @@
 import { site } from '@/content/site';
 import { StaticImage } from '@/components/ui/static-image';
 import { BrandMark } from '@/components/brand/brand-mark';
-import { brandGallery } from '@/features/gallery/data';
+import { getHeroImage } from '@/content/gallery';
 
 export function HeroVisual() {
-  const photo = brandGallery[0];
+  const photo = getHeroImage();
   return (
     <div className="relative isolate flex min-h-96 w-full min-w-0 flex-col overflow-hidden bg-ink text-white sm:min-h-[30rem] lg:min-h-[34rem]">
       {photo ? (

@@ -1,10 +1,18 @@
 # Statik içerik düzenleme rehberi
 
 Kategori, ürün ve şubelerin tek kaynağı `content/categories/`, `content/products/` ve
-`content/branches/` JSON dosyalarıdır; diğer içerikler
+`content/branches/` ve `content/gallery/` JSON dosyalarıdır; diğer içerikler
 `src/content/` TS modüllerinde kalır. Codex'e doğrulanmış yeni bilgiyi
 vermek ve ilgili kaydı güncellemesini istemek yeterlidir. Her değişiklik yeniden
 build ve doğrulama gerektirir; tarayıcıdan yönetim paneli veya runtime veri kaynağı yoktur.
+
+## Güncel medya — Faz 4.1-c3
+
+Galeri JSON, dosya güvenliği, EXIF temiz üretim çıktısı ve CMS alan planı:
+[MEDIA_GUIDE](MEDIA_GUIDE.md). Embedded görseller kendi ürün/kategori/şube kaynağında
+kalır; status/sortOrder isteğe bağlıdır. Galeride status/sortOrder/usages zorunludur.
+Boş galeri geçerli; sahte fotoğraf yok. Aşağıdaki eski faz kayıtlarında decode/upload
+kurulmadığı belirtilen yerler o fazların kapsamıdır; güncel decode/çıktı kontrolü c3'tedir.
 
 ## Faz 4.1-b — Kategori JSON pilotu
 
@@ -113,7 +121,7 @@ kaynak/out değiştirilmez. `.pages.yml` veya çalışan CMS editörü henüz yo
 | `content/branches/*.json`   | Fiziksel şubeler, koordinatlar ve doğrulama durumu       |
 | `site.ts`                   | Marka adı, slogan, navigasyon, logo; türetilmiş sayımlar |
 | `social.ts`                 | Doğrulanmış Instagram/WhatsApp adresleri; yokken null    |
-| `gallery.ts`                | Gerçek marka/mağaza fotoğrafları                         |
+| `content/gallery/*.json`    | Gerçek marka/mağaza fotoğrafları                         |
 
 `src/features/*/data.ts` ve `src/config/site.ts` ikinci veri kaynağı değildir.
 Buralara kopya kayıt eklemeyin. Sözleşmeler `src/types/content.ts`, doğrulama
@@ -219,8 +227,7 @@ genişlikte detay navigasyonunu sınar. Gerçek kaynak/out içine fixture yayım
 ## Fotoğraf ve logo
 
 Gerçek, kullanım hakkı bulunan dosyaları `public/images/` altında gruplandırın:
-`brand/`, `categories/`, `products/`, `branches/`, `gallery/`. Logo için SVG/PNG
-kabul edilir; fotoğraflarda önceden optimize edilmiş WebP ve tercihen AVIF kullanın.
+`brand/`, `categories/`, `products/`, `branches/`, `gallery/`. Bu fazda SVG kapalıdır; logo için raster PNG/WebP kabul edilir; fotoğraflarda önceden optimize edilmiş WebP ve tercihen AVIF kullanın.
 Dosyalar yokken dizin veya sahte görsel üretmek zorunlu değildir.
 
 Önerilen fotoğraf varyantları: 480, 768, 1200 ve yalnızca hero için gerekiyorsa

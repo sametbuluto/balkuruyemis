@@ -42,15 +42,13 @@ export function safeInteger(
   return value;
 }
 
+export const mediaLocalPath =
+  /^\/images\/(brand|products|categories|branches|gallery)\/(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)*[a-z0-9]+(?:-[a-z0-9]+)*\.(jpg|jpeg|png|webp|avif)$/;
+
 function mediaPath(value: unknown, context: string, fail: SchemaFailure): string {
   const url = requiredText(value, context, fail);
-  if (
-    !url.startsWith('/images/') ||
-    url.includes('..') ||
-    /[\\%?#]/.test(url) ||
-    !/\.(avif|webp|png|jpe?g|svg)$/.test(url)
-  )
-    fail(context, 'public/images altında yerel görsel yolu gerekli.');
+  if (!mediaLocalPath.test(url))
+    fail(context, 'public/images altında izinli yerel raster yolu gerekli.');
   return url;
 }
 
@@ -63,7 +61,7 @@ export function parseMediaAsset(
   const record = strictObject(
     value,
     ['id', 'url', 'alt', 'width', 'height'],
-    ['variants'],
+    ['variants', 'status', 'sortOrder'],
     context,
     fail,
   );
@@ -74,6 +72,13 @@ export function parseMediaAsset(
     width: safeInteger(record.width, 1, `${context}.width`, fail),
     height: safeInteger(record.height, 1, `${context}.height`, fail),
   };
+  if (Object.hasOwn(record, 'status')) {
+    if (record.status !== 'draft' && record.status !== 'published')
+      fail(context, 'geçersiz görsel yayın durumu.');
+    result.status = record.status;
+  }
+  if (Object.hasOwn(record, 'sortOrder'))
+    result.sortOrder = safeInteger(record.sortOrder, 0, `${context}.sortOrder`, fail);
   if (Object.hasOwn(record, 'variants')) {
     if (!Array.isArray(record.variants)) fail(context, 'variants dizi olmalı.');
     const seen = new Set<string>();

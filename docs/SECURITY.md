@@ -132,3 +132,13 @@ Telefon/saat/görsel/status bu özete dahil değildir. JSON'da verified veya hid
 alanı ayarlamak onay vermez. Draft verified kayıt da onay denetiminden geçer.
 Gerçek GitHub main koruması/güvenilir candidate CI henüz kurulmadı; yerel loader ve
 policy testi bu harici yetkilerin yerine geçmez. LocalBusiness üretimi eklenmedi.
+
+## 4.1-c3 — Aktif yerel medya kontrolü
+
+Sharp full decode, binary imza/MIME, gerçek boyut/oran, 5 MiB dosya / 20 MiB toplam /
+128 dosya / 24 MP / 8000 px sınırları, symlink/path ve global medya ID kontrolleri
+çalışır. SVG kapalıdır. Draft/orphan dosyalar out/images'te kalmaz; published rasterlar
+re-encode edilip kaynak EXIF/XMP/IPTC/ICC taşınmaz. Kaynak/Git blob'u temizlenmez;
+public repo'ya upload öncesi EXIF mahremiyet kontrolü ayrıca gerekir.
+Build drift fingerprint'i yereldir; exact Git SHA/candidate/branch protection güvenliği
+hâlâ ayrı kurulacaktır. Başarısız build'in out'u yayımlanmaz. [MEDIA_GUIDE](MEDIA_GUIDE.md).

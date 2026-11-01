@@ -1,7 +1,7 @@
 import { Container } from '@/components/ui/container';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { PhotoGallery } from '@/components/gallery/photo-gallery';
-import { brandGallery } from '@/features/gallery/data';
+import { getGalleryImages } from '@/content/gallery';
 
 export function GallerySection() {
   return (
@@ -17,7 +17,7 @@ export function GallerySection() {
           description="Mağazalarımızı ve ürünlerimizi gerçek fotoğraflarla daha yakından tanıyacağınız alan."
           inverse
         />
-        <PhotoGallery images={brandGallery} />
+        <PhotoGallery images={getGalleryImages('brand-gallery')} />
       </Container>
     </section>
   );

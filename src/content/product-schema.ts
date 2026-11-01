@@ -1,3 +1,4 @@
+import { selectPublishedMedia } from './media-selection';
 import type { Product, ProductCategory } from '../types/content';
 import {
   parseMediaAsset,
@@ -103,5 +104,6 @@ export function selectPublishedProducts(
         publishedIds.has(product.categoryId) &&
         (!categoryId || product.categoryId === categoryId),
     )
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((product) => ({ ...product, images: selectPublishedMedia(product.images) }));
 }

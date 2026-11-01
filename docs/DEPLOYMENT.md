@@ -7,7 +7,7 @@
 1. Public/Private tercihini ve gerçek GitHub planının required checks/auto-merge
    desteğini kesinleştir; [SECURITY](SECURITY.md) koşulları geçerli.
 2. Çalışma ağacındaki kaynak/belge değişikliklerini gözden geçir; gereken yerel
-   commit için yetki netleşsin. Şu an son commit `78df0f7` ve son hazırlıklar uncommitted.
+   commit için yetki netleşsin. 4.1-c2 geri dönüş noktası `0507348`; c3 sonunda medya altyapısı da yerel commit ile kaydedilir.
 3. Uzak ref'leri tekrar read-only kontrol et; şu an boş olsa da başka birinin eklediği
    geçmiş varsa koru. Yeniden git init/README overwrite veya force push yapma.
 4. Kullanıcı push yetkisi verdiğinde origin hedefi
@@ -62,3 +62,13 @@ sonrasında kapasite tekrar ölçülecek. Yüklü fotoğraf Git geçmişi ayrı 
 Bu dış testlerin hiçbiri şu an yapılmadı. Yerel out/ testleri yalnız yerel statik
 davranışı doğrular. GitHub hesabının özel planı/secret/rules ayarları ve Cloudflare
 build/deployment geçmişi yetkili bağlantı olmadan incelenemedi.
+
+## Medya pipeline ve gerçek kabul
+
+Hosting build komutu yalnız npm run build olmalıdır; sadece next build medya sanitize
+ve taslak dosya dışlamasını tamamlamaz. Başarılı komutun out/ çıktısı dağıtılır;
+.generated/ veya public/ kaynağı doğrudan yayımlanmaz. Bozuk medya/metadata veya build
+sırasında input değişimi kontrolü durdurur. Kaynak raw EXIF temizlenmiş sayılmaz.
+Ali Abi'nin gerçek CMS değişikliği → trusted kontroller → otomatik korunan aktarım →
+Cloudflare yayın → HTTP/source SHA kanıtı gerçek hesaplarda geçmeden CMS tamamlanmaz.
+Bu belge bu dış işlemleri başlatma yetkisi değildir; bu fazda deployment yapılmadı.

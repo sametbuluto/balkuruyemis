@@ -10,6 +10,7 @@ export default defineConfig([
   globalIgnores([
     '.next/**',
     'out/**',
+    '.generated/**',
     'coverage/**',
     'playwright-report/**',
     'test-results/**',

@@ -7,8 +7,8 @@
     "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
   },
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build --webpack && node scripts/verify-export.mjs",
+    "dev": "npm run media:check && next dev --webpack",
+    "build": "npm run media:check && next build --webpack && node scripts/run-media.mjs export && node scripts/verify-export.mjs",
     "start": "npm run preview --",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
@@ -20,12 +20,14 @@
     "test:e2e:ui": "playwright test --ui",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:static",
     "preview": "node scripts/serve-static.mjs",
-    "test:static": "node --test tests/static/*.test.mjs"
+    "test:static": "node --test tests/static/*.test.mjs",
+    "media:check": "node scripts/run-media.mjs check"
   },
   "dependencies": {
     "next": "16.4.3",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",

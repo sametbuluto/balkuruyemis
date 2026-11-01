@@ -1,3 +1,87 @@
+# Faz 4.1-c3 — Galeri ve medya kalite raporu
+
+Tarih: **1 Kasım 2026**. Yerel altyapı tamamlandı; gerçek CMS/push/deployment yoktur.
+[MEDIA_GUIDE](MEDIA_GUIDE.md) · [Master plan §18](../plan.md).
+
+## PASS
+
+- Galeri TS boş kaynağından content/gallery JSON koleksiyonuna taşındı; gerçek galeri
+  ve fotoğraf sayısı 0. Ürün/kategori/şube medyası kendi kaynağında kaldı; ikinci registry yok.
+- Medya id/url/alt/gerçek width-height/variants, yayın/sıra ve kullanım alanını destekler.
+  Galeri usages ile hero/ortak/şube yüzeylerine gider; embedded medya status/sortOrder
+  isteğe bağlıdır. Draft veri ebeveyn published olsa bile serialize edilmez.
+- İmza/decoder MIME/full pixel decode, gerçek ölçü/oran, güvenli yol/symlink, byte/
+  çözünürlük/adet, eksik dosya, zorunlu alt ve global medya ID tekrarı doğrulanır.
+  JPEG/PNG/WebP/AVIF izinli, SVG şimdilik tamamen kapalıdır.
+- Standart build yalnız published fotoğrafları out/images'e yeniden encode edip
+  EXIF/XMP/IPTC/ICC'siz yazar; draft/orphan raw dosyalar dışlanır. Kaynak byte'ları aynı kalır.
+- Build sırasında JSON/görsel değişimi fingerprint ile reddedilir. Header/rota/tasarım,
+  StaticImage/PhotoGallery, altı kategori ve dört koordinat korundu.
+- 38 kritik dosya başlangıç arşiviyle byte eşit. Sharp 0.35.5 mevcut transitive sürümden
+  exact doğrudan bağımlılık oldu; kontrolsüz paket/native sürüm değişikliği yoktur.
+
+| Kontrol                        | Sonuç                                                             |
+| ------------------------------ | ----------------------------------------------------------------- |
+| TypeScript / ESLint / Prettier | PASS; ana strict aynı                                             |
+| Vitest                         | **262/262**, 18 dosya; 52 yeni test                               |
+| Production static export       | **67 dosya**, noindex true; rotalar aynı                          |
+| Static HTTP                    | **3/3**                                                           |
+| Playwright / sistem Chrome     | **48/48**, out/ üzerinde                                          |
+| Responsive                     | **320, 393, 768, 1280 px**                                        |
+| Kategori / ürün / şube export  | **3/3 · 4/4 · 5/5**                                               |
+| İzole medya export             | **5/5**                                                           |
+| Git fotoğraf kurtarma          | Temp repoda doğru → yanlış → yeni düzeltme commit'i; decode geçti |
+
+Medya fixture üç hatalı build'i reddeder, EXIF'siz üretim dosyaları ve doğru MIME'i
+HTTP'de doğrular; draft/orphan URL'leri 404'tür. Hero eager/high, galeri lazy ve
+srcset/sizes dört genişlikte kontrol edilir. İzole ürün/şube fotoğrafları render edilir.
+Son input değişikliği export'u reddeder. Gerçek kaynak/out'a test fotoğrafı eklenmedi.
+67/68 farkı yalnız ham .gitkeep çıktıdan çıkarıldığı içindir; required rotalar/PNG/SEO korunur.
+
+## WARNING
+
+- CMS upload ekranı/.pages.yml/hesap/CI ve Cloudflare bağlantısı yok. Native image alanı
+  dosya yolu saklar; Ali Abi'den piksel ölçüsü istemeden metadata yazacak güvenilir
+  adaptör ve gerçek editor round-trip testi henüz kurulmadı. Şimdiki width/height zorunlu.
+- Build'de EXIF temizliği orijinal dosyayı/Git geçmişini temizlemez. Public repo upload'u
+  öncesi kaynak EXIF mahremiyeti ayrıca kontrol edilmelidir. Dev ham public dosyalarını sunar.
+- Aynı formatta re-encode vardır; otomatik resize/kadraj/varyant üretimi yok. Gerçek medya
+  performansı ölçülmedi. Hazır varyantlar doğrulanır ve StaticImage ile sunulur.
+- Yardımcı TS CJS derlemesinde TS6 Node resolution deprecation uyumluluğu ayrı config'tedir;
+  ana strict aynı, TS7 öncesi araç çözümlemesi tekrar değerlendirilmelidir.
+- Firefox/WebKit/fiziksel cihaz ve yeni axe taraması yapılmadı. Yerel test tam WCAG/host güvenliği değildir.
+- İlk generated lint/tip kopyası ve fixture bekleme sorunları düzeltildi; son kontroller geçti.
+
+## FAIL
+
+Son kontrollerde başarısız test veya açık kritik hata yok. Hatalı JSON/görsel build
+reddi beklenen güvenlik davranışıdır. **CMS entegrasyonu tamamlanmış değildir.**
+
+## Dosyalar, Git ve kabul ölçütü
+
+Yeni galeri schema/loader, media-selection, media-files/server, media-cli ve tool
+config/runner; content/gallery ve public/images alanları; iki unit, bir E2E ve izole
+medya export testi. Ortak MediaAsset/schema/yayın seçicileri, async root doğrulaması,
+hero/galeri kullanım bağlantıları ve build script'leri güncellendi. Bileşenler yeniden
+kurulmadı; eski testler kaldırılmadı. Dokümanlar ve resmî CMS alan eşlemesi güncellendi.
+
+Başlangıç Git main/0507348; snapshot/kanıt arşivi /private/tmp/bal-phase41c3-z6h_8nuw/.
+Medya kanıtı: bal-media-export-VqSdAU; diğer fixture yolları master planda kayıtlı.
+.generated, out ve test raporları Git dışıdır. Başarılı çalışma yerel
+`feat: add CMS-ready gallery and validated static media pipeline` commit'iyle kaydedilir;
+hash git log ve teslim yanıtında bulunur. Remote/push/deployment/c4 yoktur.
+
+Gerçek tamamlanma ölçütü: Ali Abi panelden ürün adı, fotoğraf veya ana sayfa metni
+ile üç akışı kod/piksel metadata girmeden yürütür; otomatik trusted kontroller ve
+korunan aktarım geçer; Cloudflare üzerinde yeni içerik/source SHA doğrulanır.
+Bozuk medya önceki yayını değiştirmez; geri alma ve yeniden yayın da denenir.
+Bu gerçek kabul henüz yapılmadı. c4 önerisi: site metinleri ve upload metadata
+adaptörünü ayrı küçük işler halinde ele almak; kendiliğinden başlatılmadı.
+
+---
+
+## Tarihsel Faz 4.1-c2 raporu
+
 # Faz 4.1-c2 — Şube JSON kalite raporu
 
 Tarih: **1 Kasım 2026**. 4.1-a/b/c1 kabul edildi; önceki kaynaklar ve raporlar korundu.

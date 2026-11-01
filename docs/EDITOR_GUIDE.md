@@ -47,3 +47,12 @@ dosya adının doğru olması tek başına fotoğrafın doğru şubeye ait oldu�
 
 Teknik sorumlu için kurtarma farkı: [ROLLBACK](ROLLBACK.md). Eski yayına dönmek,
 GitHub'daki hatalı kaydı kendiliğinden düzeltmez.
+
+## Medya hazırlığının güncel sınırı
+
+Fotoğraf seçici/yükleme ekranı henüz yoktur. Gelecekte Ali Abi fotoğrafı seçip Türkçe
+alt açıklama, yayın ve sıralamayı düzenler; piksel ölçüsü veya kod girmesi beklenmez.
+Bunu sağlayacak metadata adaptörü ve gerçek editör testi henüz yapılmadı. Şu an
+boyutu yanlış yazılmış veya bozuk dosya build'i durdurur; siteye gönderilmez.
+Tam kabul: panelden ürün adı/fotoğraf/ana sayfa metni değiştirilince otomatik kontroller
+geçer ve yeni içerik Cloudflare üzerinde görülür. Bu sonuç henüz doğrulanmadı.

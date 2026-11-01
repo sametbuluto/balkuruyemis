@@ -5,7 +5,7 @@ import { PhotoGallery } from '@/components/gallery/photo-gallery';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { BranchGrid } from '@/features/branches/branch-grid';
 
-import { brandGallery } from '@/features/gallery/data';
+import { getGalleryImages } from '@/content/gallery';
 import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata = createPageMetadata(
@@ -57,7 +57,10 @@ export default function BranchesPage() {
             title="Şubelerimizi yakından tanıyın."
             description="Gerçek mağaza fotoğrafları eklendiğinde galerimiz burada yer alacak."
           />
-          <PhotoGallery images={brandGallery} label="Şube fotoğraf galerisi" />
+          <PhotoGallery
+            images={getGalleryImages('branches-gallery')}
+            label="Şube fotoğraf galerisi"
+          />
         </Container>
       </section>
     </>

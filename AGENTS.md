@@ -7,15 +7,15 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
 - Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
-- Faz 3 kabul edildi, commit `78df0f7`. Faz 4.1-a/b/c1 kabul edildi. Aktif kapsam
-  yalnız Faz 4.1-c2 şube JSON geçişi ve başarılı veri mimarisini yerel Git kaydıdır;
-  4.1-c3 ve sonraki türlere kendiliğinden geçme.
+- Faz 3 kabul edildi, commit `78df0f7`. Faz 4.1-a/b/c1/c2 kabul edildi ve yerel Git
+  ile kaydedildi. Aktif kapsam yalnız 4.1-c3 galeri/medya altyapısı ve yerel commit;
+  4.1-c4 ve sonraki türlere kendiliğinden geçme.
 - Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
   kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
   kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
 - Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
   kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
-- Plan ve rapor kaynakları: plan.md §17, docs/CMS_SETUP.md, SECURITY.md,
+- Plan ve rapor kaynakları: plan.md §18, docs/CMS_SETUP.md, SECURITY.md,
   DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
 - Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
   deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.
@@ -60,7 +60,14 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
   Kimlik alanı değişince ürün sahibi doğrulaması ve teknik onayın yenilenmesi gerekir.
   Şube sayımı JSON'dan türetilir; dört mevcut koordinatı koru. Header veri hazırlığını
   server wrapper'da, menü etkileşimini içerik/fs import etmeyen client bileşeninde tut.
-- Galeri ve diğer kaynaklar henüz src/content TS modüllerinde kalır.
+- Galeri tek kaynağı content/gallery/<id>.json; ürün/kategori/şube medya nesneleri
+  ebeveynlerinde kalır. İkinci düzenlenebilir medya registry'si ekleme. Galeri usages
+  alanıyla hero/ortak/şube galerisini seçer; embedded status/sortOrder isteğe bağlıdır.
+- Medya için standart npm run build pipeline'ını koru: decode/doğrulama → Next →
+  sanitize out/images → export denetimi. SVG şimdilik kapalı; yalnız JPEG/PNG/WebP/AVIF.
+  .generated araç/raporları Git'e veya client'a taşıma. Source dosyaları değiştirme;
+  taslak/orphan raw dosyaları statik çıktıdan dışla. MEDIA_GUIDE limitlerini koru.
+- Site/ana sayfa metni ve diğer kaynaklar henüz src/content TS modüllerinde kalır.
   Taşıma tip/schema/kimlik eşitliği testleriyle aşamalıdır. `src/config/site.ts` ve
   eski feature data modülleri yalnızca uyumluluk re-export noktalarıdır. Şube sayısını
   kayıt listesinden türet; UI içine sabit sayı yazma. Renk ve tipografi tokenlarını
@@ -130,3 +137,10 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Yerel simülasyon ve gerçek GitHub/CMS/Cloudflare testi raporda ayrılır.
 - Her görev sonunda PASS/WARNING/FAIL; dosyalar, neden, testler, Git/deploy durumu,
   sıradaki küçük iş ve ürün sahibinin manuel kabul adımları Türkçe raporlanır.
+
+## Gerçek CMS kabul ölçütü
+
+Ali Abi panelden ürün adı, fotoğraf veya ana sayfa metni değiştirir; otomatik trusted
+kontroller ve korunan aktarım geçer; Cloudflare'da yeni içerik/source SHA kanıtlanır.
+Kullanıcı kod/piksel metadata yazmaz. Bu gerçek üç akış geçmeden CMS tamamlandı denmez;
+yerel altyapı veya simülasyon yeterli değildir. Bu faz harici kurulum/yayın yetkisi vermez.

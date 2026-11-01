@@ -3,12 +3,12 @@
 Faz 3 kabul edildi; commit `78df0f7`. V5 hedefi hosted Pages CMS + GitHub/Actions +
 Cloudflare Pages'tir; uygulama static export kalır. DB/özel API/custom admin yoktur.
 Faz 4.1-a güvenlik hazırlığı korunur. **Faz 4.1-b kategorileri, Faz 4.1-c1 ürünleri tek kaynaklı JSON
-mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri/metinler TS olarak kalır; CMS/CI/deployment aktif değildir.
+mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri c3 ile JSON kaynağına taşındı; site metinleri TS olarak kalır; CMS/CI/deployment aktif değildir.
 
-Bugün kategori/ürün/şube JSON → strict Node/RSC loader → published server props → statik
+Bugün kategori/ürün/şube/galeri JSON → strict Node/RSC loader → published server props → statik
 sayfa/client filtresi akışı kullanılır. Üretilmiş manifest bu pilotta gerekmemiştir. Diğer türlere
 geçiş ayrı 4.1-c işleridir. Detaylar [CMS_SETUP](CMS_SETUP.md), [CONTENT_GUIDE](CONTENT_GUIDE.md)
-ve [SECURITY](SECURITY.md); ana kayıt plan.md §17. Güvenlik policy kodu hâlâ aktif CI değildir.
+ve [SECURITY](SECURITY.md); ana kayıt plan.md §18. Güvenlik policy kodu hâlâ aktif CI değildir.
 
 Aşağıdaki Faz 3/2.1 kayıtları tarihsel olarak korunur; önceki CMS yasağı ve V5'in
 ilk aşamasındaki manifest önerisi güncel kategori pilotunun önüne geçmez.
@@ -85,6 +85,22 @@ Telefon/saat/WhatsApp null kalabilir; images ilk kapak ve detay galerisi sözle�
 Dosya varlığı root'ta kontrol edilir; upload/decode/EXIF yoktur. Kaynak JSON statik hostta
 404'tür. Hatalı veri build'i durdurur, fallback yoktur. Galeri/site metni geçişi, .pages.yml,
 CMS hesabı ve 4.1-c3 başlatılmadı. Paket/config/renk/rota kararları korunur.
+
+## Faz 4.1-c3 — Medya katmanı
+
+Galeri JSON + strict gallery-schema/server loader; gömülü medya kendi ebeveynindedir.
+Ortak medya status/sortOrder seçimi draft içeriği props/render'dan çıkarır; galeri usages
+hero/brand/branches kullanımını seçer. StaticImage ve PhotoGallery aynı kaldı.
+Root layout async dosya decode doğrulaması yapar; uygulama yine build-time/static'tir.
+
+media:check trusted TS CLI'yi .generated altında derler; Sharp ile tüm public/images
+imza/MIME/piksel/boyut/limit ve referans kontrolü yapar. Next export sonrası aynı input
+fingerprint'i aranır; yalnız published referanslar temizlenip out/images'e yazılır.
+Raw/draft/orphan dosyalar çıkarılır, kaynaklara dokunulmaz. .generated ikinci editör
+kaynağı değildir, Git'e/hosting'e girmez. SVG kapalı; AVIF/WebP/JPEG/PNG geçerlidir.
+Encoder/EXIF temizliği build'dedir; resize/varyant üretimi ve CMS metadata adaptörü
+kurulmadı. Sharp 0.35.5 exact doğrudan bağımlılık oldu, sürüm/native paket değişmedi.
+Ana strict tsconfig aynı; yardımcı CJS araç config'i ayrıdır. Ayrıntı: [MEDIA_GUIDE](MEDIA_GUIDE.md).
 
 ## Build ve çalışma sınırı
 
