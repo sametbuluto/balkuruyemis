@@ -1,8 +1,90 @@
 # Mimari — Faz 3 / Static-first
 
-30 Ekim 2026 mimari kararı: ilk sürüm Next.js Static Export; DB, özel backend,
-CMS, admin ve auth yok. Önceki öneriler aşağıda tarihsel kayıt olarak korunur.
-[Master plan](../plan.md), [kurallar](../AGENTS.md), [içerik rehberi](CONTENT_GUIDE.md).
+Faz 3 kabul edildi; commit `78df0f7`. V5 hedefi hosted Pages CMS + GitHub/Actions +
+Cloudflare Pages'tir; uygulama static export kalır. DB/özel API/custom admin yoktur.
+Faz 4.1-a güvenlik hazırlığı korunur. **Faz 4.1-b kategorileri, Faz 4.1-c1 ürünleri tek kaynaklı JSON
+mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri/metinler TS olarak kalır; CMS/CI/deployment aktif değildir.
+
+Bugün kategori/ürün/şube JSON → strict Node/RSC loader → published server props → statik
+sayfa/client filtresi akışı kullanılır. Üretilmiş manifest bu pilotta gerekmemiştir. Diğer türlere
+geçiş ayrı 4.1-c işleridir. Detaylar [CMS_SETUP](CMS_SETUP.md), [CONTENT_GUIDE](CONTENT_GUIDE.md)
+ve [SECURITY](SECURITY.md); ana kayıt plan.md §17. Güvenlik policy kodu hâlâ aktif CI değildir.
+
+Aşağıdaki Faz 3/2.1 kayıtları tarihsel olarak korunur; önceki CMS yasağı ve V5'in
+ilk aşamasındaki manifest önerisi güncel kategori pilotunun önüne geçmez.
+
+## Faz 4.1-b — Gerçekleştirilen kategori pilotu
+
+Tek kaynak altı `content/categories/category-*.json` dosyasıdır. `categories.server.ts`
+Node/RSC katmanında dosyaları UTF-8/normal dosya/byte kontrolleriyle okur;
+category-schema unknown JSON'a strict alan/tip/değer/ID-dosya adı/benzersizlik
+uygular. ProductCategory ve MediaAsset sözleşmeleri korunur. Aynı sıra ve değerlerle
+veri üretir; hata durumunda boş liste veya eski kayıt fallback'i yoktur.
+
+`src/content/categories.ts` yalnız erişim/fonksiyon ve uyumluluk snapshot'ıdır.
+Queries ve root denetimi getCategories üzerinden güncel dosyaları yükler. Liste/sayı
+TS içinde sabitlenmez; yeni JSON eklemek build için yeterlidir. Ürün geçişi aşağıda,
+diğer veri türleri TS olarak kalır. Kaynak JSON statik `out/` içine kopyalanmaz.
+
+Bu pilotta üretilmiş manifest gerekmedi: CatalogBrowser bütün kategorileri zaten
+server page'in published props'undan alıyor. Node fs içeren loader client import
+zincirinde değildir; doğrulanmış veri client filtresine serialize edilir. Derleme
+komutları/Next config/dependency/type ayarları değişmedi. Dev'de JSON sonrası dev sunucusunu
+yeniden başlatıp sayfayı yenileyin; otomatik HMR iddiası yoktur. Gelecekte gerçekten ihtiyaç
+olursa manifest yaklaşımı ayrıca değerlendirilir.
+
+Yükleme, schema/parse, taslak ve bozuk dosya testleri; gerçek izole negatif build ve
+draft statik çıktı testleriyle doğrulanır. Görsel decode/EXIF/CMS upload bu fazda yoktur.
+
+## Faz 4.1-c1 — Ürünler ve kategori referansları
+
+`content/products/` bir ürün/bir JSON koleksiyonudur. Şu an gerçek ürün sayısı 0;
+`.gitkeep` dizini Git'te korur. loadProducts boş koleksiyonu kabul eder; kayıp dizin,
+bozuk UTF-8/JSON, dosya tipi/boyutu, şema veya referans hatası build'i durdurur.
+`product-schema.ts` sekiz zorunlu alanı, ID-dosya eşleşmesini, benzersiz ID/slug ve
+MediaAsset dizisini unknown girdiden doğrular. Kategori ve ürünlerdeki ortak strict
+alan/görsel denetimleri content-schema.ts'e alındı; kategori sözleşmesi değiştirilmedi.
+
+`categoryId` aynı okumada strict JSON loader'dan alınan kategori kimliklerine karşı
+doğrulanır. Draft kategoriye referans olabilir; getPublishedProducts yalnız published
+ürün + published kategori birleşimini döndürür. Root içerik denetimi taslak dahil tüm
+kayıtları doğrular; CatalogBrowser'a yalnız yayımlanmış ürünler serialize edilir.
+Uyumluluk products export'u bellekteki snapshot'tır, getProducts her okumada dosyaları
+yükler. TS ürün literal listesi veya sabit kategori seçenekleri tutulmaz.
+
+Statik metadata/sitemap yeni ürün rotası veya Product schema üretmez. İzole export
+testi, published ürünün gerçekten render edildiğini; draft ürünün ve draft kategoriye
+bağlı ürünün HTML/RSC/JS/XML dahil tüm metin çıktılarından dışlandığını kontrol eder.
+Fake ürünler yalnız geçici fixture kopyasındadır. Ürün görsel yükleme/decode, CMS
+hesabı/.pages.yml, şube/galeri/metin geçişi ve 4.1-c2 başlatılmadı. UI/rota/URL
+filtresi, dört koordinat, Next config ve npm komutları aynı kalır.
+
+## Faz 4.1-c2 — Şube kaynağı ve kimlik onayı
+
+Dört kayıt 14 alanıyla birebir content/branches/location-{1,2,3,4}.json dosyalarına taşındı.
+branches.ts literal liste içermez; güncel getBranches/loadBranches ve uyumluluk snapshot'ı
+sunar. Şube sorguları, root doğrulaması, build-time sayımlar ve Next config bu kaynağı kullanır.
+Mevcut özel page.branch.tsx/generateStaticParams mekanizması değişmedi.
+
+branch-schema strict unknown JSON, nullable alanlar, koordinat/Maps eşleşmesi ve
+benzersiz ID/slug/fiziksel konum/adres denetimi yapar. Örnekler gerçek JSON'da reddedilir.
+Kimlik ve yayın ayrı eksenlerdir. branch-identity.ts korunan ID + fingerprint onayları
+(şu an boş) tutar; verified alanının id/slug/ad/adres/koordinat özetiyle eşleşmesi gerekir.
+Sadece JSON düzenleyerek kimlik onayı alınamaz. Kimlik alanı değişirse onay yenilenir;
+işletme verisinin tek kaynağı yine JSON'dur. Gerçek GitHub koruması/CI ayrı kurulacaktır.
+Onaylı verified/published detay üretir; location ve draft kayda detay/schema/sitemap yoktur.
+Yeni LocalBusiness/SEO özelliği eklenmedi.
+
+Header eskiden content/site → branches üzerinden statik listeyi client'a import ediyordu.
+FS loader sonrasında bu zincir build tarafından reddedildi. Header şimdi server wrapper'da
+marka ve navigasyonu hazırlar; header-navigation client'ı yalnız props ve render edilmiş
+marka slotu alır. CSS/DOM, sticky, menü/Escape/odak/aktif rota davranışı korundu.
+Node fs/crypto/config verisi client bundle'a taşınmaz; statik export API gerektirmez.
+
+Telefon/saat/WhatsApp null kalabilir; images ilk kapak ve detay galerisi sözleşmesini korur.
+Dosya varlığı root'ta kontrol edilir; upload/decode/EXIF yoktur. Kaynak JSON statik hostta
+404'tür. Hatalı veri build'i durdurur, fallback yoktur. Galeri/site metni geçişi, .pages.yml,
+CMS hesabı ve 4.1-c3 başlatılmadı. Paket/config/renk/rota kararları korunur.
 
 ## Build ve çalışma sınırı
 

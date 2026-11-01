@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **30 Ekim 2026**. Aktif faz: **Faz 3 — Static-first migration ve dört gerçek konum tamamlandı, değerlendirmeye hazır**.
+Son güncelleme: **1 Kasım 2026**. Aktif durum: **Faz 4.1-c2 — Şube JSON geçişi tamamlandı, yerel Git teslimi**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -19,13 +19,18 @@ doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte
 
 ## 2. Fazların durumu
 
-| Faz                      | Durum        | Sonuç / hedef                                                                       |
-| ------------------------ | ------------ | ----------------------------------------------------------------------------------- |
-| Faz 1 — Proje altyapısı  | Tamamlandı   | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
-| Faz 2 — Kurumsal tasarım | Tamamlandı   | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
-| Faz 2.1 — Marka kimliği  | Tamamlandı   | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
-| Faz 3 — Statik mimari    | Tamamlandı   | Static export, Git içerik kaynakları ve dört gerçek konum                           |
-| Faz 4 — Yayına hazırlık  | Başlatılmadı | Gerçek içerik ve yayın kontrolleri; ayrıca canlıya çıkış onayı gerekir              |
+| Faz                        | Durum          | Sonuç / hedef                                                                       |
+| -------------------------- | -------------- | ----------------------------------------------------------------------------------- |
+| Faz 1 — Proje altyapısı    | Tamamlandı     | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
+| Faz 2 — Kurumsal tasarım   | Tamamlandı     | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
+| Faz 2.1 — Marka kimliği    | Tamamlandı     | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
+| Faz 3 — Statik mimari      | Tamamlandı     | Static export, Git içerik kaynakları ve dört gerçek konum                           |
+| Faz 4.1 — CMS ön hazırlık  | Yerel hazırlık | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
+| Faz 4.2–4.5 — CMS ve yayın | Başlatılmadı   | Pages CMS, güvenilir Actions, Pages preview ve Ali Bey testleri                     |
+| Faz 5 — Gerçek varlıklar   | Başlatılmadı   | Logo ve gerçek fotoğraflar                                                          |
+| Faz 6 — Kesin bilgiler     | Başlatılmadı   | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
+| Faz 7 — Kurumsal yayın     | Başlatılmadı   | Domain/SEO/HTTPS ve yayın onayı                                                     |
+| Faz 8 — Bakım              | Başlatılmadı   | İzleme ve iki ayrı geri alma süreci                                                 |
 
 ## 3. Faz 1 — Neler yapıldı?
 
@@ -545,3 +550,499 @@ Yerel önizleme: `npm run build` ardından `npm run preview`, http://127.0.0.1:4
 Cloudflare Pages için npm run build / out ayarları README'de hazır; bağlantı yapılmadı.
 Sonraki adım Faz 4 için gerçek kimlik/görsel/iletişim/domain kabulü ve yayın öncesi
 kontrollerdir; bu faz veya deployment kendiliğinden başlatılmaz.
+
+## 13. Faz 3 kabul/commit ve Faz 4 hazırlık planı
+
+30 Ekim 2026: ürün sahibi statik mimariyi ve dört konumu kabul etti. Önce mevcut
+sürüm kaydedildi; ardından yalnızca plan belgeleri düzenlendi. Faz 4 uygulaması,
+GitHub push ve Cloudflare deployment başlatılmadı.
+
+### 13.1. Git teslim kaydı
+
+- İstenen commit mesajı: `feat: complete static site migration and branch locations`.
+- Tam hash: **`78df0f7e5505a396b3c7c64f8aaa7d69498cd747`**; kısa hash `78df0f7`.
+- Dal: `main`; 65 dosya değişikliği. Şube şablonu rename olarak kaydedildi.
+- `.env`, `.env.local`, node_modules, out, .next, coverage ve test raporları
+  ignore kontrolünden geçti; Git'e girmedi. `.env.example` yalnızca şablon ayarlar içerir.
+- Kaynak ve staged içerikte bilinen sır desenleri tarandı, eşleşme yoktu.
+  Bu kontrol tüm sır türlerini tespit etme garantisi değildir.
+- Commit sonrasında çalışma ağacı temizdi. Sonradan hazırlanan Faz 4 belgeleri
+  çalışma ağacında bırakılır; bu görevde ek commit oluşturulmaz.
+- Remote listesi boş. Ekran görüntüsündeki `sametbuluto/balkuruyemis` hedef adayı
+  olarak not edildi; uzak depo içeriği/erişimi bu tur doğrulanmadı, bağlantı/push yapılmadı.
+- `docs/QUALITY_REPORT.md` bu tur başında boştu; boş içeriği korundu (yalnızca Prettier boş satırı kaldırdı). Önceki Faz 3
+  sonuçları §12.5 ve README'de kayıtlı; geçmiş sonuçlar yeni test sonucu gibi sunulmaz.
+
+### 13.2. Faz 4 geliştirme planı
+
+Ayrıntılı plan, içerik matrisi ve kabul listesi: **[PHASE4_PLAN](docs/PHASE4_PLAN.md)**.
+
+1. Gerçek logo ve koyu zemin varyantını al; BrandMark yüzeyleri ve ikon/OG güncellemelerini hazırla.
+2. Gerçek mağaza/ürün fotoğraflarını eşleştir; yerel AVIF/WebP varyantlarını ve alt/boyut bilgilerini hazırla.
+3. Altı kategoriyi onaylı gerçek fotoğraflarla zenginleştir; mevcut oranları, filtreleri ve tasarımı koru.
+4. Şube kartlarını sadeleştir: tek kısa eksik bilgi notu, kompakt görsel/ikon, iki Maps eylemi önerisi.
+5. Statik out/ üzerinde regresyon, erişilebilirlik, responsive ve gerçek medya performansını değerlendir.
+6. GitHub ve ücretsiz Cloudflare Pages önizleme ayarlarını gözden geçir; yayın işlemlerini sonraki açık talimata bırak.
+
+Bunlar yapılacak işlerdir; uygulama kodu veya içerik verisi bu görevde değiştirilmez.
+Mimari, testler, dört koordinat ve kırmızı/siyah/beyaz kimlik korunur.
+
+### 13.3. İçerik kontrol listesi
+
+- [x] Marka adı, slogan, renk yönü ve dört gerçek koordinat hazır.
+- [ ] Orijinal SVG/vektör logo; şeffaf PNG ve koyu zemin varyantı.
+- [ ] Gerçek fiziksel tabela referansı ve seçilecek hero fotoğrafı.
+- [ ] Kuruyemiş/Kahve/Lokum/Baharat/Aktar/Kozmetik kategori fotoğrafları.
+- [ ] Gerçek ürün listesi, kategori eşleşmesi, kısa açıklamalar ve fotoğraflar.
+- [ ] Konum 1–4 ile eşleştirilmiş gerçek mağaza fotoğrafları.
+- [ ] Konum 1–4 için doğrulanmış şube adı/adres/telefon/çalışma saatleri.
+- [ ] Resmî Instagram ve WhatsApp adresleri.
+- [ ] Sağlanan varlıkların sitede/depo görünürlüğünde yayın uygunluğu.
+- [ ] Hedef GitHub depo/görünürlük ve Cloudflare hesap/proje kararları.
+
+Alan adı ücretsiz önizlemenin ön koşulu değildir. Preview için site URL boş,
+indeksleme false ve Pages noindex koruması planlanır. Git entegrasyonunun push'la
+build/yayın tetikleyebileceği, ilk bağlantıda branch ayarlarının kontrol edilmesi
+ve dış önizleme yayınının da deployment olduğu ayrıntılı planda belgelendi.
+
+### 13.4. Doğrulama
+
+Bu tur `npm run check` ve `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e`
+yeniden çalıştırıldı: strict TypeScript, ESLint ve Prettier başarılı; **25/25 Vitest**,
+**3/3 statik HTTP**, static export ve **36/36 Playwright** geçti. out/ yeniden
+üretildi; Git'e alınmadı. 320/393/768/1280 px regresyon kontrolleri E2E içinde geçti.
+İlk tur boş QUALITY_REPORT dosyasının tek boş satırı nedeniyle Prettier'da durdu;
+boş içeriği değiştirmeden satır normalize edildi ve son toplu tur başarıyla tamamlandı.
+Firefox/WebKit için yeni bir test veya yeni axe taraması yapılmadı; önceki kısıtlar
+geçerli. Uygulama kaynakları/testleri/config'leri Faz 3 commit'iyle aynı.
+Yalnızca belge değişiklikleri yapıldı; Faz 4 görsel uygulaması test edildi denmez.
+
+## 14. Master Prompt V5.0 — Faz 4.1 ön inceleme ve yerel hazırlık
+
+### 14.1. Güncel karar ve koruma
+
+30 Ekim'de başlayan V5 çalışması 1 Kasım 2026'da sürdürülüp tamamlandı. V5 önceki
+“CMS kapsam dışı” kararını değiştirir: hedef hosted Pages CMS + GitHub + Actions +
+Cloudflare Pages. Site static export kalır; uygulamada DB/Prisma/özel API/custom
+admin yoktur. CMS hizmetinin kendi auth/veri altyapısı bu sınırla karıştırılmaz.
+
+- Son commit: `78df0f7e5505a396b3c7c64f8aaa7d69498cd747`; baseline `b844bad`.
+- Başlangıçta önceki turdan doküman değişiklikleri vardı; korundu. 102 kaynak yolu
+  arşivi `/private/tmp/bal-v5-start-epqoprmo/source.tar.gz`, diff aynı dizinde.
+- Gerçek .env/otomatik çıktı Git'te değil; bilinen sır desenlerine rastlanmadı.
+  package/lockfile exact sürümleri eşleşiyor; yeni paket yok.
+- GitHub API 30 Ekim ve 1 Kasım'da HTTP 200, Public, size 0; anonim ls-remote refs
+  boş. Local remote boş. Kullanıcı Public/Private tercihi ayrıca soruldu; yanıt yok.
+  Mevcut Public durumu tercih olarak varsayılmadı. Hesabın ücretli planı okunmadı.
+- Remote/branch/commit/push/App yetkisi/davet/hesap/ödeme/domain/deployment yok.
+  Dört koordinat ve uygulama görünümü korunur.
+
+### 14.2. Araştırma ve uygulanabilirlik
+
+[CMS_SETUP](docs/CMS_SETUP.md) resmî kaynaklarla sekiz hedef içerik girişini,
+alan/medya/davet/işlem/dal uyumunu, JSON migration risklerini ve küçük işleri tutar.
+E-posta collaborator destekleniyor; özel Content Editor RBAC veya editöre özel
+branch allowlist varmış gibi davranılmıyor. TypeScript kaynakları raw editor'a
+sunulmayacak. Kategori reference koleksiyonundan alınacak; ikinci sabit seçenek
+listesi oluşturulmayacak. Rename/delete açıkça kapatılacak; status draft ile yayından kaldırılacak.
+
+Native maxSize/pixel/EXIF kontrolü veya otomatik güvenli save-to-production hook'u
+varsayılmıyor. Image yolu tek başına MediaAsset değildir; alt/gerçek boyut/variant
+normalizasyonu ayrı build-time işidir. Dış JSON unknown olarak strict şema ve iş
+kurallarından geçecek; client tarafına fs taşınmayacak. Henüz veri formatı değiştirilmedi.
+
+[SECURITY](docs/SECURITY.md) güvenilir main koduyla data-only candidate, exact SHA,
+PR/required checks, ayrı bot/App yetkileri, race/conflict ve güvenli alternatifleri
+anlatır. Public repo Free'de koruma/auto-merge destekler; Private tercihinde uygun
+plan kontrol edilmeli. CMS kurulum kaynak manifesti geniş izinler ister; hosted
+kurulumun gerçek izinleri görülmedi. En az yetki veya main koruması tamamlandı sayılmaz.
+
+Güvenli ilk alternatif, Ali Bey'in main ref'ine bağlı “Yayına gönder” CMS action'ıdır;
+insan inceleme onayı beklemez fakat save sonrası tam otomatik akışla aynı değildir.
+Tam otomatik uyandırma/candidate/PR/merge tasarımı ayrı 4.3 entegrasyon testleri ister.
+Content-edit script/artifact/cache veya sahte yeşil check'e güvenilmez. Koruma
+kanıtlanamazsa yalnız doğrulama + manuel teknik PR merge alternatifiyle durulur;
+otomasyon hedefi tamamlandı denmez. Cron tek başına kalıcı yayın garantisi değildir.
+
+### 14.3. Bu görevde uygulanan yerel hazırlık
+
+`src/lib/content-change-policy.ts`: gelecekte güvenilir Git okuyucunun üreteceği
+manifest için saf ön kontrol. Planlanan content JSON ve raster medya yolları, A/M,
+100644 mode, benzersiz path ve byte/adet limitleri. Kod/workflow/.pages/env,
+silme/rename, symlink/submodule/executable, uygunsuz medya ve log satırı enjeksiyonu
+reddedilir. Tek hatalı dosya paketin tamamını durdurur.
+
+Bu helper aktif loader/CI değildir; JSON içerik şeması, medya decode/EXIF, Git
+nesnelerinden envanter, hesap yetkisi ve atomik merge kontrolünü yapmaz. Dosya boyutu
+limitleri başlangıç politika önerisidir, CMS'nin yerleşik yeteneği değildir.
+
+Yeni belgeler: CMS_SETUP, SECURITY, DEPLOYMENT, ROLLBACK, EDITOR_GUIDE. AGENTS,
+README, ARCHITECTURE, ROADMAP, CONTENT_GUIDE V5 ile eşleştirildi. Eski görsel
+PHASE4_PLAN tarihsel olarak korundu. Önceden boş QUALITY_REPORT bu görevin gerçek
+raporuyla dolduruldu; eski Faz 3 sonuçları §12'de kaldı.
+
+### 14.4. İlk sıradaki küçük iş ve kabul kriterleri
+
+**4.1-b: Altı kategori için JSON pilotu.** Aynı id/slug/sıra/metin/null görseller;
+tek düzenlenebilir kaynak; strict unknown parse ve iş kuralları; bozuk/şema dışı/
+tekrar slug reddi; statik/client veri ve Next config/dev/typecheck/build sırası;
+eski/yeni normalize çıktı eşitliği ve kategori E2E. Bu işte CMS App/davet veya
+aktif otomatik yayın/tasarım değişikliği yapılmaz. Sonra diğer veri tiplerine tek tek geçilir.
+
+Root .pages.yml 4.2-a'da gerçekten tüketilen JSON kaynaklarına bağlanacak. Bu tur
+var olmayan dosyalara CMS bağlamak veya TS'yi ham editöre açmak yerine önce güvenli
+veri sözleşmesi planlandı; 4.2 tamamlandı sayılmaz. Küçük görev/kabul matrisi CMS_SETUP'tadır.
+Logo/fotoğraf Faz 5, kesin bilgiler Faz 6, domain/SEO Faz 7, bakım Faz 8'dir.
+
+### 14.5. Doğrulama ve manuel kabul
+
+Son toplu yerel sonuç, 1 Kasım 2026:
+
+| Kontrol                    | Sonuç                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------- |
+| TypeScript strict          | Başarılı; ayarlar gevşetilmedi                                                                          |
+| ESLint / Prettier          | Başarılı; sıfır lint uyarısı                                                                            |
+| Vitest                     | **64/64**, 10 dosya; yeni politika için 39 test dahil                                                   |
+| Production static export   | Başarılı; **68 dosya**, noindex true                                                                    |
+| Statik HTTP                | **3/3**                                                                                                 |
+| Playwright / sistem Chrome | **36/36**, gerçek out/ sunucusunda                                                                      |
+| Responsive regresyon       | **320, 393, 768, 1280 px** mevcut E2E kapsamında geçti                                                  |
+| Kaynak koruma              | App/components/content/features/styles/types, önceki test/config/paket dosyaları Faz 3 commit'iyle aynı |
+
+İlk tur .next/types içindeki `routes.d 2.ts` gibi üretilmiş kopyalar yüzünden typecheck
+aşamasında durdu. Kopyalar silinmeden `/private/tmp/bal-v5-generated-copies-l3t_twe_`
+içinde korundu; ardından aynı sıradaki tüm check ve E2E kontrolleri geçti. Bu bir
+ortam/generated cache sorunudur; strict tipler veya kaynaklar değiştirilmedi.
+
+Yeni code path uygulamaya veya CI'ya bağlı değildir. Önceki 38 testlik hedefli tur,
+log güvenliği testi eklendikten sonra son toplu turda 39 politika/64 toplam test oldu.
+Yeni axe, WebKit/Firefox, fiziksel cihaz, gerçek CMS veya yayın testi yapılmadı.
+Sonuç: PASS yerel hazırlık/regresyon; WARNING harici yetki/entegrasyon ve tercihler;
+FAIL son kontrollerde başarısız test yok. Git main/78df0f7, değişiklikler uncommitted.
+
+Gerçek CMS edit/davet/yetki, GitHub branch koruması ve otomatik aktarım, Cloudflare
+build/deployment/rollback testleri çalıştırılmadı; yerel policy bunları kanıtlamaz.
+Resmî doküman araştırması ve anonim GitHub okuması dışında harici işlem yapılmadı.
+
+Ürün sahibinin manuel kabulü: Public/Private tercihi, sekiz içerik girişinin kapsamı,
+yetki/otomasyon sınırlamaları ve 4.1-b kabul ölçütleri. Çalışan CMS hesabı veya dış
+preview yok; onları test etmesi beklenmez. Yeni sonuçlar [QUALITY_REPORT](docs/QUALITY_REPORT.md) içinde.
+
+## 15. Faz 4.1-b — Kategori JSON migration pilotu
+
+### 15.1. Başlangıç ve kapsam
+
+1 Kasım 2026: ürün sahibi V5/4.1-a'yı kabul etti; yalnız kategori geçişini yetkilendirdi.
+Git main/78df0f7; önceki doküman ve güvenlik politikası değişiklikleri korundu.
+Kaynak snapshot: `/private/tmp/bal-phase41b-nUr6iB/source-before.tar.gz` ve
+working-before.diff. Eski TS literal kayıtları güvenilir AST ile çıkarıldı;
+`categories-before.ts/json` aynı çalışma dizininde korundu. Değerlendirme için
+çalıştırılabilir ikinci kategori listesi veya sabit CMS veri hash testi eklenmedi.
+
+Ürünler/şubeler/galeri taşınmadı; .pages.yml/App/hesap/secret/commit/push/deploy yok.
+4.1-a policy ve testleri korunur. Site tasarımı/rotalar/filtre davranışı değişmedi.
+
+### 15.2. Eski/yeni karşılaştırma
+
+7 alan karşılaştırıldı: id, slug, name, description, image, sortOrder, status.
+
+| ID                 | Slug      | Ad        | Sıra | Durum     | 7 alan |
+| ------------------ | --------- | --------- | ---- | --------- | ------ |
+| category-kuruyemis | kuruyemis | Kuruyemiş | 1    | published | Eşit   |
+| category-kahve     | kahve     | Kahve     | 2    | published | Eşit   |
+| category-lokum     | lokum     | Lokum     | 3    | published | Eşit   |
+| category-baharat   | baharat   | Baharat   | 4    | published | Eşit   |
+| category-aktar     | aktar     | Aktar     | 5    | published | Eşit   |
+| category-kozmetik  | kozmetik  | Kozmetik  | 6    | published | Eşit   |
+
+Eski 6, yeni 6; kayıp/değişen kayıt 0. Açıklamalar ve altı image:null değeri de birebir.
+Canonical JSON SHA-256 (sıralı kayıtlar):
+`f9ef00bbdcb4b05a9971aee9e4491c5e4c0cf176447e1f5b52254e07a1626aad` hem önce hem sonra aynı.
+Karşılaştırma kanıtı `/private/tmp/bal-phase41b-nUr6iB/parity-report.json`.
+Bu tarihsel hash gelecekte geçerli CMS düzenlemelerini engelleyen test değildir.
+
+### 15.3. Uygulama ve dosyalar
+
+- content/categories altında ID adına göre altı JSON: tek düzenlenebilir kaynak.
+- categories.ts eski literal listeyi kaldırıp loadCategories erişimi ve eski importlar
+  için bellekteki productCategories snapshot'ını sunar. İkinci düzenlenebilir liste yoktur.
+- categories.server.ts: Node/RSC dosya yükleme, normal dosya/UTF-8/256 KiB kontrolü;
+  boş/kayıp/bozuk kaynakta hata; her query/render güncel veri okur, fallback yok.
+- category-schema.ts: unknown parse, strict alan/tip, ID-dosya eşleşmesi, benzersizlik,
+  MediaAsset/varyant doğrulaması; published/draft seçimi. Tip sistemi gevşetilmedi.
+- queries ve root içerik denetimi yeni getCategories yolunu kullanır. Client mevcut
+  server props'unu kullanır; fs client'a girmez, statik hostta source JSON/API yoktur.
+- Yeni schema/loader testleri; yeni E2E source gizliliği/API yokluğu; izole kategori
+  export sözleşme script'i. Mevcut testler kaldırılmadı.
+- Mevcut şube export fixture script'i yalnız content/ kopyalama bağımlılığıyla güncellendi.
+- AGENTS/README/CONTENT_GUIDE/CMS_SETUP/ARCHITECTURE/ROADMAP ve kalite/plan kayıtları.
+
+Bu pilot için manifest/preprocessing/generator veya yeni paket gerekmedi. Next config,
+komutlar ve strict ayarları aynı. JSON sonrası dev'de tam sayfa yenileme gerekir;
+otomatik HMR vaat edilmez. Statik yayında yeniden build gerekir.
+
+### 15.4. Doğrulama
+
+Son sonuç: **PASS**, 1 Kasım 2026.
+
+| Kontrol                    | Sonuç                                                                        |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| npm run check              | TypeScript strict, ESLint, Prettier, Vitest, build ve HTTP başarılı          |
+| Vitest                     | **103/103**, 12 dosya; önceki 64 test ve 39 yeni kategori testi              |
+| Production static export   | **68 dosya**, noindex true; rotalar aynı                                     |
+| Static HTTP                | **3/3**                                                                      |
+| Playwright / sistem Chrome | **39/39**, out/ üzerinden; kategori/source gizliliği dahil                   |
+| Responsive                 | **320, 393, 768, 1280 px** mevcut kırpılma/taşma kontrolleri geçti           |
+| İzole kategori export      | **3/3**; malformed JSON ve unknown field build reddi; draft görünmezliği     |
+| İzole şube export          | **1/1**; yeni content/ konumuyla mevcut şablon çalışıyor                     |
+| Veri/koruma                | **6/6 kayıt, 7/7 alan eşit**; 13 korunan dosya başlangıç arşiviyle byte eşit |
+
+Kategori fixture kanıtı: `/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-category-export-4gDIrh`;
+şube fixture: `/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-branch-export-603FFr`.
+Koruma kanıtı: çalışma arşivindeki preservation-report.json. Kaynak kategori JSON'u
+ve server TS yolu hostta 404; client filtre için yeni API/content isteği yok.
+Playwright HTML: playwright-report/index.html, durum test-results/.last-run.json.
+Bu QA çıktıları Git'e girmez. Yeni dependency/commit/push/deployment yok.
+
+WARNING: otomatik JSON HMR eklenmedi; dev'de JSON düzenlemesinden sonra sunucuyu
+tekrar başlatıp sayfayı yenileyin. Görsel decode ve gerçek CMS/Pages entegrasyonu,
+Safari/WebKit/Firefox/fiziksel cihaz testi bu görevde yok. Son testlerde FAIL yok.
+
+İlk typecheck tekrar oluşan .next/types/routes.d 2.ts kopyası yüzünden durdu;
+numaralı generated kopyalar silinmeden aynı çalışma dizininin generated-type-copies
+altına taşındı. Strict veya kaynaklar değiştirilmedi; production build sonra geçti.
+
+### 15.5. Sonraki faz önerisi — başlatılmadı
+
+4.1-c'de önce ürün sözleşmesi ve kategori ID referansları; ardından şube kimliği/
+koordinat ayrımı, galeri/medya ve site metinleri ayrı işler olarak taşınabilir.
+Her adımda birebir veri karşılaştırması, strict dış JSON ve gerçek statik build
+kontrolü gerekir. Görsel decode/EXIF/optimizasyon ve CMS editörü farklı aşamalardır.
+Bu turda diğer veri tipleri veya .pages.yml oluşturulmadı.
+
+## 16. Faz 4.1-c1 — Ürün JSON içerik mimarisi
+
+### 16.1. Başlangıç ve veri eşitliği
+
+1 Kasım 2026: 4.1-b kabul edildi; yalnız ürün geçişi yetkilendirildi. Git main/78df0f7;
+4.1-a/b dahil önceki uncommitted değişiklikler korundu. Başlangıç kaynak arşivi,
+diff ve SHA manifesti `/private/tmp/bal-phase41c1-e1237sbd/` içinde. Eski ürün TS
+kaynağı readonly boş listeydi; yeni JSON koleksiyonu da **0 ürün**. Gerçek veya
+örnek ürün JSON'u oluşturulmadı; content/products yalnız `.gitkeep` içerir.
+
+Başlangıca göre altı kategori JSON'u byte eşit. Dört koordinat, şube/galeri/site/sosyal,
+App/components/features/styles/types/config kaynakları, 4.1-a policy/test, paket/lock,
+strict TS, Next ve Playwright config dahil **75 korunan dosya** byte eşit doğrulandı.
+Kanıt: preservation-report.json. Kategori schema'nın ortak alan/görsel yardımcıları
+content-schema.ts'e çıkarıldı; kategori sözleşmesi korunup önceki testleri tekrar geçti.
+
+### 16.2. Ürün sözleşmesi ve güven sınırı
+
+Tek kaynak `content/products/product-<id>.json`; dosya başına bir ürün.
+Sekiz zorunlu alan: **id, slug, name, categoryId, description, images, sortOrder, status**.
+ID product- önekli ve dosya adıyla eşleşir; ID/slug benzersizdir. Ad/açıklama boş
+olmayan UTF-8 metin, images boş dizi veya strict MediaAsset dizisi, sıra negatif
+olmayan güvenli tam sayı, status yalnız draft/published olabilir. Fiyat alanı yoktur.
+
+categoryId aynı server/build okumasında gerçek kategori JSON loader'ından gelen
+kimliklere karşı doğrulanır; ikinci sabit kategori listesi yoktur. Draft kategoriye
+referans geçerlidir; yalnız ürün ve kategorisi birlikte published ise ziyaretçiye
+aktarılır. Draft ürünün yanlış referansı da reddedilir. Bilinmeyen/eksik alan, yanlış
+tip/değer, bozuk JSON/UTF-8, ID-dosya uyuşmazlığı, mükerrer ID/slug, symlink, alt
+klasör, JSON dışı dosya ve 256 KiB üstü dosya build'i durdurur. Boş koleksiyon
+geçerli; kayıp dizin/bozuk veride fallback yoktur.
+
+products.server.ts Node/RSC okuması yapar. products.ts yalnız erişim/uyumluluk
+snapshot'ıdır; eski TS ürün literal listesi kaldırıldı. Queries/root tüm kayıtları
+doğrular; client'a yalnız published props gider. Node fs/kaynak JSON statik hosta
+ve client bundle'a taşınmaz. Yeni API, ürün rotası, Product schema veya metadata
+özelliği eklenmedi; mevcut genel katalog SEO'su ve filtre URL davranışı korundu.
+Görsel sözleşmesi ve mevcut dosya varlığı kontrolü var; upload/decode/EXIF kurulmadı.
+
+### 16.3. Dosya kaydı
+
+- content/products/.gitkeep: gerçek ürün bekleyen boş koleksiyon.
+- Yeni product-schema.ts/products.server.ts ve ikisinin test dosyaları.
+- content-schema.ts: kategori/ürün ortak strict alan ve medya yardımcıları;
+  category-schema.ts bu yardımcıları kullanır, aynı kuralları sürdürür.
+- products.ts, queries.ts, content.server.ts: JSON tek kaynağına erişim ve yayın filtresi.
+- categories.server.test.ts: draft kategori testinde bağımsız ürün fixture'ı.
+- tests/e2e/catalog-assertions.ts, products-json.spec.ts, site.spec.ts:
+  mevcut boş durum denetimi korunur, gelecekte gerçek ürün varsa kartlar doğrulanır.
+- scripts/test-product-export.mjs: geçici kaynakta üç negatif build ve görünürlük testi.
+- AGENTS/README/CONTENT_GUIDE/ARCHITECTURE/CMS_SETUP/ROADMAP/QUALITY_REPORT ve bu plan.
+
+Mevcut testler kaldırılmadı. Ürünlerin gerçek kaynağını kalıcı olarak boş olmaya
+zorlayan test eklenmedi; boş koleksiyon davranışı temp fixture ile sınanır.
+
+### 16.4. Son doğrulama
+
+| Kontrol                    | Sonuç                                                                                        |
+| -------------------------- | -------------------------------------------------------------------------------------------- |
+| npm run check              | TypeScript strict, ESLint, Prettier, Vitest, static export ve HTTP başarılı                  |
+| Vitest                     | **146/146**, 14 dosya; önceki 103 + 43 yeni ürün testi                                       |
+| Production static export   | **68 dosya**, noindex true; rotalar aynı                                                     |
+| Statik HTTP                | **3/3**                                                                                      |
+| Playwright / sistem Chrome | **42/42**, gerçek out/ sunucusunda                                                           |
+| Responsive                 | **320, 393, 768, 1280 px**; mevcut taşma/kırpılma kontrolleri ve fixture ekranları           |
+| İzole ürün export          | **4/4**: malformed/unknown field/invalid reference build reddi; published/draft/SEO kontrolü |
+| İzole kategori export      | **3/3**, önceki pilot sözleşmesi tekrar geçti                                                |
+| İzole şube export          | **1/1**, mevcut detay üretimi korundu                                                        |
+| Kaynak/veri koruma         | 75 dosya byte eşit; 6 kategori aynı; eski/yeni gerçek ürün sayısı 0                          |
+
+Ürün fixture'ı yalnız temp kopyada published ürün, draft ürün ve draft kategoriye
+bağlı published ürün üretir. Published ürün katalogda görünür; iki gizli kaydın
+ID/ad işaretleri HTML/RSC/TXT/XML/JSON/JS çıktılarında yoktur. Katalog dört genişlikte
+Chrome ile denendi, ekranlar incelendi; kaynak JSON yolu 404. Gerçek out ve içerik
+fixture verisiyle değiştirilmedi. Gerçek katalog/filtre/navigasyon/şube/SEO testleri
+42 E2E içinde geçer. test-results ve playwright-report Git dışındadır.
+
+İlk izole tarayıcı denemeleri temp dizinin macOS /var → /private/var yol farkıyla
+404 sunduğu için başarısız oldu. Fixture sunucusuna realpath kökü verilerek düzeltildi;
+son tur 4/4 geçti. Uygulamanın statik sunumu veya tasarımı bu nedenle değiştirilmedi.
+Bu tur typecheck'de önceki generated kopya sorunu yaşanmadı; strict ayarlar değişmedi.
+
+Kanıt dizinleri:
+
+- Ana log/arşiv/koruma: `/private/tmp/bal-phase41c1-e1237sbd/`.
+- Ürün: `/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-product-export-8AydTy`.
+- Kategori: `/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-category-export-xg9mEJ`.
+- Şube: `/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-branch-export-o5TMlr`.
+
+### 16.5. Teslim ve sınırlar
+
+**PASS:** Ürün JSON sözleşmesi, referans/yayın güvenliği ve yerel statik regresyon tamamlandı.
+**WARNING:** Gerçek ürün/fotoğraf bekleniyor. JSON düzenlemesi sonrası dev'i yeniden
+başlatıp sayfayı yenileyin; yayında yeniden build gerekir. Görsel yükleme/decode,
+Pages CMS editörü/hesap/.pages.yml/CI entegrasyonu ve WebKit/Firefox/fiziksel cihaz
+bu görevde test edilmedi; önceki tarayıcı kısıtları geçerli. Yeni axe taraması yok.
+**FAIL:** Son kontrollerde başarısız test veya açık kritik hata yok.
+
+Git main/78df0f7; değişiklikler uncommitted, önceki 4.1-a/b korunur. Commit, remote,
+push, deployment, secret veya hesap oluşturulmadı. Yeni bağımlılık yok. Şube/galeri/
+ana sayfa metin geçişi yapılmadı. Faz 4.1-c2 başlatılmadı; sonraki veri türü ayrıca
+istenirse, referans/kimlik/yayın ayrımı ve birebir koruma testleriyle ele alınabilir.
+Ürün sahibi yerelde boş katalog/kategori geçişlerini değerlendirebilir; çalışan
+CMS editörünün var olduğu veya kullanıcıdan CMS testi beklendiği iddia edilmez.
+
+## 17. Faz 4.1-c2 — Şube JSON geçişi ve veri mimarisi teslimi
+
+### 17.1. Başlangıç, veri eşitliği ve koruma
+
+1 Kasım 2026: ürün sahibi 4.1-c1'i kabul etti; yalnız şube JSON geçişini ve başarılı
+4.1-a/b/c1/c2 çalışmalarının yerel commit'lerini yetkilendirdi. Başlangıç main/78df0f7;
+önceki uncommitted içerik/policy/belgeler korundu. 130 kaynak dosyasının başlangıç
+arşivi ve SHA manifesti `/private/tmp/bal-phase41c2-fxkd65p4/` içindedir.
+
+Dört eski TS kaydı, **14 alanın tamamı birebir** korunarak ayrı JSON dosyalarına taşındı:
+
+| Dosya                            | Latitude  | Longitude | Tür / durum          |
+| -------------------------------- | --------- | --------- | -------------------- |
+| content/branches/location-1.json | 38.362633 | 27.148943 | location / published |
+| content/branches/location-2.json | 38.374462 | 27.183882 | location / published |
+| content/branches/location-3.json | 38.367344 | 27.148973 | location / published |
+| content/branches/location-4.json | 38.378593 | 27.163704 | location / published |
+
+Slug, adres, telefon, çalışma saatleri ve WhatsApp null; images boş dizi kaldı.
+Geçici Konum 1–4 adları, açıklamalar, sıra ve özgün Maps URL'leri de aynı.
+Eski/yeni canonical JSON SHA-256:
+`5185cc775a8e564cdd4e35af5cf97ea018904d5f746df7d880356aed6bd28c4b`.
+Kanıt: branches-before.json ve parity-report.json. Bu migration karşılaştırmasıdır;
+kalıcı olarak bütün koleksiyonu dört kayda kilitleyen bir hash testi eklenmedi.
+Dört özgün koordinatın korunması ayrıca unit/E2E beklentisidir.
+
+Kategori/ürün kaynakları, loader/schema/helpers, önceki export script'leri,
+paket/lock/strict/config, renkler, feature/UI kaynakları dahil **82 korunan dosya**
+başlangıç arşiviyle byte eşit doğrulandı. Header yalnız server/client sınırı için
+ayrıldı; tasarım ve menü davranışı korunur. Galeri, site metni veya veri modeli taşınmadı.
+
+### 17.2. Sözleşme ve kimlik onayı
+
+Şubelerin tek düzenlenebilir kaynağı content/branches/<id>.json. branches.ts yalnız
+loader erişimi ve uyumluluk snapshot'ı sunar; örnekler ayrı TS kaynağında kalır.
+14 zorunlu alan: id, slug, name, description, coordinates, googleMapsUrl, address,
+phone, openingHours, whatsappUrl, images, sortOrder, status, contentKind.
+
+Strict schema unknown/eksik alanı, yanlış tip/değer/ID-filename, bozuk JSON/UTF-8,
+mükerrer ID/slug/koordinat/normalize adresi ve örnek kaydı reddeder. Koordinat finite
+ve coğrafi aralıkta olmalı; Maps HTTPS/host/yol ve sayısal koordinat eşitliği kontrol edilir.
+Doğrulanamayan kısa Maps URL kabul edilmez. Nullable iletişim/saat ve MediaAsset dizisi
+korunur; images[0] mevcut kapak, dizi detay galerisidir. Upload/decode kurulmadı.
+
+branch-identity.ts teknik onay listesinde yalnız ID + kimlik fingerprint'i tutulur;
+şube bilgilerinin ikinci düzenlenebilir kopyası yoktur. Hash sırası id/slug/ad/adres/
+latitude/longitude. Şu an liste boş, kimliği onaylı gerçek şube **0**. JSON'daki verified
+tek başına yetki değildir; kimlik hash'i onayla eşleşmeden build durur. Kimlik alanı
+değişirse ürün sahibinin doğrulamasıyla teknik onay yenilenir; telefon/saat/görsel/
+status bu hash'e dahil değildir. Bu yerel kapı gerçek GitHub koruması/CI kuruldu demek değildir.
+
+location yalnız konumdur; slug null, detay/LocalBusiness yok. Yalnız onaylı verified +
+published kayıt detay ve uygun SEO sitemap girdisi üretir. Draft kayıt kart/sayım/
+detay/sitemap/client çıktısına girmez. Yeni LocalBusiness üretimi eklenmedi.
+Yeni fiziksel şube JSON eklenince merkezi sayım güncellenir; kimlik eşleşmesinde
+aynı ID güncellenir, ikinci fiziksel kayıt açılmaz. Eksik tanımlayıcılarla iki farklı
+kaydın gerçek dünyada aynı yer olduğunu otomatik araştırma iddiası yoktur.
+
+### 17.3. Çözülen teknik sorunlar ve dosyalar
+
+İlk strict kontrolde ortak nesnenin status literal tipi ve test union daraltması
+hataları bulundu; tipleri gevşetmeden düzeltildi. İlk loader testindeki aynı modül
+binding mock'u gerçek dosya okuma/seçim testiyle değiştirildi.
+İlk export, Header → config/site → branches zincirinde Node fs client import'unu
+reddetti. header.tsx server wrapper ve header-navigation.tsx client etkileşim
+bileşenine ayrıldı; logo server slotu ve navigation props kullanıldı. CSS/DOM ve
+klavye/Escape/aktif rota davranışları korundu; son build/E2E geçti.
+
+- Yeni: dört content/branches JSON, branch-schema.ts, branches.server.ts,
+  branch-identity.ts, schema/loader testleri, tests/e2e/branches-json.spec.ts.
+- Güncellenen: branches.ts, content.server.ts; Header sınırı; test-branch-export.mjs.
+- Test export script'i TS literal eklemek yerine geçici JSON + ayrı teknik onay üretir.
+  Gerçek kaynak/out'a fixture yazmaz. Mevcut testler kaldırılmadı.
+- AGENTS/README/CONTENT_GUIDE/ARCHITECTURE/CMS_SETUP/SECURITY/ROADMAP/QUALITY_REPORT/plan.
+
+### 17.4. Son kontroller
+
+| Kontrol                    | Sonuç                                                                      |
+| -------------------------- | -------------------------------------------------------------------------- |
+| npm run check              | TypeScript strict, ESLint, Prettier, Vitest, build, HTTP başarılı          |
+| Vitest                     | **210/210**, 16 dosya; önceki 146 + 64 yeni şube testi                     |
+| Production static export   | **68 dosya**, noindex true; gerçek konum detay sayısı 0                    |
+| Statik HTTP                | **3/3**                                                                    |
+| Playwright / sistem Chrome | **45/45**; gerçek out/ sunucusunda                                         |
+| Responsive                 | **320, 393, 768, 1280 px**, menü/taşma/kırpılma ve izole detay ekranları   |
+| Kategori export            | **3/3**                                                                    |
+| Ürün export                | **4/4**                                                                    |
+| Şube export                | **5/5**; dört negatif build ve onaylı kimlik/yeni şube/draft/HTTP kontrolü |
+| Veri koruma                | **4/4 kayıt, 14/14 alan eşit**; 82 kaynak dosyası byte eşit                |
+
+Şube fixture'ı mevcut ID'yi onaylı verified kayda yükseltir; yeni fiziksel şube ve
+onaylı draft kayıt ekler. Sayım 5 olur, draft hariç kalır; onaylı detaylar 200,
+location/draft/bilinmeyen detaylar 404'tür. Test domaini example.com ile yalnız
+izole build'de indeksleme açılıp sitemap'in sadece onaylı/published detayları içerdiği
+doğrulanır. Draft işaretleri HTML/RSC/TXT/XML/JSON/JS çıktılarında bulunmaz.
+Gerçek build noindex ve boş sitemap olarak kalır; deployment yapılmaz.
+
+Loglar/parity/preservation arşivi: `/private/tmp/bal-phase41c2-fxkd65p4/`.
+Kategori fixture: bal-category-export-AWTcB3; ürün: bal-product-export-0bcUOc;
+son şube fixture yolu aynı arşivin branch-fixture-final.log dosyasındadır.
+Tarayıcı raporu playwright-report/, ekranlar test-results/; Git dışındadır.
+
+### 17.5. Git teslimi ve sınırlar
+
+Önceki 4.1-a/b/c1 ve bu şube geçişi birlikte kontrol edildi. Kod/test ve belgeler
+iki yerel commit olarak ayrılır. Kod/test commit: **`11b28847a041e4f6a49fc2cef8e5453daf7fb30e`**.
+Belge teslim commit mesajı: `docs: record CMS content migrations and quality results`.
+Son belge commit hash'i `git log -1` ve ürün sahibine teslim yanıtından okunur;
+belgenin kendi hash'ini kendi içine yazması gerekmez.
+
+Git ignore/aday dosyalar kontrol edildi; gerçek env/sır dosyası, node_modules,
+.next, out, coverage ve test raporları commit'e alınmaz. Bilinen sır desenleri
+aday kaynaklarda taranır; bu tarama tüm sır çeşitlerini bulma garantisi değildir.
+Commit öncesi staged içerik ve diff gözden geçirilir. Remote/push/deploy yoktur.
+
+PASS: Şube JSON geçişi ve yerel regresyon tamamlandı. WARNING: Gerçek şube kimlik,
+adres/telefon/saat/fotoğrafları bekleniyor. JSON sonrası dev'i yeniden başlatıp
+sayfayı yenileyin; yayın için build gerekir. Yeni WebKit/Firefox/fiziksel cihaz/axe,
+CMS/CI/Cloudflare testi yapılmadı. FAIL: Son kontrolde başarısız test veya kritik hata yok.
+.pages.yml, galeri/site metni geçişi, backend/admin/DB/secret/hesap/deployment yok.
+Faz 4.1-c3 başlatılmadı; sonraki çalışma ayrıca talimat gerektirir.

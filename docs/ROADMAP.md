@@ -63,15 +63,38 @@ ve otomatik ölçülemeyen hero kontrastı kalite raporunda WARNING olarak kayı
 
 Bu fazda GitHub, Cloudflare hesabı, domain, push ve deployment yoktur.
 
-## Faz 4 — İçerik ve yayına hazırlık · Başlatılmadı
+## V5 güncel yol haritası
 
-Gerçek varlıklarla örneklerin değiştirilmesi, onaylanmış iletişim URL'leri,
-alan adı ve hosting, performans, erişilebilirlik, SEO ve kullanıcı kabul testleri.
-Deployment için ayrıca onay gerekir. Gerçek içerik daha erken gelirse mevcut fazda
-ürün sahibinin yönlendirmesiyle kullanılabilir.
+V5 önceki “CMS kapsam dışı” kararını değiştirir. Tasarım ve static export korunur.
+Ayrıntılı küçük işler/kabul kriterleri: [CMS_SETUP](CMS_SETUP.md).
 
-## Bekleyen kararlar
+| Faz                                   | Durum / küçük işler                                                                              |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 4.1 GitHub ve güvenli içerik mimarisi | Audit/izin politikası, kategori/ürün/şube JSON hazır; galeri/metinler bekliyor; remote/push yok  |
+| 4.2 Pages CMS prototipi               | Gerçek JSON kaynağı sonrası .pages.yml, round-trip ve yetki testleri; App bağlantısı ayrıca onay |
+| 4.3 Actions doğrulama/aktarımı        | Güvenilir candidate, required checks, bot PR ve race/conflict testleri; şu an yalnız tasarım     |
+| 4.4 Pages ücretsiz önizleme           | Ayrı deployment onayı; main/noindex, content-edit doğrudan yayın yok                             |
+| 4.5 Ali Bey hesabı ve gerçek testler  | Davet/yetki için onay; editör, yayın ve kurtarma akışları                                        |
+| 5 Gerçek marka varlıkları             | Orijinal logo, ürün/mağaza fotoğrafları ve görsel sadeleştirme                                   |
+| 6 Kesin şube/sosyal bilgiler          | Konumları koruyarak ad/adres/telefon/saat eşleşmesi                                              |
+| 7 Domain ve kurumsal yayın            | Onaylı domain/HTTPS/canonical/robots/sitemap/Search Console/yerel SEO                            |
+| 8 Bakım ve kurtarma                   | İçerik ve deployment rollback, izleme ve destek prosedürü                                        |
 
-Şube ad/adres/telefon/saat eşleşmeleri ve gerçek görseller; ürünler; sosyal hesaplar;
-alan adı ve yayın onayı. Dört gerçek koordinat alındı. DB/admin ilk sürüm kapsamı değildir.
-Fiyat, sepet, ödeme ve sipariş kapsam dışıdır.
+Önceki görsel Faz 4 önerisi [PHASE4_PLAN](PHASE4_PLAN.md) içinde tarihsel korunur.
+Public/Private tercihi ve GitHub planı kesinleşmeden koruma gereksinimleri kaldırılmaz.
+Gerçek içerikler eksik; ilk sürümde fiyat/sepet/ödeme/sipariş yok.
+
+## Faz 4.1-c1 — Ürün JSON · Yerel uygulama
+
+Boş ürün koleksiyonu, strict sekiz alanlı sözleşme, gerçek kategori JSON referansları,
+published ürün/kategori birleşimi, server/build yükleme ve izole negatif build testleri.
+Görseller yalnız veri sözleşmesidir; upload/CMS hesabı/.pages.yml yoktur. Kategori
+filtreleri, tasarım ve dört koordinat korunur. Sonuçlar [QUALITY_REPORT](QUALITY_REPORT.md).
+4.1-c2 bu görevde başlatılmaz; sonraki veri türü ayrıca yetkilendirilmelidir.
+
+## Faz 4.1-c2 — Şube JSON · Yerel uygulama
+
+Dört konum/14 alan aynı kaldı; strict server loader, Maps eşleşmesi, fiziksel kayıt
+tekrarını reddetme, korunan kimlik hash onayı ve verified/published detay üretimi.
+Header server/client sınırı ayrıldı; tasarım ve menü davranışı korundu. Kabul edilen
+4.1-a/b/c1/c2 çalışmaları yerel Git'e kaydedilir. Harici işlem veya 4.1-c3 yoktur.

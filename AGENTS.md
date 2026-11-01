@@ -6,11 +6,22 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 ## Kapsam ve kaynaklar
 
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
-- Aktif kapsam Faz 3: static-first migration ve işletme sahibinin sağladığı gerçek konumlar.
-- İlk sürüm statik kurumsal sitedir; DB, özel backend, CMS ve admin kapsam dışıdır.
+- Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
+- Faz 3 kabul edildi, commit `78df0f7`. Faz 4.1-a/b/c1 kabul edildi. Aktif kapsam
+  yalnız Faz 4.1-c2 şube JSON geçişi ve başarılı veri mimarisini yerel Git kaydıdır;
+  4.1-c3 ve sonraki türlere kendiliğinden geçme.
+- Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
+  kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
+  kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
+- Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
+  kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
+- Plan ve rapor kaynakları: plan.md §17, docs/CMS_SETUP.md, SECURITY.md,
+  DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
+- Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
+  deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.
 - Sonraki fazlara kendiliğinden geçme.
 - Kırmızı/siyah/beyaz tasarımı, rotaları, etkileşimleri ve testlerin amaçlarını koru.
-- Veritabanı, ORM, kimlik doğrulama, admin ve deployment başlatma.
+- Özel uygulama backend/auth/admin geliştirme; harici CMS ve yayın kurulumunu bu ilk görevde başlatma.
 - `plan.md` fazların, yapılan işlerin, teknik kararların ve doğrulama sonuçlarının
   ana kaydıdır. Her fazda güncelle. `docs/ARCHITECTURE.md` teknik ayrıntıları,
   `docs/ROADMAP.md` kısa kapsam özetini tutar; bu belgeler birbiriyle tutarlı olmalı.
@@ -35,7 +46,22 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - App Router sayfalarını ince tut; işlevleri `src/features`, ortak arayüzü
   `src/components`, içerik sözleşmelerini `src/types` altında tut.
 - Server Component varsayılandır. `use client` yalnızca etkileşim gerektiğinde eklenir.
-- İçerikleri tek kaynak olarak `src/content/` altında tut. `src/config/site.ts` ve
+- Kategorilerin tek kaynağı `content/categories/category-*.json` dosyalarıdır.
+  `categories.server.ts` Node/RSC loader, category-schema strict runtime sözleşmesidir.
+  Client kategorileri props ile alır; Node fs loader'ını client'a import etme.
+- Ürünlerin tek kaynağı `content/products/product-*.json`; gerçek ürün yokken
+  yalnız `.gitkeep` içeren boş koleksiyon geçerlidir. products.server.ts strict
+  loader kullanır; categoryId gerçek kategori JSON kimliğine referans vermeli.
+  Yalnız published ürün + published kategori ziyaretçiye aktarılır; draft veri client
+  props/HTML/SEO içine girmez. Sahte ürün veya ikinci TS literal listesi ekleme.
+- Şubelerin tek kaynağı `content/branches/<id>.json`; örnek kayıt bu koleksiyona girmez.
+  `branch-identity.ts` yalnız korunan onay hash'leri taşır; JSON'daki verified bayrağı
+  tek başına yetki değildir. ID/slug/ad/adres/koordinat özeti onayla eşleşmeden build durur.
+  Kimlik alanı değişince ürün sahibi doğrulaması ve teknik onayın yenilenmesi gerekir.
+  Şube sayımı JSON'dan türetilir; dört mevcut koordinatı koru. Header veri hazırlığını
+  server wrapper'da, menü etkileşimini içerik/fs import etmeyen client bileşeninde tut.
+- Galeri ve diğer kaynaklar henüz src/content TS modüllerinde kalır.
+  Taşıma tip/schema/kimlik eşitliği testleriyle aşamalıdır. `src/config/site.ts` ve
   eski feature data modülleri yalnızca uyumluluk re-export noktalarıdır. Şube sayısını
   kayıt listesinden türet; UI içine sabit sayı yazma. Renk ve tipografi tokenlarını
   `src/styles/tokens.css` üzerinden yönet.
@@ -83,3 +109,24 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Çalıştırılmayan kontrolü başarılı raporlama. Ortam engelini somut olarak açıkla.
 - Mimari veya komutlar değişirse ilgili dokümantasyonu güncelle.
 - Kullanıcıya sonuçları ve yerel açılış adımlarını Türkçe açıkla.
+
+## V5 CMS ve yayın güven sınırları
+
+- Ali Bey'e Content Editor hedefi için Pages CMS e-posta collaborator modeli
+  değerlendirilir; GitHub write rolü, ayrıntılı yerleşik RBAC veya branch lock varsayma.
+- .pages.yml yalnız gerçekten tüketilen JSON kaynağı hazır olunca etkinleştirilir;
+  mevcut TS dosyalarını raw/code editor olarak sunma. Sekiz hedef giriş CMS_SETUP'tadır.
+- CMS destekleri resmî dokümanla doğrulanmalı; maxSize, draft motoru veya branch
+  allowlist gibi doğrulanmamış seçenekler uydurulmaz. UI readonly/hidden yetki değildir.
+- main production; content-edit doğrudan yayımlanmaz. main required checks ve PR ile
+  korunur. İncelenmemiş branch script/paket/workflow'unu sır taşıyan job'da çalıştırma.
+- Güvenilir main koduyla yalnız izinli veriden candidate; şema/medya/build/test
+  geçmeden aktarım yok. Exact candidate SHA, drift/race/conflict, token ve bypass
+  kontrolü kurulup dış entegrasyonda kanıtlanmadan tam otomasyon tamamlandı denmez.
+- src/lib/content-change-policy.ts bu tur yalnız yerel manifest prototipidir;
+  dosya içeriği/medya decode/atomik merge doğrulaması veya aktif CI güvenliği sayılmaz.
+- İçerik silme/rename otomatik aktarımda kapalı; draft ile yayından kaldırma tercih edilir.
+- Kaynak rollback ile deployment rollback ayrıdır; yanlış kaynağı da düzelt.
+- Yerel simülasyon ve gerçek GitHub/CMS/Cloudflare testi raporda ayrılır.
+- Her görev sonunda PASS/WARNING/FAIL; dosyalar, neden, testler, Git/deploy durumu,
+  sıradaki küçük iş ve ürün sahibinin manuel kabul adımları Türkçe raporlanır.

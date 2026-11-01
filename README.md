@@ -3,7 +3,9 @@
 **Faz 3: statik kurumsal site.** Next.js Static Export ile `out/` üretilir;
 ziyaretçiye yalnızca HTML, CSS, JavaScript ve medya dosyaları servis edilir.
 Node.js build/geliştirme/test için gerekir; yayında Next sunucusu gerekmez.
-İlk sürümde veritabanı, özel backend, CMS, admin, üyelik ve e-ticaret yoktur.
+Uygulamada veritabanı, özel backend, özel admin, müşteri üyeliği ve e-ticaret yoktur.
+V5 hedefi hosted Pages CMS + GitHub + Actions + Cloudflare Pages entegrasyonudur;
+CMS ve yayın hattı henüz kurulmadı. Statik uygulama korunur.
 Kırmızı/siyah/beyaz kimlik ve beş temel sayfa korunur.
 
 [Master plan](plan.md) · [Mimari](docs/ARCHITECTURE.md) ·
@@ -66,10 +68,13 @@ Dev QA mevcut 3000 sunucusunu koruyarak yeniden kullanır.
 ## Mimari ve içerik
 
 ```text
+content/categories/      # Tek düzenlenebilir kategori kaynağı (JSON)
+content/products/        # Tek ürün JSON kaynağı; gerçek ürün yokken .gitkeep ile boş
+content/branches/        # Dört fiziksel şube/konum JSON kaydı; ayrı teknik kimlik onayı
 src/
   app/                  # Beş sayfa, layout, 404, build-time SEO/PNG
     subelerimiz/[slug]/page.branch.tsx  # Yalnızca doğrulanmış şube varsa etkin
-  content/              # Tek Git içerik kaynağı, sorgular ve doğrulama
+  content/              # Tipli erişim, sorgular, strict JSON loader/onay/sorgular ve diğer TS verileri
   types/                # İçerik sözleşmeleri
   components/           # Layout, marka, iletişim, galeri ve StaticImage
   features/             # Ana sayfa, katalog ve şube arayüzleri
@@ -87,13 +92,13 @@ Next.js 16.4.3, React 19.3.1, TypeScript 6.0.3 strict, Tailwind 4.3.3,
 ESLint 9, Prettier 3, Vitest 4, RTL ve Playwright korunur; yeni paket eklenmedi.
 Ortamın Turbopack yardımcı süreç kısıtlaması nedeniyle resmî `--webpack` seçeneği kullanılır.
 
-Dört gerçek koordinat işletme sahibince sağlandı. `src/content/branches.ts` içindeki
+Dört gerçek koordinat işletme sahibince sağlandı. `content/branches/` içindeki
 Konum 1–4 henüz şube adı/adres eşleşmesi bekler. Hepsinde haritada açma ve
 Google Maps URLs API `api=1&destination=...` yol tarifi vardır; adres/telefon/saat
 uydurulmaz. Bu kayıtlar detay sayfası, sitemap veya LocalBusiness verisi üretmez.
 Tarihsel örnek kayıtlar ayrı tutulur ve canlı gride girmez.
 
-Kategoriler `src/content/categories.ts`, ürünler `products.ts`, sosyal kanallar
+Kategoriler `content/categories/*.json`, ürünler `content/products/*.json`, sosyal kanallar
 `social.ts`, marka/logo `site.ts`, galeri `gallery.ts` üzerinden yönetilir.
 Değişiklik sonrası yeniden build gerekir; şube sayısı görünür kayıtlardan türetilir.
 Yeni kayıt ve fotoğraf ekleme adımları [CONTENT_GUIDE](docs/CONTENT_GUIDE.md) içindedir.
@@ -159,11 +164,32 @@ incelendi; 20 axe taramasında otomatik ihlal 0. WebKit/Firefox binary dosyalar�
 bu tarayıcılar ve fiziksel cihaz testi eksik. Hero kontrastındaki otomatik ölçüm
 sınırı [kalite raporunda](docs/QUALITY_REPORT.md) kayıtlıdır.
 
+## V5 — Aktif Faz 4.1 yerel hazırlıkları
+
+[Güncel CMS incelemesi/küçük işler](docs/CMS_SETUP.md),
+[güvenli otomasyon tasarımı](docs/SECURITY.md), [yayın hazırlığı](docs/DEPLOYMENT.md),
+[geri alma](docs/ROLLBACK.md), [Ali Bey için taslak rehber](docs/EDITOR_GUIDE.md).
+Yerel manifest izin politikası ve negatif testleri korunur; aktif workflow değildir.
+Faz 4.1-b ile altı kategori `content/categories/*.json` kaynağına taşındı; strict
+server/build doğrulaması var. Faz 4.1-c1 ürün JSON sözleşmesini ve gerçek kategori
+referanslarını ekledi; boş ürün koleksiyonu geçerli, sahte ürün yok. Yalnız published
+ürün + published kategori ziyaretçiye gider. Faz 4.1-c2 dört fiziksel şubeyi JSON
+kaynağına taşıdı. Kimlik onayı ayrı korunan hash kaydıdır; location kayıtlar detay
+üretmez. Galeri/metinler TS olarak kalır.
+Ürün export kontrolü: `node scripts/test-product-export.mjs`; test verileri yalnız geçici kopyadadır.
+
+GitHub public API kontrolünde repo Public ve ref listesi boştu. Public/Private
+tercihi ve hesap planı, push öncesi kesinleştirilecek. Remote/push/App/davet/deploy yok.
+Güncel Faz 4.1-c2 raporu [QUALITY_REPORT](docs/QUALITY_REPORT.md); master kayıt plan.md §17.
+Önceki [görsel Faz 4 planı](docs/PHASE4_PLAN.md) tarihsel korunur; gerçek logo/fotoğraf
+çalışmaları V5'te Faz 5'e taşındı. Başarılı veri mimarisi kod/test ve teslim belgeleri yerel Git ile kaydedilir;
+harici push/remote/deployment yoktur. Commit kaydı plan.md §17 içindedir.
+
 ## Tarihsel doğrulamalar — önceki fazların davranışıdır
 
 Aşağıdaki kayıtların eski sunucu/SEO/Git kararları Faz 3 tarafından güncellenmiştir.
 Faz 2.1 geri dönüş commit'i ürün sahibi onayıyla yerelde `b844bad` olarak oluşturuldu.
-Faz 3 değişiklikleri henüz commit edilmedi; harici remote yoktur.
+Faz 3 ürün sahibi tarafından kabul edildi ve `78df0f7` ile kaydedildi; harici remote yoktur.
 
 ## Faz 1 doğrulama kaydı
 
