@@ -1,10 +1,10 @@
-import { productCategories } from './categories';
-import { products } from './products';
+import { getCategories } from './categories';
+import { selectPublishedCategories } from './category-schema';
+import { getProducts } from './products';
+import { selectPublishedProducts } from './product-schema';
 
 export function getPublishedCategories() {
-  return productCategories
-    .filter((category) => category.status === 'published')
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+  return selectPublishedCategories(getCategories());
 }
 
 export function getCategoryBySlug(slug: string) {
@@ -12,15 +12,10 @@ export function getCategoryBySlug(slug: string) {
 }
 
 export function getPublishedProducts(categoryId?: string) {
-  const publishedCategoryIds = new Set(
-    getPublishedCategories().map((category) => category.id),
+  const categories = getCategories();
+  return selectPublishedProducts(
+    getProducts(undefined, categories),
+    categories,
+    categoryId,
   );
-  return products
-    .filter(
-      (product) =>
-        product.status === 'published' &&
-        publishedCategoryIds.has(product.categoryId) &&
-        (!categoryId || product.categoryId === categoryId),
-    )
-    .sort((a, b) => a.sortOrder - b.sortOrder);
 }

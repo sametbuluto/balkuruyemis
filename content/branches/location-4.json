@@ -1,0 +1,19 @@
+{
+  "id": "location-4",
+  "slug": null,
+  "name": "Konum 4",
+  "description": "İşletme sahibinin paylaştığı gerçek konum. Şube adı ve açık adres eşleşmesi bekleniyor.",
+  "coordinates": {
+    "latitude": 38.378593,
+    "longitude": 27.163704
+  },
+  "googleMapsUrl": "https://maps.google.com/?q=38.378593,27.163704",
+  "address": null,
+  "phone": null,
+  "openingHours": null,
+  "whatsappUrl": null,
+  "images": [],
+  "sortOrder": 4,
+  "status": "published",
+  "contentKind": "location"
+}

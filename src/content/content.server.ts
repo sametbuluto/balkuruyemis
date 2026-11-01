@@ -1,18 +1,19 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { productCategories } from './categories';
-import { products } from './products';
-import { branches } from './branches';
+import { getCategories } from './categories';
+import { getProducts } from './products';
+import { getBranches } from './branches';
 import { brandGallery } from './gallery';
 import { brandAssets } from './site';
 import { contactChannels } from './social';
 import { allMedia, validateContent } from './validation';
 
 export function assertSiteContent() {
+  const categories = getCategories();
   const content = {
-    categories: productCategories,
-    products,
-    branches,
+    categories,
+    products: getProducts(undefined, categories),
+    branches: getBranches(),
     gallery: brandGallery,
     brandAssets,
     channels: contactChannels,

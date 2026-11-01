@@ -1,0 +1,9 @@
+{
+  "id": "category-kahve",
+  "slug": "kahve",
+  "name": "Kahve",
+  "description": "Günün keyifli molaları için kahve dünyası.",
+  "image": null,
+  "sortOrder": 2,
+  "status": "published"
+}

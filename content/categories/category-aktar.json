@@ -1,0 +1,9 @@
+{
+  "id": "category-aktar",
+  "slug": "aktar",
+  "name": "Aktar",
+  "description": "Aktar ürünlerini bir araya getiren kategori.",
+  "image": null,
+  "sortOrder": 5,
+  "status": "published"
+}

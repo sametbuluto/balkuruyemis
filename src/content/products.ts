@@ -1,4 +1,5 @@
-import type { Product } from '../types/content';
+import { loadProducts } from './products.server';
 
-// Gerçek ürünler sağlandığında bu tek kaynak güncellenir.
-export const products: readonly Product[] = [];
+// Tek düzenlenebilir kaynak content/products/*.json; boş koleksiyon geçerlidir.
+export const products = loadProducts();
+export const getProducts = loadProducts;

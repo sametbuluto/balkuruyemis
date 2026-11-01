@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 import { site } from '../../src/content/site';
-import { getPublishedCategories } from '../../src/content/queries';
+import { getPublishedCategories, getPublishedProducts } from '../../src/content/queries';
+import { expectCatalogProducts } from './catalog-assertions';
 
 const categories = getPublishedCategories();
 const routes = ['/', '/hakkimizda', '/urunlerimiz', '/subelerimiz', '/iletisim'];
@@ -56,18 +57,18 @@ test('altı kategori URL ile seçilir, geri dönüş ve bilinmeyen kategori güv
     await expect(
       page.getByRole('heading', { level: 2, name: category.name, exact: true }),
     ).toBeVisible();
-    await expect(
-      page.getByRole('heading', { name: `${category.name} ürünleri hazırlanıyor.` }),
-    ).toBeVisible();
+    await expectCatalogProducts(
+      page,
+      getPublishedProducts(category.id),
+      `${category.name} ürünleri hazırlanıyor.`,
+    );
     await expect(page).toHaveTitle('Ürünlerimiz | Bal Kuruyemiş');
   }
   await page.goBack();
   await expect(page).toHaveURL('/urunlerimiz?kategori=aktar');
   await filters.getByRole('link', { name: 'Tüm kategoriler' }).click();
   await expect(page).toHaveURL('/urunlerimiz');
-  await expect(
-    page.getByRole('heading', { name: 'Ürünlerle yakında tanışın.' }),
-  ).toBeVisible();
+  await expectCatalogProducts(page, getPublishedProducts(), 'Ürünlerle yakında tanışın.');
   await page.goto('/urunlerimiz?kategori=olmayan');
   await expect(page.getByRole('status')).toHaveText(
     'Kategori bulunamadı. Tüm kategorileri görüntülüyorsunuz.',
