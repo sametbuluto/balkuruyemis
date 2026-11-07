@@ -8,7 +8,7 @@ mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri c
 Bugün kategori/ürün/şube/galeri JSON → strict Node/RSC loader → published server props → statik
 sayfa/client filtresi akışı kullanılır. Üretilmiş manifest bu pilotta gerekmemiştir. Diğer türlere
 geçiş ayrı 4.1-c işleridir. Detaylar [CMS_SETUP](CMS_SETUP.md), [CONTENT_GUIDE](CONTENT_GUIDE.md)
-ve [SECURITY](SECURITY.md); ana kayıt plan.md §20. Güvenlik policy kodu hâlâ aktif CI değildir.
+ve [SECURITY](SECURITY.md); ana kayıt plan.md §21. Güvenlik policy kodu hâlâ aktif CI değildir.
 
 Aşağıdaki Faz 3/2.1 kayıtları tarihsel olarak korunur; önceki CMS yasağı ve V5'in
 ilk aşamasındaki manifest önerisi güncel kategori pilotunun önüne geçmez.
@@ -387,3 +387,24 @@ canonical normalization + tam kontroller + exact candidate PR gerekir. Source da
 main'e kör kopyalama yasaktır. Ham CMS upload source EXIF'i Git blob'una gidebilir;
 pre-upload hook kurulmuş sayılmaz. Cloudflare content-edit'i doğrudan yayımlamamalı.
 CMS_ACCEPTANCE hesap adımları/gerçek test kanıt zincirini, plan §20 sonuçları tutar.
+
+## Faz 4.2-a — Yerel Git candidate katmanı
+
+Uygulama render/veri tasarımı ve .pages.yml değişmedi. src/publishing yalnız teknik
+Node aracı; client'a import edilmez. git-source.server.ts fixed main/content-edit
+SHA'larını, gerçek Git mode/blob/byte ve tek ortak atayı kontrol eder. Source
+checkout veya paket/workflow çalıştırılmaz. candidate.server.ts üç snapshot'ı
+aynı C5 adaptörüyle normalize eder; three-way.ts alan/atomik medya merge'i yapar.
+Son strict schema/media decode ve ref kontrolünden sonra ayrı data-only çıktı
+yazılır. Candidate commit veya push oluşturulmaz.
+
+Mevcut main telefon/sosyal onayı yalnız aynı değere bağlı korunur; branch identity
+hash kapısı aynı kalır. Promotion gate typed yerel proof modelidir; API observer
+veya Check Run imzası değildir. Gerçek attest/writer/required checks yoktur.
+Teknik iş ayrımı/izin/SHA/race sözleşmesi [AUTOMATION_DESIGN](AUTOMATION_DESIGN.md)
+içinde, bağlantı kapıları [GITHUB_READINESS](GITHUB_READINESS.md) içindedir.
+
+Komutlar publishing:simulate (ayrı boş dizine data/report), publishing:audit
+(reachable geçmiş; sır değerlerini loglamaz); test-publishing-export.mjs izole
+Git candidate → trusted static build/HTTP/Chrome kontrolüdür. tsconfig.media.json
+teknik CLI derlemesini de kapsar; ana strict ayarları/dependency lockfile aynı.

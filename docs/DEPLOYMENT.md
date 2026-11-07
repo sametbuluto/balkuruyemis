@@ -2,9 +2,20 @@
 
 30 Ekim 2026 araştırması; 1 Kasım 2026 yerel tamamlama. **Push, App kurulumu ve deployment yapılmadı.**
 
+## Faz 4.2-a — Güncel bağlantı hazırlığı (7 Kasım 2026)
+
+C5 checkpoint **8d0046d** kabul edildi. Hedef repo anonim API ve ls-remote ile
+yeniden doğrulandı: Public, refs/branches/rulesets boş; remote eklenmedi. Gerçek
+hesap planı/kurulum yetkileri bilinmiyor. Onboarding, Public/Private/plan maliyeti,
+hosted App izinleri ve açık kullanıcı adımları **[GITHUB_READINESS](GITHUB_READINESS.md)**
+içinde; testli yerel Git araçları ve ilerideki CI sözleşmesi
+**[AUTOMATION_DESIGN](AUTOMATION_DESIGN.md)** içindedir. Bu güncel kayıt aşağıdaki
+tarihsel hazırlık önerilerinden önceliklidir; aktif CMS/Actions/Cloudflare yoktur.
+
 ## İlk push için gereken sıra — uygulanmadı
 
-1. Public/Private tercihini ve gerçek GitHub planının required checks/auto-merge
+1. Mevcut webhook/App/Cloudflare bağlantılarının ilk push ile yayın tetiklemeyeceğini
+   hesap sahibi doğrulasın. Public/Private tercihini ve gerçek GitHub planının required checks/auto-merge
    desteğini kesinleştir; [SECURITY](SECURITY.md) koşulları geçerli.
 2. Çalışma ağacındaki kaynak/belge değişikliklerini gözden geçir; gereken yerel
    commit için yetki netleşsin. 4.1-c2 geri dönüş noktası `0507348`; c3 sonunda medya altyapısı da yerel commit ile kaydedilir.

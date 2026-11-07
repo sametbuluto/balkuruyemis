@@ -126,3 +126,17 @@ yoktur. Gerçek panel → otomatik kontroller → Cloudflare üç kabul akışı
 ad/fotoğraf değiştirme ve sayfa/şube/kategori/duyuru akışlarını gerçek statik çıktı ile
 sınar. Gerçek hosted editor, GitHub koruması/otomatik aktarım ve Cloudflare kabulü
 PENDING; kullanıcı işlemleri CMS_ACCEPTANCE.md içindedir. Bağlantı/yayın bu tur yoktur.
+
+## Faz 4.2-a — Bağlantı hazırlığı · Yerelde tamamlandı
+
+- [x] C5/main geçmişi, secret/build/EXIF taraması; uzak boş repo read-only kontrolü.
+- [x] Güncel Public/Private plan/koruma ve hosted App public izin incelemesi.
+- [x] Gerçek Git envanteri, trusted normalizasyon, üç yönlü merge ve negatif testler.
+- [x] İlk push/kullanıcı adımları, 12 form ve gerçek hosted kabul kapıları.
+- [ ] Hesap planı/görünürlük kararı; ayrı push, koruma/CI ve App izinleri.
+- [ ] Gerçek API attestation, required checks, PR/auto-merge/source-sync kurulumu.
+- [ ] Gerçek panel/kullanıcı ve Cloudflare kabulü; ayrıca yetki gerekir.
+
+Yeni içerik/tasarım veya .pages.yml değişimi yok. Public/Private değişimi, push, App,
+davet, secret ve deployment yapılmadı. Plan §21, GITHUB_READINESS ve AUTOMATION_DESIGN
+güncel kaynaklardır. Sonraki harici aşama kendiliğinden başlamaz.

@@ -8,15 +8,16 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
 - Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
 - Faz 3 kabul edildi, commit `78df0f7`. Faz 4.1-a/b/c1/c2 kabul edildi ve yerel Git
-  ile kaydedildi. c3/c4 kabul edildi; aktif kapsam c5 CMS alan eşlemesi/güvenilir
-  medya adaptörü, yerel .pages.yml ve gerçek kabul testlerinin hazırlığıdır.
-  Hesap bağlantısı, push veya deployment başlatma; başarılı işi yerel commit ile kaydet.
+  ile kaydedildi. c3/c4/c5 kabul edildi; c5 checkpoint 8d0046d. Aktif kapsam
+  Faz 4.2-a GitHub/CMS bağlantı hazırlığı, salt okunur uzak inceleme ve testli yerel
+  Git candidate araçlarıdır. Hesap bağlantısı, push, App, davet, secret veya deployment
+  başlatma; başarılı yerel hazırlığı geri dönüş noktası olarak kaydet.
 - Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
   kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
   kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
 - Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
   kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
-- Plan ve rapor kaynakları: plan.md §20, docs/CMS_SETUP.md, SECURITY.md,
+- Plan ve rapor kaynakları: plan.md §21, docs/CMS_SETUP.md, SECURITY.md,
   DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
 - Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
   deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.
@@ -130,7 +131,7 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Ali Bey'e Content Editor hedefi için Pages CMS e-posta collaborator modeli
   değerlendirilir; GitHub write rolü, ayrıntılı yerleşik RBAC veya branch lock varsayma.
 - .pages.yml yalnız gerçekten tüketilen JSON kaynağı hazır olunca etkinleştirilir;
-  mevcut TS dosyalarını raw/code editor olarak sunma. Sekiz hedef giriş CMS_SETUP'tadır.
+  mevcut TS dosyalarını raw/code editor olarak sunma. On iki Türkçe form .pages.yml ve CMS_ACCEPTANCE içindedir.
 - CMS destekleri resmî dokümanla doğrulanmalı; maxSize, draft motoru veya branch
   allowlist gibi doğrulanmamış seçenekler uydurulmaz. UI readonly/hidden yetki değildir.
 - main production; content-edit doğrudan yayımlanmaz. main required checks ve PR ile
@@ -138,8 +139,12 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Güvenilir main koduyla yalnız izinli veriden candidate; şema/medya/build/test
   geçmeden aktarım yok. Exact candidate SHA, drift/race/conflict, token ve bypass
   kontrolü kurulup dış entegrasyonda kanıtlanmadan tam otomasyon tamamlandı denmez.
-- src/lib/content-change-policy.ts bu tur yalnız yerel manifest prototipidir;
-  dosya içeriği/medya decode/atomik merge doğrulaması veya aktif CI güvenliği sayılmaz.
+- src/lib/content-change-policy.ts saf izin politikasıdır. src/publishing gerçek Git
+  blob/mode/byte envanteri ve üç yönlü canonical candidate hazırlığını yerelde yapar.
+  Source commit kodunu checkout/execute etme; trusted main kodu/paketlerini kullan.
+  simulatePromotionGate modeldir; payload bool/SHA alanı uzak yetki kanıtı değildir.
+  Aktif CI/API observer/check attester/PR writer veya atomik remote merge kurulmadı.
+  Hesabın planı ve main enforcement görülmeden koruma başarılı sayılmaz.
 - İçerik silme/rename otomatik aktarımda kapalı; draft ile yayından kaldırma tercih edilir.
 - Kaynak rollback ile deployment rollback ayrıdır; yanlış kaynağı da düzelt.
 - Yerel simülasyon ve gerçek GitHub/CMS/Cloudflare testi raporda ayrılır.

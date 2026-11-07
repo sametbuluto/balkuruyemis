@@ -277,3 +277,29 @@ Normal check zinciri resmî config kontrolünü de içerir. Candidate aracı kul
 EXIF sınırı [CMS_ADAPTER](docs/CMS_ADAPTER.md), kullanıcı hesap işlemleri ve gerçek
 kabul [CMS_ACCEPTANCE](docs/CMS_ACCEPTANCE.md) içinde. Kaynak raw upload EXIF'inin
 Git'e yazılmadan temizlenmesi garanti edilemez; bu karar bağlantıdan önce alınır.
+
+## Faz 4.2-a — GitHub/CMS hazırlığı
+
+C5 kabul edildi (8d0046d). Uzak repo read-only kontrolde Public/boş; hesap planı ve
+main enforcement henüz doğrulanmadı. Aktif CMS/Actions/Cloudflare kurulmadı.
+[İlk push ve kullanıcı adımları](docs/GITHUB_READINESS.md),
+[trusted otomasyon sözleşmesi](docs/AUTOMATION_DESIGN.md),
+[gerçek panel kabul planı](docs/CMS_ACCEPTANCE.md).
+
+Teknik sorumlu için, harici erişim yapmayan yerel araçlar:
+
+```bash
+npm run publishing:audit
+npm run publishing:simulate -- /yerel/repo MAIN_SHA CONTENT_EDIT_SHA /ayri/bos/cikti
+node scripts/test-publishing-export.mjs
+```
+
+Simülatör main/content-edit ref'lerini okumak için önceden var olmalarını ister;
+komut bu proje kökünde yeni dal açmaz. Ayrı temp Git fixture'ları testi çalıştırır.
+Candidate data/report üretmek gerçek candidate commit/check/PR/merge değildir.
+Ali Bey bu komutları kullanmaz; hosted panel henüz bağlanmadığından admin girişi yok.
+
+426 Vitest/51 Playwright korunmuş yerel sonuçları ve sınırlamalar kalite raporundadır.
+Hedef Public/Private ve gerçek GitHub planı kararı, mevcut yayın entegrasyonlarının
+kontrolü ve **ayrı ilk push onayı** gerekir. İzin gelmeden remote/push/App/davet/
+secret/yayın işlemi yapılmaz. Private repository EXIF temizliği sağlamaz.

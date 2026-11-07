@@ -23,7 +23,9 @@
     "test:static": "node --test tests/static/*.test.mjs",
     "media:check": "node scripts/run-media.mjs check",
     "cms:config:check": "node scripts/validate-pages-config.mjs",
-    "cms:prepare": "node scripts/run-cms.mjs"
+    "cms:prepare": "node scripts/run-cms.mjs",
+    "publishing:simulate": "node scripts/run-publishing.mjs",
+    "publishing:audit": "node scripts/audit-git-history.mjs"
   },
   "dependencies": {
     "next": "16.4.3",

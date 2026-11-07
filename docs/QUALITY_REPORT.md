@@ -1,3 +1,87 @@
+# Faz 4.2-a — GitHub / gerçek Pages CMS bağlantı hazırlığı
+
+Tarih: **7 Kasım 2026**. C5 checkpoint **8d0046d** kabul edildi. Bu rapor yerel
+hazırlık ve anonim uzak okuma sonuçlarıdır; gerçek otomatik CMS yayını değildir.
+[Bağlantı/kullanıcı adımları](GITHUB_READINESS.md), [güvenli mimari](AUTOMATION_DESIGN.md),
+[gerçek kabul protokolü](CMS_ACCEPTANCE.md), [plan §21](../plan.md).
+
+## PASS
+
+- Başlangıç temiz main/8d0046d, 7 commit, remote yok. Uzak repo Public ve gerçekten
+  refs boş; branches/rulesets API de boş. Hesap yetkisi veya ayarı değiştirilmedi.
+- Reachable geçmiş 7 commit/340 blob; env/build/test çıktısı, bilinen sır deseni,
+  raster/EXIF ve büyük/atlanmış blob bulgusu 0. En büyük blob 307409 byte. Bilinen
+  desen taraması tüm sır türlerini bulma garantisi değildir.
+- Gerçek Git mode/blob/byte ingress + trusted C5 normalizasyonu + üç yönlü merge
+  çalışıyor. Source code checkout/execute edilmez. Kod/workflow/env, rename/delete,
+  symlink/exec/gitlink, bozuk JSON/görsel, SHA drift ve merge conflict reddedilir.
+- Telefon/sosyal onayı yalnız aynı current-main değere bağlıdır; eşzamanlı başka
+  değerle birleştirilmez. Kimlik/verified şube kapısı değişmedi.
+- .pages.yml/12 form, eski testler, UI/veri/tasarım, altı kategori ve dört konum
+  korundu; **187 önceki kaynak byte eşit**. Yeni paket/lockfile değişimi yok. Test ürün/fotoğrafları yalnız temp'te.
+
+| Kontrol                               | Sonuç                                         |
+| ------------------------------------- | --------------------------------------------- |
+| TypeScript strict / ESLint / Prettier | PASS                                          |
+| Vitest                                | **426/426**, 27 dosya; 363 eski + 63 yeni     |
+| Resmî CMS config kontrolü             | PASS; .pages.yml aynı                         |
+| Production static export              | **67 dosya**, noindex true                    |
+| Statik HTTP                           | **3/3**                                       |
+| Playwright / sistem Chrome            | **51/51**, out/ üzerinde                      |
+| Responsive                            | **320, 393, 768, 1280 px**                    |
+| Gerçek temp Git candidate export      | **2/2**, static HTTP/Chrome ve conflict reddi |
+| Önceki CMS source-backed round-trip   | PASS; hosted editör testi değildir            |
+
+`npm run publishing:audit`, `npm run publishing:simulate` ve izole
+`node scripts/test-publishing-export.mjs` teknik araçları eklendi. Simülasyon ayrı
+data/report üretir; candidateCommitSha=null/fullChecksRun=false/remoteProtectionVerified=false.
+Promotion gate modelindeki bool/SHA alanları gerçek API yetki kanıtı değildir.
+
+## WARNING
+
+- **Uzak main henüz yok, koruma kurulmuş değil.** Gerçek hesap planı/installation
+  grant okunmadı. Public Free native korumaları destekler; kişisel Private için
+  Pro gerekir. Private Free tek repo güvenli otomasyon hedefini karşılamaz.
+- Hosted public App metadata'sı write **actions/contents/repository_creation**,
+  read checks/deployments/emails/metadata/pages/statuses ister; gerçek kurulum
+  ekranı/onaylanan izinler henüz görülmedi. Self-host admin manifestinden ayrıdır.
+- API observer, trusted Check Run attester, required checks, main-only secret
+  environment, bot PR/auto-merge/source-sync kurulmadı. CMS'nin main'e save reddi
+  yalnız yerel modelde sınandı; gerçek GitHub enforcement testi PENDING.
+- Private repo EXIF temizliği değildir. İlk gerçek testler önceden metadata'sızlığı/
+  yayın hakkı onaylı kişisel veri içermeyen görsellerle yapılmalı. Ali Bey'den JSON,
+  piksel veya terminal istenmez. Gerçek ürün/fotoğraflar hâlâ bekleniyor.
+- İlk push için Public/Private/gerçek plan kararı, mevcut webhook/Cloudflare yayın
+  tetikleyicisi kontrolü ve **ayrı açık push izni** gerekir. Teknik olarak koşullu
+  hazırız; ilk push'un yayın tetiklemeyeceği henüz hesap sahibi tarafından görülmedi.
+- Hosted login/12 form/reference/image/date/UUID/davet ve Cloudflare kabulü PENDING.
+  Yeni WebKit/Firefox/fiziksel cihaz/axe taraması yapılmadı. Eski bağımsız kategori/
+  ürün/şube fixture script'leri bu tur ayrı tekrar çalıştırılmadı; mevcut unit/E2E
+  ve kapsamlı CMS round-trip korundu.
+
+## FAIL
+
+Son yerel doğrulamada başarısız test veya açık kritik uygulama hatası yok. Beklenen
+negatif test reddi başarıdır. **Tam otomatik harici yayın hedefi henüz karşılanmadı**;
+bu rapor onu PASS olarak sunmaz.
+
+## Git, dosyalar ve kanıt
+
+src/publishing/*, üç teknik script ve iki hazırlık belgesi yeni; package.json
+teknik komutları/tsconfig.media include ve AGENTS/README/mimari/güvenlik/yayın/CMS/
+plan raporları güncellendi. Önceki kaynaklar/testler byte eşit. Anlamlı yerel
+checkpoint kaydedilir, hash teslim yanıtında; remote/push/App/davet/secret/deploy yok.
+
+Başlangıç arşivi/anonim GET'ler/audit/preservation ve son check/playwright/fixture
+logları /private/tmp/bal-phase42a/ içinde. Git fixture sonucu
+/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-publishing-export-RYVYTt;
+CMS fixture /var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-cms-roundtrip-cHGLAo.
+QA/env/build dosyaları Git dışıdır. Sonraki harici aşama açık izin olmadan başlamaz.
+
+---
+
+## Tarihsel Faz 4.1-c5 raporu
+
 # Faz 4.1-c5 — CMS alan/medya adaptörü kalite raporu
 
 Tarih: **7 Kasım 2026**. Yerel c5 ve .pages.yml hazırlığı tamamlandı. Gerçek CMS

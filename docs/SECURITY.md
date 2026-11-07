@@ -2,6 +2,16 @@
 
 30 Ekim 2026 araştırması; 1 Kasım 2026 yerel tamamlama. Tasarımdır; aktif bot/workflow/branch protection kurulmadı.
 
+## Faz 4.2-a — Güncel bağlantı hazırlığı (7 Kasım 2026)
+
+C5 checkpoint **8d0046d** kabul edildi. Hedef repo anonim API ve ls-remote ile
+yeniden doğrulandı: Public, refs/branches/rulesets boş; remote eklenmedi. Gerçek
+hesap planı/kurulum yetkileri bilinmiyor. Onboarding, Public/Private/plan maliyeti,
+hosted App izinleri ve açık kullanıcı adımları **[GITHUB_READINESS](GITHUB_READINESS.md)**
+içinde; testli yerel Git araçları ve ilerideki CI sözleşmesi
+**[AUTOMATION_DESIGN](AUTOMATION_DESIGN.md)** içindedir. Bu güncel kayıt aşağıdaki
+tarihsel hazırlık önerilerinden önceliklidir; aktif CMS/Actions/Cloudflare yoktur.
+
 ## Güven sınırları
 
 main kodu/paketleri/workflow'ları teknik sorumlunun kontrolünde kalır. CMS girdisi
@@ -177,3 +187,21 @@ Hosted media upload kaynak base64'ü GitHub'a yazabilir; candidate EXIF temizli�
 raw blob'u silmez. Public/private ve pre-Git gizlilik kararı bağlantı ön koşuludur.
 Karşılaştırmalı seçenekler CMS_ADAPTER, gerçek başarısız upload/izin/rollback kabulü
 CMS_ACCEPTANCE içinde. Yerel unit/wire testi hosted yetki kanıtı sayılmaz.
+
+## 4.2-a izin ve kanıt ayrımı
+
+7 Kasım public hosted App API kaydı write actions/contents/repository_creation;
+read checks/deployments/emails/metadata/pages/statuses gösterdi. administration write
+public hosted kayıtta yok; yukarıdaki self-host manifestiyle karıştırılmamalıdır.
+Gerçek installation grant, kullanıcı planı ve bypass durumu henüz okunmadı.
+[Public App API](https://api.github.com/apps/pages-cms).
+
+Geçmiş taraması başlangıçtaki 7 commit/340 blob içinde gerçek env, build/test çıktısı,
+bilinen sır deseni veya raster fotoğraf bulmadı. Private repo metadata temizliği
+değildir; ilk gerçek CMS testi önceden EXIF/XMP/IPTC'siz ve yayın hakkı onaylı
+fotoğraflarla yapılmalıdır. Source Git geçmişi candidate/out temizliğinden etkilenmez.
+
+Yeni Git ingress gerçekten blob/mode/byte kontrol eder; üç yönlü merge conflict ve
+SHA drift'te durur. Yerel promotion proof modeli gerçek GitHub koruması değildir.
+API enforcement, trusted workflow/check App, main-only secret ortamı ve korunan PR
+yazarı kurulmadan tam otomasyon açılmaz. Ayrıntı AUTOMATION_DESIGN içindedir.

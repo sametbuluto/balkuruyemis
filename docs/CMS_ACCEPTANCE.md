@@ -4,6 +4,16 @@
 Yerel kaynak tabanlı round-trip PASS, gerçek panel/CI/Cloudflare kabulü PENDING'dir.
 Teknik sözleşme [CMS_ADAPTER](CMS_ADAPTER.md), güven sınırları [SECURITY](SECURITY.md).
 
+## Faz 4.2-a — Güncel bağlantı hazırlığı (7 Kasım 2026)
+
+C5 checkpoint **8d0046d** kabul edildi. Hedef repo anonim API ve ls-remote ile
+yeniden doğrulandı: Public, refs/branches/rulesets boş; remote eklenmedi. Gerçek
+hesap planı/kurulum yetkileri bilinmiyor. Onboarding, Public/Private/plan maliyeti,
+hosted App izinleri ve açık kullanıcı adımları **[GITHUB_READINESS](GITHUB_READINESS.md)**
+içinde; testli yerel Git araçları ve ilerideki CI sözleşmesi
+**[AUTOMATION_DESIGN](AUTOMATION_DESIGN.md)** içindedir. Bu güncel kayıt aşağıdaki
+tarihsel hazırlık önerilerinden önceliklidir; aktif CMS/Actions/Cloudflare yoktur.
+
 ## Önce ürün sahibinden gerekenler
 
 - Hedef GitHub repo/ad/görünürlük kararı. Önceki Public durumu güncel tercih değildir.
@@ -20,7 +30,7 @@ Teknik sözleşme [CMS_ADAPTER](CMS_ADAPTER.md), güven sınırları [SECURITY](
 
 | Sıra | Kullanıcı / teknik sorumlu işlemi                                                                   | Geçiş koşulu                                                                                                               |
 | ---- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| 1    | Repo/görünürlük/EXIF kararını verin; yerel commit'i inceleyin                                       | Açık push yetkisi, kaynaklarda secret/test çıktısı yok                                                                     |
+| 1    | Repo/görünürlük/EXIF kararını verin; yerel commit'i inceleyin                                       | Açık push yetkisi; gerçek plan/koruma desteği ve önceden bağlı yayın tetikleyicisi yok; secret/test çıktısı yok            |
 | 2    | Teknik sorumlu uzak geçmişi read-only tekrar kontrol edip yetkili ilk push'u yapar                  | Mevcut uzak geçmiş korunur, force push yok                                                                                 |
 | 3    | Güvenilir main'de candidate CI ve PR/required checks kurulur; content-edit hazırlanır               | CMS'nin main'e doğrudan yazması gerçekten reddedilir; App/admin bypass kapalı                                              |
 | 4    | GitHub hesabınızla hosted Pages CMS'ye girip GitHub App kurulumunu yalnız hedef repo için onaylayın | Gerçek istenen izinler görülür; least-privilege ve main kapısı doğrulanır                                                  |
@@ -89,3 +99,21 @@ testidir**; hosted form, reference arama, upload API, auth ve gerçek yayın tes
 Resmî başlangıç: [Pages CMS quick start](https://pagescms.org/docs/quick-start/),
 [davetli editör](https://pagescms.org/docs/configuration/collaborators/),
 [Cloudflare static Next.js](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/).
+
+## 4.2-a gerçek GitHub kapıları — tamamı PENDING
+
+- GH-01: Hesabın planı ve aktif main ruleset/PR/strict required-check sonucu API/UI'de
+  görülür; CMS App main'e doğrudan save ve bypass denemesi gerçekten reddedilir.
+- GH-02: Aynı context'i yanlış App veya farklı candidate SHA ile yeşil gösterme
+  denemesi merge yetkisi vermez; source workflow/artifact güven kanıtı sayılmaz.
+- GH-03: Main-only protected environment sırrına content-edit erişimi reddedilir;
+  validator write token/secret almaz, source code çalıştırmaz.
+- GH-04: Hatalı JSON/bozuk görsel/kod değişimi ve aynı alan merge çatışması main'i
+  değiştirmez; eşzamanlı M/C değişiminde eski kanıt yenilenir, yeni edit kaybolmaz.
+- GH-05: Bot PR tetiklenmesi/required checks/auto-merge ve canonical source-sync
+  insan teknik onayı gerektirmeden çalışır; exact SHA/HTTP zinciri kaydedilir.
+
+Yerel 63 yeni negatif/unit test ve izole Git candidate export testi bu gerçek
+kurulum denemelerinin yerine geçmez. Native reference/date/UUID/image alanları
+gerçek hosted sürümde, Europe/Istanbul saat diliminde ve ikinci save'de ayrıca
+kontrol edilir. Davetin hosted plan/ücret ve rol kısıtları gerçek ekrandan teyit edilir.

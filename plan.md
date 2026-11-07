@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.1-c5 — Yerel CMS alan/medya adaptörü ve .pages.yml hazır; gerçek editör/CI/yayın kabulü bekliyor**.
+Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.2-a — GitHub/CMS bağlantı hazırlığı yerelde tamamlandı; harici yetki bekliyor**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -19,18 +19,19 @@ doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte
 
 ## 2. Fazların durumu
 
-| Faz                        | Durum          | Sonuç / hedef                                                                       |
-| -------------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| Faz 1 — Proje altyapısı    | Tamamlandı     | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
-| Faz 2 — Kurumsal tasarım   | Tamamlandı     | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
-| Faz 2.1 — Marka kimliği    | Tamamlandı     | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
-| Faz 3 — Statik mimari      | Tamamlandı     | Static export, Git içerik kaynakları ve dört gerçek konum                           |
-| Faz 4.1 — CMS ön hazırlık  | Yerel hazırlık | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
-| Faz 4.2–4.5 — CMS ve yayın | Başlatılmadı   | Pages CMS, güvenilir Actions, Pages preview ve Ali Bey testleri                     |
-| Faz 5 — Gerçek varlıklar   | Başlatılmadı   | Logo ve gerçek fotoğraflar                                                          |
-| Faz 6 — Kesin bilgiler     | Başlatılmadı   | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
-| Faz 7 — Kurumsal yayın     | Başlatılmadı   | Domain/SEO/HTTPS ve yayın onayı                                                     |
-| Faz 8 — Bakım              | Başlatılmadı   | İzleme ve iki ayrı geri alma süreci                                                 |
+| Faz                              | Durum              | Sonuç / hedef                                                                       |
+| -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
+| Faz 1 — Proje altyapısı          | Tamamlandı         | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
+| Faz 2 — Kurumsal tasarım         | Tamamlandı         | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
+| Faz 2.1 — Marka kimliği          | Tamamlandı         | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
+| Faz 3 — Statik mimari            | Tamamlandı         | Static export, Git içerik kaynakları ve dört gerçek konum                           |
+| Faz 4.1 — CMS ön hazırlık        | Yerel hazırlık     | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
+| Faz 4.2-a — Bağlantı hazırlığı   | Yerelde tamamlandı | Git ingress/merge negatif testleri, güncel izin/plan ve ilk push hazırlığı          |
+| Faz 4.2-b–4.5 — Gerçek CMS/yayın | Başlatılmadı       | Hesap/App, korumalar/Actions, Pages ve Ali Bey testleri; ayrı yetki gerekir         |
+| Faz 5 — Gerçek varlıklar         | Başlatılmadı       | Logo ve gerçek fotoğraflar                                                          |
+| Faz 6 — Kesin bilgiler           | Başlatılmadı       | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
+| Faz 7 — Kurumsal yayın           | Başlatılmadı       | Domain/SEO/HTTPS ve yayın onayı                                                     |
+| Faz 8 — Bakım                    | Başlatılmadı       | İzleme ve iki ayrı geri alma süreci                                                 |
 
 ## 3. Faz 1 — Neler yapıldı?
 
@@ -1425,3 +1426,141 @@ raporları Git dışıdır. Remote/push/App/davet/token/Cloudflare değişmedi; 
 harici entegrasyon kendiliğinden başlatılmaz. Ürün sahibinin ayrıca repo/EXIF seçimi,
 push/App/koruma/davet ve deployment yetkileri gereklidir; Ali Bey'den JSON/piksel/Git
 komutu istenen bir gerçek akış kabul edilmez.
+
+## 21. Faz 4.2-a — GitHub ve gerçek Pages CMS bağlantı hazırlığı
+
+### 21.1. Başlangıç ve kapsam
+
+7 Kasım 2026: ürün sahibi C5 yerel prototipini 8d0046da331ba8f9d5035cf750d42b3a1ccbfbd8
+checkpoint'iyle kabul etti. Başlangıç main/8d0046d, temiz çalışma ağacı, 7 commit ve
+remote yoktu. Yedek: /private/tmp/bal-phase42a/baseline-source.tar. Bu tur yalnız
+salt okunur harici inceleme ve geri alınabilir yerel hazırlıktır. Yeni işletme JSON
+mimarisi, .pages.yml/tasarım değişikliği, push, App/davet/secret veya deployment yok.
+
+### 21.2. Gerçek uzak okuma / hesap sınırı
+
+- Anonim API: sametbuluto/balkuruyemis Public, size 0, owner User. Başarılı anonim
+  ls-remote'da refs boş; branches ve rulesets GET'leri de boş liste döndürdü. Uzak
+  main henüz yoktur; default_branch=main değeri koruma/varlık kanıtı değildir.
+- Kullanıcının gerçek Free/Pro/Team planı, admin izinleri ve installation grant
+  yetkili oturum olmadığı için görülmedi. Koruma enforcement başarılı sayılmaz.
+- Public App API write actions/contents/repository_creation, read checks/deployments/
+  emails/metadata/pages/statuses istiyor. Hosted public kayıtta administration write
+  yoktur; eski self-host kurulum manifestinin administration isteğinden ayrıldı.
+  Gerçek kurulum ekranı/izin daraltma olanağı ve davet ücret/rol ekranı görülmedi.
+- Source upstream SHA 6f4e860a35d934406580287e7042e5e111e207a1 aynı; hosted sürümünün
+  aynı olduğu iddia edilmez. E-posta collaborator resmi model, granular RBAC veya
+  editöre özel branch lock değil. GitHub write rolü Ali Bey'e verilmez.
+
+Resmî plan/ruleset/protection/auto-merge/environment belgeleri yeniden okundu.
+Public Free korumaları destekler. Kişisel Private Free tek repo otomasyon için
+gereken native kapıları karşılamaz; kişisel Pro veya org Team koşulu vardır.
+Main-only environment secret desteği ile private required reviewer/wait timer
+desteği ayrı özelliklerdir. Org Team güncel liste 4 USD/kullanıcı/ay; kişisel Pro
+için resmî tarihsel 2020 fiyatı 4 USD/ay, güncel checkout/vergi görülmediğinden
+kesin teklif değildir. Gerçek plan ve enforcement kullanıcı hesabında doğrulanır.
+Ayrı private raw/public trusted repo alternatifi yalnız tasarım önerisidir;
+ücretli plan veya manuel teknik PR seçeneğiyle birlikte GITHUB_READINESS'dadır.
+
+### 21.3. Geçmiş ve medya denetimi
+
+Başlangıçtaki reachable 7 commit/340 benzersiz blob incelendi; en büyük 307409 byte.
+Gerçek env, node_modules, out, .next, .generated, coverage/test raporu yolu 0; bilinen
+sır deseni 0; raster fotoğraf/EXIF 0; büyük/atlanmış blob 0. .env.example şablondur.
+Tarama sır değerlerini loglamaz; bütün sır türlerini yakalama garantisi değildir.
+Tarihte eklenip silinen sahte env/tokenı bulma testi ayrı temp Git'te çalışır.
+
+Private seçmek EXIF temizliği değildir. Raw upload Git geçmişine metadata yazabilir;
+adaptör/out temizliği bunu geri almaz. İlk gerçek kullanıcı testleri teknik sorumlu
+tarafından önceden metadata'sızlığı ve yayın hakkı doğrulanmış, kişisel veri içermeyen
+gerçek görsellerle yapılır. Ali Bey fotoğraf seçer/alt yazar; terminal/piksel girmez.
+Gerçek ürün/fotoğraf listesi hâlâ boştur; test resmi canlı kaynağa eklenmedi.
+
+### 21.4. Yeni yerel güvenlik katmanı
+
+- src/publishing/git-source.server.ts: tam M/C SHA ve tek ortak ata B; gerçek Git
+  raw diff/mode/blob-byte envanteri. Tek kod/workflow/.pages/env, legacy singleton,
+  silme/rename/exec/symlink/gitlink veya limit ihlali tüm paketi reddeder. Hook/
+  fsmonitor/external diff/replace ref ve child credential aktarımı kapalı; source
+  kodu checkout/execute edilmez. Main/HEAD/index/refs değiştirilmez.
+- candidate.server.ts: B/M/C ayrı snapshot, aynı trusted C5 normalizasyonu, canonical
+  üç yönlü merge, son strict schema/media decode ve pin yeniden kontrolü. Bağımsız
+  JSON alanları birleşir; aynı alan çatışması ve diziler/binary/medya çakışması durur.
+  Mevcut telefon/sosyal onay başka eşzamanlı değere taşınamaz. Kimlik hash kapısı aynı.
+- three-way.ts ve promotion-gate.ts: yapısal merge ve typed yerel proof modeli.
+  Model direct main/raw/kod/stale SHA/yanlış workflow/check App/context/skipped check/
+  bypass/eksik koruma ve validator secret/write-token güven ihlallerini reddeder.
+  Model input'u yetki/imza değildir; gerçek API okuyucu/attester/writer hâlâ yoktur.
+- publishing:simulate ayrı boş dizine yalnız data ve publication-report.json yazar.
+  candidateCommitSha=null, fullChecksRun=false, remoteProtectionVerified=false;
+  gerçek candidate commit/check/PR/merge kanıtı üretmez. publishing:audit read-only
+  reachable geçmiş taramasıdır. scripts/test-publishing-export.mjs izole entegrasyondur.
+
+İlerideki job/LP token ayrımı, main-only protected environment, check App sabitleme,
+üç yönlü source-sync, queue/drift ve teknik PR ayrımı AUTOMATION_DESIGN'dadır.
+GitHub iki ref'i tek atomik CAS ile kilitlemez; local pin kontrolü uzak merge-time
+koruması değildir. Required checks/server strict head ve gerçek yarış testleri
+olmadan otomatik writer açılmaz. Aktif workflow dosyası bırakılmadı.
+
+### 21.5. Son doğrulama
+
+| Kontrol                      | Sonuç                                                                               |
+| ---------------------------- | ----------------------------------------------------------------------------------- |
+| npm run check                | TypeScript strict, ESLint, Prettier, config, Vitest, export, HTTP PASS              |
+| Vitest                       | **426/426**, 27 dosya; önceki 363 ve 63 yeni publishing testi                       |
+| Resmî .pages.yml kontrolü    | PASS; C5 dosyası byte eşit                                                          |
+| Production static export     | **67 dosya**, noindex true; rotalar aynı                                            |
+| Static HTTP                  | **3/3**                                                                             |
+| Playwright / sistem Chrome   | **51/51**, gerçek out/ üzerinde                                                     |
+| Responsive                   | **320, 393, 768, 1280 px**, önceki kontroller ve PNG'ler                            |
+| Git candidate izole export   | **2/2**; native CMS şekli → gerçek refs → merge → build/HTTP/Chrome; conflict reddi |
+| Önceki CMS kaynak round-trip | PASS; gerçek hosted/CMS API testi değildir                                          |
+| Git geçmiş audit             | PASS; başlangıç 7 commit/340 blob, bilinen bulgu 0                                  |
+
+63 yeni test gerçek temp Git nesneleriyle kod/workflow/env/mode/link/delete/rename/
+byte reddini, malformed JSON/bozuk görsel/onaysız verified ve ref hatalarını, üç yönlü
+çatışmayı, sırasında ilerleyen main'i ve onay-değer yarışını kapsar. Sahte check ve
+koruma senaryoları yerel modeldir; GitHub'da main'e yazma reddi test edilmiş değildir.
+İzole native UUID ürünü ve 32×16 metadata'sız geometrik PNG yalnız fixture'dadır.
+
+İlk publishing unit turunda .gitkeep'in tek LF içerdiği ve exec-mode fixture'ının
+çalışma ağacı modu eksikliği görüldü; boşluk-only keep ve gerçek chmod/stage düzeltildi.
+İlk fixture browser testi CSS uppercase innerText beklediği için durdu; gerçek
+textContent denetimine çevrildi, uygulama değiştirilmedi. Son turlar geçti.
+
+Kanıt/loglar: /private/tmp/bal-phase42a/ altında history-audit, preservation-report,
+check/playwright/git-export-final/cms-roundtrip kayıtları ve anonim GET JSON'ları.
+Git fixture: /var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-publishing-export-RYVYTt;
+CMS fixture: /var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-cms-roundtrip-cHGLAo.
+Yeni Firefox/WebKit/fiziksel cihaz/axe veya harici yazma/yayın testi yapılmadı.
+Eski kategori/ürün/şube export script'leri korundu; bu tur ayrı ayrı tekrar
+çalıştırılmadı. Tam eski unit/E2E ve CMS round-trip regresyonları çalıştırıldı.
+
+### 21.6. Dosya ve Git teslimi
+
+Yeni src/publishing (Git okuyucu/candidate/merge/proof/CLI ve üç unit dosyası), üç
+publishing/history/test script'i, GITHUB_READINESS ve AUTOMATION_DESIGN belgeleri.
+package.json yalnız iki teknik komut, tsconfig.media.json yalnız CLI include aldı.
+AGENTS, README, mimari/yol haritası/SECURITY/DEPLOYMENT/CMS_SETUP/CMS_ACCEPTANCE/
+QUALITY_REPORT ve bu plan güncellendi. Yeni paket veya lockfile değişimi yoktur.
+Eski UI/veri/loader/test dosyaları, .pages.yml, korunan kimlik, altı kategori ve dört
+koordinat dahil **187 korunan dosya byte eşit**; koruma raporu başlangıç commit'ine karşı üretildi.
+
+Başarılı hazırlık yerel checkpoint olarak kaydedilir; hash teslim yanıtı/git log'da
+raporlanır. Remote/harici refs/görünürlük/App/davet/secret/Cloudflare değiştirilmez.
+QA çıktıları/env otomatik dosyalar ignore kapsamındadır. Sonraki dış aşama başlamaz.
+
+### 21.7. Karar ve kullanıcıdan gerekenler
+
+PASS: yerel hazırlık/testler ve salt okunur uzak inceleme tamamlandı.
+WARNING: uzak main/koruma yok; gerçek hesap planı/App grant/checks/otomasyon ve hosted
+12 form/kullanıcı/Cloudflare kabulü henüz doğrulanmadı. Yerel PASS uzak güvenlik PASS
+değildir. İlk push teknik olarak koşullu hazır; henüz izin verilmedi.
+FAIL: son yerel kontrollerde başarısız test/açık kritik uygulama hatası yok.
+
+Net sonraki adım: kullanıcı gerçek GitHub planı + Public/Private tercihini bildirir;
+mevcut webhook/App/Cloudflare bağlantısının ilk push ile yayın başlatmayacağını
+doğrular; sonra **yalnız ilk push için ayrı açık izin** verir. Bir sonraki iş
+bootstrap koruma/CI'dır; CMS App/hesap ve davet/deployment ayrı ayrı onaylanır.
+GitHub tokenı/parola/ödeme bilgisi sohbetten istenmez. Uzak geçmiş push öncesi yeniden
+kontrol edilir; refs değişmişse işlem durur, force/mirror/all kullanılmaz.

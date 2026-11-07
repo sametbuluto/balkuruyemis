@@ -6,6 +6,16 @@ prompt V5'in araştırma kaydını korur. 7 Kasım C5 güncellemesi: tüm JSON k
 Gerçek hesap/CI/workflow/yayın yoktur. Güncel [CMS_ADAPTER](CMS_ADAPTER.md) ve
 [gerçek kabul planı](CMS_ACCEPTANCE.md) önceki fazların plan satırlarından önceliklidir.
 
+## Faz 4.2-a — Güncel bağlantı hazırlığı (7 Kasım 2026)
+
+C5 checkpoint **8d0046d** kabul edildi. Hedef repo anonim API ve ls-remote ile
+yeniden doğrulandı: Public, refs/branches/rulesets boş; remote eklenmedi. Gerçek
+hesap planı/kurulum yetkileri bilinmiyor. Onboarding, Public/Private/plan maliyeti,
+hosted App izinleri ve açık kullanıcı adımları **[GITHUB_READINESS](GITHUB_READINESS.md)**
+içinde; testli yerel Git araçları ve ilerideki CI sözleşmesi
+**[AUTOMATION_DESIGN](AUTOMATION_DESIGN.md)** içindedir. Bu güncel kayıt aşağıdaki
+tarihsel hazırlık önerilerinden önceliklidir; aktif CMS/Actions/Cloudflare yoktur.
+
 ## Mevcut durum
 
 - Faz 3 anchor: `78df0f7`, önceki baseline `b844bad`. Önceki çalışma ağacı korundu;

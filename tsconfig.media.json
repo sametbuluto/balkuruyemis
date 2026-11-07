@@ -11,6 +11,10 @@
     "types": ["node"],
     "ignoreDeprecations": "6.0"
   },
-  "include": ["src/content/media-cli.ts", "src/cms/adapter-cli.ts"],
+  "include": [
+    "src/content/media-cli.ts",
+    "src/cms/adapter-cli.ts",
+    "src/publishing/cli.ts"
+  ],
   "exclude": ["node_modules", ".generated", "**/*.test.*"]
 }
