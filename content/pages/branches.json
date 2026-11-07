@@ -1,0 +1,22 @@
+{
+  "seo": {
+    "title": "Şubelerimiz",
+    "description": "{name}’in İzmir Buca’daki {branchCountText} şubesini keşfedin. İsim ve adres eşleştirmeleri bekleyen gerçek konumlar."
+  },
+  "intro": {
+    "eyebrow": "Şubelerimiz",
+    "title": "Buca’da {branchCountText} buluşma noktası.",
+    "description": "Aynı marka, {branchCountText} fiziksel şube. İzmir Buca’da sizinle buluşuyoruz."
+  },
+  "list": {
+    "eyebrow": "Bizi ziyaret edin",
+    "title": "Size yakın bir {name}.",
+    "noticeTitle": "Gerçek konumlar · Şube isimleri doğrulanıyor",
+    "notice": "{branchCountCapitalized} şubeden {knownLocationCountText} konum işletme sahibi tarafından paylaşıldı. Konumlar henüz şube isimleriyle eşleştirilmedi. Açık adres, telefon ve çalışma saatleri daha sonra eklenecek."
+  },
+  "gallery": {
+    "eyebrow": "Mağazalarımızdan",
+    "title": "Şubelerimizi yakından tanıyın.",
+    "description": "Gerçek mağaza fotoğrafları eklendiğinde galerimiz burada yer alacak."
+  }
+}

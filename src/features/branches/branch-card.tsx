@@ -1,3 +1,4 @@
+import { site } from '@/content/site';
 import Link from 'next/link';
 import { StaticImage } from '@/components/ui/static-image';
 import { LineIcon } from '@/components/ui/line-icon';
@@ -48,7 +49,7 @@ export function BranchCard({ branch }: { branch: BranchCardEntry }) {
         ) : null}
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <p className="eyebrow text-brand-red">Buca, İzmir</p>
+        <p className="eyebrow text-brand-red">{site.location}</p>
         <h3 className="mt-3 font-display text-2xl font-bold tracking-tight">
           {branch.name}
         </h3>

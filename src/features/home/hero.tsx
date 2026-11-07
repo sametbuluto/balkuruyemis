@@ -1,3 +1,4 @@
+import { getPageCopy } from '@/content/page-copy';
 import { site } from '@/content/site';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
@@ -5,29 +6,29 @@ import { ArrowIcon } from '@/components/ui/arrow-icon';
 import { HeroVisual } from '@/features/home/hero-visual';
 
 export function Hero() {
+  const copy = getPageCopy('home').hero;
   return (
     <section className="overflow-hidden border-b border-line bg-white">
       <Container className="grid gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-14 lg:py-18">
         <div className="min-w-0">
           <p className="eyebrow flex items-center gap-3 text-brand-red">
             <span aria-hidden="true" className="h-1 w-8 bg-brand-red" />
-            Buca’dan, sizin için
+            {copy.eyebrow}
           </p>
           <h1 className="mt-7 font-display text-[clamp(2.75rem,6.7vw,5.9rem)] leading-[1.02] font-bold tracking-[-0.065em]">
-            Lezzetin <br />
-            <span className="text-brand-red">Doğal Adresi.</span>
+            {copy.titleLead} <br />
+            <span className="text-brand-red">{copy.titleAccent}</span>
           </h1>
           <p className="mt-7 max-w-md text-base leading-8 text-muted sm:text-lg">
-            Günlük molalara, paylaşılan sofralara. <br />
-            Bal Kuruyemiş ile tanışın; İzmir Buca’daki {site.branchCountText} şubemizde
-            buluşalım.
+            {copy.descriptionLead} <br />
+            {copy.descriptionBody}
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link href="/urunlerimiz" className="button-primary">
-              Ürünlerimizi keşfedin <ArrowIcon />
+              {copy.catalogAction} <ArrowIcon />
             </Link>
             <Link href="/subelerimiz" className="button-secondary">
-              Şubelerimiz <ArrowIcon />
+              {copy.branchesAction} <ArrowIcon />
             </Link>
           </div>
           <div className="mt-10 flex items-center gap-4 border-t border-line pt-6">
@@ -35,8 +36,8 @@ export function Hero() {
               {site.branchCountPadded}
             </span>
             <p className="text-xs leading-5 text-muted">
-              Aynı marka, {site.branchCountText} buluşma noktası. <br />
-              <span className="font-semibold text-ink">Buca, İzmir</span>
+              {copy.countDescription} <br />
+              <span className="font-semibold text-ink">{site.location}</span>
             </p>
           </div>
         </div>

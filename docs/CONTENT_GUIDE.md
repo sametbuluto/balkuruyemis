@@ -1,8 +1,9 @@
 # Statik içerik düzenleme rehberi
 
-Kategori, ürün ve şubelerin tek kaynağı `content/categories/`, `content/products/` ve
-`content/branches/` ve `content/gallery/` JSON dosyalarıdır; diğer içerikler
-`src/content/` TS modüllerinde kalır. Codex'e doğrulanmış yeni bilgiyi
+Kategori, ürün, şube, galeri ve duyuruların tek kaynağı ilgili `content/` JSON
+koleksiyonlarıdır. Beş sayfanın işletme metinleri `content/pages/`, marka/iletişim
+ve sosyal bilgiler `content/settings/` altındadır. `src/content/` yalnız tipli
+erişim, şema ve teknik kuralları tutar; ikinci düzenlenebilir metin listesi yoktur. Codex'e doğrulanmış yeni bilgiyi
 vermek ve ilgili kaydı güncellemesini istemek yeterlidir. Her değişiklik yeniden
 build ve doğrulama gerektirir; tarayıcıdan yönetim paneli veya runtime veri kaynağı yoktur.
 
@@ -280,3 +281,11 @@ npm run preview
 
 Yerel çıktı http://127.0.0.1:4173 üzerinden incelenir. İçerik düzeltmek deployment
 izni anlamına gelmez. Yayın için ayrıca ürün sahibi onayı gerekir.
+
+## Güncel metinler — Faz 4.1-c4
+
+Beş sayfa, site/sosyal ayarlar, alan sınırları, metin değişkenleri, iletişim doğrulaması
+ve duyuru tarih/yayın davranışı [EDITORIAL_GUIDE](EDITORIAL_GUIDE.md) içinde.
+`node scripts/test-editorial-export.mjs` gerçek içeriklere dokunmadan izole negatif
+build ve statik HTML/tarayıcı kabulünü çalıştırır. Gerçek CMS ekranı değildir.
+Kaynak JSON değişince dev sunucusunu yeniden başlatın; statik yayında yeniden build gerekir.

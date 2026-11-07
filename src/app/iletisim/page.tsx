@@ -1,4 +1,5 @@
-import { site } from '@/content/site';
+import { ContactDetails } from '@/components/contact/contact-details';
+import { getPageCopy } from '@/content/page-copy';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { PageIntro } from '@/components/ui/page-intro';
@@ -8,41 +9,37 @@ import { ArrowIcon } from '@/components/ui/arrow-icon';
 import { ContactChannels } from '@/components/contact/contact-channels';
 import { createPageMetadata } from '@/lib/metadata';
 
+const copy = getPageCopy('contact');
 export const metadata = createPageMetadata(
-  'İletişim',
-  `Bal Kuruyemiş ile bağlantıda kalın. İzmir Buca’daki ${site.branchCountText} şubemiz, Instagram ve WhatsApp iletişim alanlarımız.`,
+  copy.seo.title,
+  copy.seo.description,
   '/iletisim',
 );
 
 export default function ContactPage() {
   return (
     <>
-      <PageIntro
-        eyebrow="İletişim"
-        title="Bir merhaba kadar yakın."
-        description="Mağazalarımızda buluşalım, bağlantıda kalalım. Şube ve dijital iletişim bilgilerimizi bu sayfada bir araya getiriyoruz."
-      />
+      <PageIntro {...copy.intro} />
       <section className="section-space" aria-labelledby="visit-heading">
         <Container className="grid gap-8 lg:grid-cols-[0.9fr_1.2fr] lg:gap-16">
           <div>
             <SectionHeading
               id="visit-heading"
-              eyebrow="Bizi ziyaret edin"
-              title="Buca’da buluşalım."
-              description={`Bal Kuruyemiş, İzmir Buca’da ${site.branchCountText} fiziksel şubesiyle hizmet veriyor.`}
+              eyebrow={copy.visit.eyebrow}
+              title={copy.visit.title}
+              description={copy.visit.description}
             />
           </div>
           <div className="border border-line bg-surface p-7 sm:p-10">
             <LineIcon name="location" className="text-brand-dark" />
-            <h3 className="mt-6 font-display text-3xl">İzmir, Buca</h3>
+            <h3 className="mt-6 font-display text-3xl">{copy.visit.placeTitle}</h3>
             <p className="mt-4 max-w-lg text-sm leading-8 text-muted">
-              Paylaşılan gerçek konumları şubelerimiz sayfasında haritada açabilir veya
-              yol tarifi alabilirsiniz. Şube adı, açık adres, telefon ve çalışma saatleri
-              henüz tamamlanmadı.
+              {copy.visit.placeDescription}
             </p>
             <Link href="/subelerimiz" className="button-primary mt-7">
-              Şubelerimiz <ArrowIcon />
+              {copy.visit.action} <ArrowIcon />
             </Link>
+            <ContactDetails />
           </div>
         </Container>
       </section>
@@ -53,9 +50,9 @@ export default function ContactPage() {
         <Container>
           <SectionHeading
             id="digital-heading"
-            eyebrow="Bağlantıda kalalım"
-            title="Dijital kanallarımız"
-            description="Resmî hesaplarımız hazır olduğunda aşağıdaki alanlardan bize ulaşabileceksiniz."
+            eyebrow={copy.digital.eyebrow}
+            title={copy.digital.title}
+            description={copy.digital.description}
           />
           <ContactChannels />
         </Container>

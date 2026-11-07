@@ -1,3 +1,4 @@
+import { AnnouncementsSection } from '@/features/home/announcements-section';
 import { Hero } from '@/features/home/hero';
 import { Explore } from '@/features/home/explore';
 import { BrandStory } from '@/features/home/brand-story';
@@ -5,13 +6,10 @@ import { BranchesSection } from '@/features/home/branches-section';
 import { GallerySection } from '@/features/home/gallery-section';
 import { SocialSection } from '@/features/home/social-section';
 import { createPageMetadata } from '@/lib/metadata';
-import { site } from '@/config/site';
+import { getPageCopy } from '@/content/page-copy';
 
-export const metadata = createPageMetadata(
-  'Lezzetin Doğal Adresi',
-  site.description,
-  '/',
-);
+const copy = getPageCopy('home');
+export const metadata = createPageMetadata(copy.seo.title, copy.seo.description, '/');
 
 export default function HomePage() {
   return (
@@ -22,6 +20,7 @@ export default function HomePage() {
       <BranchesSection />
       <GallerySection />
       <SocialSection />
+      <AnnouncementsSection />
     </>
   );
 }

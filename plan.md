@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **1 Kasım 2026**. Aktif durum: **Faz 4.1-c3 — Galeri/medya altyapısı tamamlandı, CMS entegrasyonu bekliyor**.
+Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.1-c4 — Kurumsal metin/duyuru JSON altyapısı tamamlandı; gerçek CMS entegrasyonu bekliyor**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -1172,3 +1172,122 @@ beklenir; yeni axe taraması yapılmadı. FAIL: Son kontrollerde başarısız te
 hata yok. Ana sayfa/kurumsal metinler, admin/backend/DB ve 4.1-c4 başlatılmadı.
 Önerilen c4: site/ana sayfa düz metin sözleşmesini ve upload metadata adaptörü tasarımını
 ayrı küçük işlere bölmek; sonra gerçek CMS round-trip ve otomatik yayın kabulünü yürütmek.
+
+## 19. Faz 4.1-c4 — Kurumsal metinler, sosyal/iletişim ve duyuru JSON
+
+### 19.1. Kapsam ve koruma
+
+7 Kasım 2026: c3 kabulüyle yalnız bu yerel geçiş yetkilendirildi. Başlangıç commit'i
+**697db940005a633f96c9ea864acf04492846565e**, main. Devam sırasında var olan c4
+çalışması korundu; reset/temizleme yapılmadı. 697db94 kaynakları ayrıca geçici baseline
+kopyasında derlendi; gerçek statik tarayıcı çıktısıyla eşitlik ölçüldü. Güncel kanıt
+ve loglar `/private/tmp/bal-c4-final/` içinde. Önceki faz kayıtları korunur.
+
+Kategori/ürün/şube/galeri JSON'ları, bütün önceki testler, raster güvenlik kodu,
+StaticImage, renk tokenları, lockfile, strict/Next/Playwright ayarları dahil seçilen
+**61 korunan dosya byte eşit**. Altı kategori ve dört koordinat değişmedi:
+
+| ID         | Latitude  | Longitude |
+| ---------- | --------- | --------- |
+| location-1 | 38.362633 | 27.148943 |
+| location-2 | 38.374462 | 27.183882 |
+| location-3 | 38.367344 | 27.148973 |
+| location-4 | 38.378593 | 27.163704 |
+
+Kaynakta ürün/galeri/duyuru sayısı hâlâ 0. Test görüntüleri ve duyurular yalnız
+izole temp projelerdedir. Yeni paket, gerçek marka bilgisi veya dış işlem yoktur.
+
+### 19.2. Tek kaynak ve düzenlenebilir alanlar
+
+Yeni `content/pages/{home,about,contact,catalog,branches}.json` dosyaları beş sayfanın
+SEO açıklamaları, başlıkları, işletme açıklamaları, bölüm metinleri ve CTA yazılarını
+tutar. `content/settings/{site,social}.json` marka/slogan/kurumsal açıklama/footer,
+nullable merkezi telefon/e-posta ve resmî sosyal link açıklamalarını tutar.
+`content/announcements/.gitkeep` boş koleksiyonu korur; her ilerideki kayıt
+announcement-<id>.json dosyasıdır. Aynı metnin ikinci TS listesi yoktur.
+
+Hero başlık parçaları/vurgu ve satır kırılması kodda; JSON yalnız metni verir.
+Sabit href/rota, UI hata/eksik veri mesajı/ARIA/navigasyon/filtre etiketleri, CSS,
+ikon geometrisi, şube kimliği ve teknik canonical/noindex/domain/env kodda kalır.
+Temel sayfalar zorunludur, status alanı yoktur; bu faz sayfa taslak önizleme sistemi
+kurmaz. Draft/published yeni duyuru koleksiyonunda ve mevcut koleksiyonlarda çalışır.
+Alan envanteri/sınırlar [EDITORIAL_GUIDE](docs/EDITORIAL_GUIDE.md) içindedir.
+
+### 19.3. Doğrulama ve render
+
+editorial-schema strict nested unknown girdide eksik/bilinmeyen alanı, yanlış tipi,
+boş/uzun metni, geçersiz şablon/URL/telefon/e-posta değerini reddeder. Loader yalnız
+Node/RSC katmanında normal dosya, UTF-8 ve 256 KiB denetimi yapar; sessiz fallback yok.
+Yalnız tanımlı yedi sayfa/ayar dosyası okunur. Sayfa/sosyal/footer metinleri merkezi
+sayım/marka değişkenleriyle çözülür; çözülmüş uzunluk da yeniden doğrulanır.
+
+React düz metni escape eder; HTML/MDX çalıştırılmaz, CSS/HTML/href/SEO yayın ayarı
+alanı yoktur. CatalogBrowser yalnız copy props alır, Node fs istemciye taşınmaz.
+Uzun kelime için body overflow-wrap:anywhere eklendi; palette/boşluk/rota değişmedi.
+Tel/mailto/sosyal link yalnız geçerli değer + verified ile oluşur. İşaret insan
+teyididir, hesap sahipliği doğrulayıcısı değildir. Gerçek veriler bilinmediğinden
+telefon/e-posta/URL null, verified false kalır.
+
+Duyuru strict ID/slug/benzersizlik/sıra, opsiyonel MediaAsset ve gerçek UTC tarih
+aralığı kullanır. Published ve başlangıç dahil/bitiş hariç filtresi build anında
+uygulanır. Dışlanan kayıt/medya HTML/RSC/JS/yayına girmez; ham medya doğrulanır.
+Boş duyuru bölümü render edilmez; yeni detay rotası/schema/sitemap girdisi yoktur.
+
+build-site.mjs tek güvenilir SITE_BUILD_AT üretir: medya decode → Next Webpack →
+sanitize out/images → export doğrulama. Medya raporu aynı anı ve bütün JSON'ların
+fingerprint'ini tutar; drift build'i durdurur. Saatin ilerlemesi statik duyuruyu
+kendiliğinden değiştirmez; yeni build/deployment gerekir. Zamanlayıcı kurulmadı.
+
+### 19.4. Son doğrulama ve kanıt
+
+| Kontrol                                     | Sonuç                                                                  |
+| ------------------------------------------- | ---------------------------------------------------------------------- |
+| npm run check                               | TypeScript strict, ESLint, Prettier, Vitest, build ve statik HTTP PASS |
+| Vitest                                      | **328/328**, 22 dosya; önceki 262 test korundu                         |
+| Production static export                    | **67 dosya**, noindex true; ana rotalar aynı                           |
+| Statik HTTP                                 | **3/3**                                                                |
+| Playwright / sistem Chrome                  | **51/51**, gerçek out/ üzerinde                                        |
+| Responsive                                  | **320, 393, 768, 1280 px**; DOM kontrolleri ve ekran görüntüleri       |
+| İzole metin export                          | **4/4**; üç negatif build ve pozitif HTML/tarayıcı kabulü              |
+| İzole kategori / ürün / şube / medya export | **3/3, 4/4, 5/5, 5/5**                                                 |
+| Baseline metin/metadata                     | Beş sayfa × görünür metin/title/description, **15/15 eşit**            |
+| Koruma                                      | **61 dosya byte eşit**, altı kategori/dört koordinat aynı              |
+
+Ek unit testler şema/URL/nullable/şablon/çözülmüş sınır/build anı/duyuru tarih ve
+sıralamayı kapsar. Metin fixture'ı JSON başlık ve Hakkımızda değişimini gerçek
+HTML'de doğrular. Zararlı img onerror metni çalışmaz; kırmızı span korunur.
+Draft/future/expired ve onaysız iletişim işaretleri tüm statik metin çıktılarından
+dışlanır; draft duyuru fotoğrafı 404'tür. İstemci saati 2030'a ilerletilse bile
+statik duyuru HTML'i değişmez. SEO/404/ikon/robots/sitemap/menu testleri tekrar geçti.
+
+İlk sandbox turunda yerel listen EPERM nedeniyle HTTP testleri çalışamadı;
+gerekli erişimle statik HTTP, Playwright, fixture'lar ve tüm check zinciri tekrar
+çalıştırıldı, geçti. Bu ortam kısıtı uygulama hatası diye gizlenmedi.
+
+Kanıtlar: `/private/tmp/bal-c4-final/check-final.log`, `playwright.log`,
+`editorial-fixture.log`, diğer dört fixture log'u, `copy-parity.json`,
+`preservation-report.json`; ayrıca .next/static-export-report.json,
+playwright-report/ ve test-results/.last-run.json. Baseline ve dört genişliğin önce/
+sonra ekran görüntüleri aynı temp dizindedir. QA çıktıları Git'e girmez.
+
+### 19.5. Git, teslim ve kalan işler
+
+Anlamlı yerel commit mesajı:
+`feat: migrate corporate copy and announcements to validated JSON`.
+Tam hash teslim yanıtı/git log'da raporlanır; commit kendisini hash'leyemez.
+Gerçek env/secret, node_modules, .next, out, .generated ve test raporları ignore
+kapsamındadır; staged kaynaklar ayrıca incelenir. Remote/push/deployment yoktur.
+
+**PASS:** C4 yerel veri mimarisi, içerik eşitliği ve tüm son kontroller tamamlandı.
+**WARNING:** Gerçek telefon/e-posta/sosyal hesap, şube kimliği, logo/fotoğraf/ürün
+ve duyuru beklenir. WebKit/Firefox/fiziksel cihaz/yeni axe bu fazda çalıştırılmadı.
+CMS/.pages.yml/metadata adaptörü/CI/Cloudflare ve zamanlanmış yeniden build yoktur.
+**FAIL:** Son doğrulamada başarısız test veya açık kritik hata yoktur.
+
+Manuel kabul: `npm run build` ardından `npm run preview` ile 4173 portunda mevcut
+metin/tasarımı ve kategori/menü/şube akışını inceleyin. Bilinmeyen linkler aktif
+olmamalı; gerçek CMS ekranı beklenmemeli. Sonraki c5 önerisi upload metadata adaptörü
+ve CMS alan eşleme/round-trip planını ayrı küçük kapsam olarak netleştirmektir.
+Bu faz başlatılmadı. Ali Abi'nin gerçek panelden ürün adı/fotoğraf/ana sayfa metni
+→ otomatik trusted kontroller → korunan aktarım → Cloudflare içerik/SHA üç kabulü
+henüz gerçekleşmedi; yerel fixture bu dış entegrasyonların yerine geçmez.

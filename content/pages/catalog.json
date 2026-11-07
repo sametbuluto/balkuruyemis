@@ -1,0 +1,18 @@
+{
+  "seo": {
+    "title": "Ürünlerimiz",
+    "description": "{name} ürün dünyası: kategori ve ürün tanıtımlarını keşfedin."
+  },
+  "intro": {
+    "eyebrow": "Ürünlerimiz",
+    "title": "Her buluşmaya bir eşlikçi.",
+    "description": "Kuruyemişten kahveye, lokumdan baharata. Ürün dünyamızın başlangıç kategorilerini keşfedin."
+  },
+  "content": {
+    "heading": "Ürün kategorileri",
+    "description": "Gerçek ürün bilgileri ve fotoğraflar yakında.",
+    "emptyTitle": "Ürünlerle yakında tanışın.",
+    "emptyDescription": "Ürün açıklamaları ve gerçek ürün fotoğrafları tamamlandığında bu alanda yer alacak.",
+    "visitDescription": "{name} ile İzmir Buca’daki {branchCountText} şubemizde buluşabilirsiniz."
+  }
+}

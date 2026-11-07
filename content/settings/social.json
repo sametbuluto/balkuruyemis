@@ -1,0 +1,14 @@
+{
+  "instagram": {
+    "url": null,
+    "verified": false,
+    "description": "{name}’ten kareler ve paylaşımlar için.",
+    "actionLabel": "Instagram’a gidin"
+  },
+  "whatsapp": {
+    "url": null,
+    "verified": false,
+    "description": "Sorularınız ve şubelerimizle iletişim için.",
+    "actionLabel": "WhatsApp’a gidin"
+  }
+}

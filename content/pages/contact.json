@@ -1,0 +1,24 @@
+{
+  "seo": {
+    "title": "İletişim",
+    "description": "{name} ile bağlantıda kalın. İzmir Buca’daki {branchCountText} şubemiz, Instagram ve WhatsApp iletişim alanlarımız."
+  },
+  "intro": {
+    "eyebrow": "İletişim",
+    "title": "Bir merhaba kadar yakın.",
+    "description": "Mağazalarımızda buluşalım, bağlantıda kalalım. Şube ve dijital iletişim bilgilerimizi bu sayfada bir araya getiriyoruz."
+  },
+  "visit": {
+    "eyebrow": "Bizi ziyaret edin",
+    "title": "Buca’da buluşalım.",
+    "description": "{name}, İzmir Buca’da {branchCountText} fiziksel şubesiyle hizmet veriyor.",
+    "placeTitle": "İzmir, Buca",
+    "placeDescription": "Paylaşılan gerçek konumları şubelerimiz sayfasında haritada açabilir veya yol tarifi alabilirsiniz. Şube adı, açık adres, telefon ve çalışma saatleri henüz tamamlanmadı.",
+    "action": "Şubelerimiz"
+  },
+  "digital": {
+    "eyebrow": "Bağlantıda kalalım",
+    "title": "Dijital kanallarımız",
+    "description": "Resmî hesaplarımız hazır olduğunda aşağıdaki alanlardan bize ulaşabileceksiniz."
+  }
+}

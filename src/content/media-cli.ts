@@ -1,3 +1,5 @@
+import { getPublishedAnnouncements } from './announcements';
+import { getBuildInstant } from './build-clock';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -14,7 +16,15 @@ async function main() {
   validateContentBundle(content);
   const files = await validateMediaFiles(allMedia(content));
   const inputHash = createHash('sha256');
-  for (const area of ['categories', 'products', 'branches', 'gallery']) {
+  for (const area of [
+    'categories',
+    'products',
+    'branches',
+    'gallery',
+    'pages',
+    'settings',
+    'announcements',
+  ]) {
     for (const file of (await readdir(path.join('content', area)))
       .filter((file) => file.endsWith('.json'))
       .sort()) {
@@ -37,7 +47,14 @@ async function main() {
       throw new Error(
         'Medya/içerik build sırasında değişti; çıktı güvenilir değil. Yeniden build gerekli.',
       );
+    const buildAt =
+      'buildAt' in before && typeof before.buildAt === 'string'
+        ? new Date(before.buildAt)
+        : getBuildInstant();
     const publicMedia = [
+      ...getPublishedAnnouncements(buildAt).flatMap((entry) =>
+        entry.image ? [entry.image] : [],
+      ),
       ...selectPublishedMedia(
         [content.brandAssets.logo, content.brandAssets.inverseLogo].filter(
           (value) => value !== null,
@@ -69,7 +86,11 @@ async function main() {
     await mkdir('.generated', { recursive: true });
     await writeFile(
       reportPath,
-      JSON.stringify({ fingerprint, files: files.size }, null, 2),
+      JSON.stringify(
+        { fingerprint, files: files.size, buildAt: getBuildInstant().toISOString() },
+        null,
+        2,
+      ),
     );
     process.stdout.write(`Medya ön kontrol: ${files.size} dosya doğrulandı.\n`);
   }

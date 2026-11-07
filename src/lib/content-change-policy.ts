@@ -16,6 +16,8 @@ const entryName = '[a-z0-9]+(?:-[a-z0-9]+)*';
 const collectionPath = new RegExp(
   `^content/(products|categories|branches|gallery|announcements)/${entryName}\\.json$`,
 );
+const editorialPath =
+  /^content\/(?:pages\/(?:home|about|contact|catalog|branches)|settings\/(?:site|social))\.json$/;
 const singletonPath = /^content\/(home|settings|social)\.json$/;
 const imagePath = new RegExp(
   `^public/images/(brand|products|categories|branches|gallery)/(?:${entryName}/)*${entryName}\\.(jpg|jpeg|png|webp|avif)$`,
@@ -66,7 +68,8 @@ export function assessContentChanges(input: unknown): ContentChangeDecision {
       );
     if (seen.has(path)) errors.push(`${label}: yinelenen dosya yolu.`);
     seen.add(path);
-    const isJson = collectionPath.test(path) || singletonPath.test(path);
+    const isJson =
+      collectionPath.test(path) || editorialPath.test(path) || singletonPath.test(path);
     const isImage = imagePath.test(path);
     if (!isJson && !isImage) errors.push(`${label}: içerik izin listesi dışında.`);
     if (isJson && bytes > contentChangeLimits.jsonBytes)

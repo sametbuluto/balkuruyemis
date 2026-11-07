@@ -1,4 +1,4 @@
-import { site } from '@/content/site';
+import { getPageCopy } from '@/content/page-copy';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { PageIntro } from '@/components/ui/page-intro';
@@ -9,44 +9,37 @@ import { getPublishedCategories } from '@/features/catalog/data';
 import { GallerySection } from '@/features/home/gallery-section';
 import { createPageMetadata } from '@/lib/metadata';
 
+const copy = getPageCopy('about');
 export const metadata = createPageMetadata(
-  'Hakkımızda',
-  `Lezzetin Doğal Adresi Bal Kuruyemiş ile tanışın. İzmir Buca’da ${site.branchCountText} fiziksel şube ve başlangıç kategorilerimiz.`,
+  copy.seo.title,
+  copy.seo.description,
   '/hakkimizda',
 );
 
 export default function AboutPage() {
   return (
     <>
-      <PageIntro
-        eyebrow="Hakkımızda"
-        title="Buca’dan, sizin için."
-        description={`Bal Kuruyemiş, İzmir’in Buca ilçesinde ${site.branchCountText} fiziksel şubesiyle hizmet veren bir perakende markasıdır.`}
-      />
+      <PageIntro {...copy.intro} />
       <section className="section-space" aria-labelledby="about-story-heading">
         <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
           <div className="flex min-h-80 flex-col items-center justify-center gap-8 border-b-8 border-brand-red bg-ink p-8 text-white sm:min-h-96">
             <BrandMark large inverse />
-            <p className="eyebrow text-brand-gold">Lezzetin Doğal Adresi</p>
+            <p className="eyebrow text-brand-gold">{copy.story.signature}</p>
           </div>
           <div>
-            <p className="eyebrow text-brand-red">Bal Kuruyemiş</p>
+            <p className="eyebrow text-brand-red">{copy.story.eyebrow}</p>
             <h2 id="about-story-heading" className="display-heading mt-5">
-              Günün küçük molalarına, <br />
-              paylaşılan anlara.
+              {copy.story.titleLead} <br />
+              {copy.story.titleTail}
             </h2>
             <p className="mt-6 text-base leading-8 text-muted">
-              Bir sohbetin yanında, bir fincan kahveyle ya da bir ikram sofrasında. Bal
-              Kuruyemiş’in ürün dünyası, farklı buluşmalara eşlik eden kategorileri bir
-              araya getiriyor.
+              {copy.story.description}
             </p>
             <p className="mt-5 text-base leading-8 text-muted">
-              İzmir Buca’daki {site.branchCountText} fiziksel şubemizde sizinle
-              buluşuyoruz. Mağazalarımızı ve ürün kategorilerimizi keşfederek bizi daha
-              yakından tanıyabilirsiniz.
+              {copy.story.continuation}
             </p>
             <Link href="/subelerimiz" className="text-link mt-7">
-              Şubelerimizi keşfedin <ArrowIcon />
+              {copy.story.action} <ArrowIcon />
             </Link>
           </div>
         </Container>
@@ -58,9 +51,9 @@ export default function AboutPage() {
         <Container>
           <SectionHeading
             id="about-world-heading"
-            eyebrow="Ürün dünyamız"
-            title="Farklı kategoriler. Tek bir adres."
-            action={{ href: '/urunlerimiz', label: 'Kategorileri keşfedin' }}
+            eyebrow={copy.categories.eyebrow}
+            title={copy.categories.title}
+            action={{ href: '/urunlerimiz', label: copy.categories.action }}
           />
           <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
             {getPublishedCategories().map((category) => (

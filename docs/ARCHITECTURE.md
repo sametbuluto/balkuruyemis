@@ -3,12 +3,12 @@
 Faz 3 kabul edildi; commit `78df0f7`. V5 hedefi hosted Pages CMS + GitHub/Actions +
 Cloudflare Pages'tir; uygulama static export kalır. DB/özel API/custom admin yoktur.
 Faz 4.1-a güvenlik hazırlığı korunur. **Faz 4.1-b kategorileri, Faz 4.1-c1 ürünleri tek kaynaklı JSON
-mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri c3 ile JSON kaynağına taşındı; site metinleri TS olarak kalır; CMS/CI/deployment aktif değildir.
+mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri c3 ile JSON kaynağına, kurumsal metinler/ayarlar/duyurular c4 ile JSON mimarisine taşındı. CMS/CI/deployment aktif değildir.
 
 Bugün kategori/ürün/şube/galeri JSON → strict Node/RSC loader → published server props → statik
 sayfa/client filtresi akışı kullanılır. Üretilmiş manifest bu pilotta gerekmemiştir. Diğer türlere
 geçiş ayrı 4.1-c işleridir. Detaylar [CMS_SETUP](CMS_SETUP.md), [CONTENT_GUIDE](CONTENT_GUIDE.md)
-ve [SECURITY](SECURITY.md); ana kayıt plan.md §18. Güvenlik policy kodu hâlâ aktif CI değildir.
+ve [SECURITY](SECURITY.md); ana kayıt plan.md §19. Güvenlik policy kodu hâlâ aktif CI değildir.
 
 Aşağıdaki Faz 3/2.1 kayıtları tarihsel olarak korunur; önceki CMS yasağı ve V5'in
 ilk aşamasındaki manifest önerisi güncel kategori pilotunun önüne geçmez.
@@ -335,3 +335,32 @@ Bu mod 3000 portundaki mevcut sunucuyu koruyarak yeniden kullanır; production m
 3100 portunda ayrı QA sunucusu açar.
 Sonuçlar ve tam komutlar [plan.md](../plan.md) içinde tutulur. Fiziksel cihaz,
 Safari ve Firefox test edilmedi. Hiçbir test deployment gerektirmez.
+
+## Faz 4.1-c4 — Kurumsal metinler, ayarlar ve duyurular
+
+`content/pages/*.json` ve `content/settings/*.json` tek kaynaktır. editorial-schema
+unknown girdiden strict nested şema çıkarır; editorial.server yalnız Node/RSC'de
+normal dosya/UTF-8/256 KiB kontrolüyle okur. Eksik/bozuk/şema dışı dosya veya alan
+build'i durdurur. page-copy sabit değişkenleri site ve merkezi şube sayımıyla çözer;
+çözülmüş metinler de sınırları tekrar geçer. CatalogBrowser yalnız CatalogCopy props
+alır; schema tipi type-only import, fs client'a aktarılmaz.
+
+JSON yalnız görünür düz metni belirler. Hero vurgusu, satır kırılması, href, route,
+stil, canonical/noindex/domain güvenliği kodda kalır. Teknik UI ve eksik veri durumları
+de kodda kalır. React escaping korunur; HTML/MDX renderer eklenmedi. Uzun kelimelerin
+mobil taşmasını önlemek için yalnız body overflow-wrap:anywhere eklendi; renk/boşluk
+sistemi aynı. İletişimde URL/tip doğrulamasına ek olarak verified bayrağı gerekir;
+bu editoryal insan beyanıdır, hesap sahipliği veya aktif CI yetkilendirmesi değildir.
+
+Duyuru JSON koleksiyonu boştur. Strict ID/slug/opsiyonel medya/UTC tarih aralığı,
+published + [başlangıç,bitiş) filtresi uygulanır. Filtrelenen kayıtlar HTML/RSC/JS ve
+medya export'una girmez; ham görsellerin tamamı decode denetiminden yine geçer.
+Duyuru bölümü boşken render edilmez; yeni detay rotası/LocalBusiness/sitemap girdisi yok.
+
+build-site.mjs tek SITE_BUILD_AT üretip medya check, Next Webpack, medya sanitize
+ve export denetimine aktarır. Medya raporu bu zamanı ve bütün JSON fingerprint'ini
+tutar; export aynı zamanı kullanır, kaynak drift'i reddedilir. Tarih geçmesi tek
+başına statik yayını değiştirmez. Zamanlanmış yeniden build/deployment kurulmadı.
+
+[EDITORIAL_GUIDE](EDITORIAL_GUIDE.md) alan sözleşmesi; plan §19 kabul/test kaydıdır.
+Önceki faz bölümlerindeki TS metin/komut açıklamaları kendi tarihsel kapsamlarıdır.

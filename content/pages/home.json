@@ -1,0 +1,57 @@
+{
+  "seo": {
+    "title": "{slogan}",
+    "description": "{siteDescription}"
+  },
+  "hero": {
+    "eyebrow": "Buca’dan, sizin için",
+    "titleLead": "Lezzetin",
+    "titleAccent": "Doğal Adresi.",
+    "descriptionLead": "Günlük molalara, paylaşılan sofralara.",
+    "descriptionBody": "{name} ile tanışın; İzmir Buca’daki {branchCountText} şubemizde buluşalım.",
+    "catalogAction": "Ürünlerimizi keşfedin",
+    "branchesAction": "Şubelerimiz",
+    "countDescription": "Aynı marka, {branchCountText} buluşma noktası."
+  },
+  "heroVisual": {
+    "eyebrow": "Bizden kareler",
+    "photoDescription": "Mağazalarımızdan bir kare.",
+    "pendingDescription": "Gerçek mağaza ve ürün fotoğraflarımız yakında burada.",
+    "countLabel": "{branchCountCapitalized} şubede"
+  },
+  "categories": {
+    "eyebrow": "Ürün dünyamız",
+    "title": "Her buluşmaya bir eşlikçi.",
+    "description": "Kuruyemişten kahveye, ikramlardan günlük bakıma. Başlangıç kategorilerimizi keşfedin.",
+    "action": "Tüm kategoriler"
+  },
+  "story": {
+    "eyebrow": "Bizimle tanışın",
+    "titleLead": "Buca’da buluşan",
+    "titleTail": "bir lezzet hikâyesi.",
+    "description": "{name}, İzmir Buca’daki {branchCountText} fiziksel şubesiyle sizinle buluşuyor. Günün küçük molalarında, bir fincan kahvenin yanında, paylaşılan sofralarda.",
+    "signature": "{slogan}.",
+    "action": "Bizi daha yakından tanıyın"
+  },
+  "branches": {
+    "eyebrow": "Şubelerimiz",
+    "title": "Buca’da {branchCountText} buluşma noktası.",
+    "description": "İzmir Buca’daki {branchCountText} şubemizde sizinle buluşalım.",
+    "action": "Şubelerimizi keşfedin",
+    "notice": "İşletme sahibinin paylaştığı {knownLocationCountText} gerçek konum aşağıda yer alıyor. Şube isimleri ve açık adres eşleştirmeleri henüz tamamlanmadı."
+  },
+  "gallery": {
+    "eyebrow": "Bizden kareler",
+    "title": "{name}’ten anlar.",
+    "description": "Mağazalarımızı ve ürünlerimizi gerçek fotoğraflarla daha yakından tanıyacağınız alan."
+  },
+  "social": {
+    "eyebrow": "Bağlantıda kalalım",
+    "title": "Bir merhaba kadar yakın.",
+    "description": "Paylaşımlarımız ve iletişim kanallarımız için ayrılan bu alan, resmî hesaplarımızla yakında tamamlanacak."
+  },
+  "announcements": {
+    "eyebrow": "Bizden haberler",
+    "title": "Duyurular"
+  }
+}

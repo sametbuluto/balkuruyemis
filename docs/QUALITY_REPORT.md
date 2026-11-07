@@ -1,3 +1,93 @@
+# Faz 4.1-c4 — Kurumsal metin ve duyuru JSON kalite raporu
+
+Tarih: **7 Kasım 2026**. Önceki c3 ve tüm veri mimarisi korundu. Yalnız yerel
+uygulama; gerçek CMS veya yayın kurulmadı. [Metin sözleşmesi](EDITORIAL_GUIDE.md),
+[master plan §19](../plan.md), [içerik rehberi](CONTENT_GUIDE.md).
+
+## PASS
+
+- Beş sayfanın işletme metinleri content/pages/*.json; marka/footer/iletişim ve
+  sosyal ayarlar content/settings/{site,social}.json tek kaynağına taşındı.
+  Ana/vurgulu hero başlığı, bölüm/kurumsal metinler, CTA yazıları ve işletme SEO
+  açıklamaları düzenlenebilir. İkinci TS literal listesi yoktur.
+- UI/navigasyon/hata/eksik veri metinleri, href/rota, kırmızı span/satır kırılımı,
+  CSS ve canonical/noindex/domain yetkisi kodda kalır. Temel sayfalar zorunludur;
+  sayfa status sistemi kurulmadı, yeni duyurular draft/published destekler.
+- Strict nested şema, required/unknown/tip/uzunluk/URL ve UTF-8/256 KiB/normal
+  dosya denetimi; bozuk kaynakta build reddi vardır. HTML React ile düz metin olur.
+  Telefon/e-posta/sosyal değer null ve verified false; sahte link yoktur.
+- Duyuru koleksiyonu boş; benzersiz ID/slug, sıra, opsiyonel medya ve UTC tarih
+  sözleşmesi hazır. Published + başlangıç dahil/bitiş hariç filtre build'de çalışır.
+  Tek SITE_BUILD_AT render ve sanitize export'u eşler; kaynak drift reddi korunur.
+- 697db94 geçici kopyada yeniden derlendi. Beş sayfanın görünür metin/title/meta
+  description sonuçları **15/15 birebir**. Altı kategori, dört gerçek koordinat ve
+  **61 korunan kaynak dosyası byte eşit**. Yeni bağımlılık yok; eski testler korundu.
+
+| Kontrol                                     | Sonuç                                              |
+| ------------------------------------------- | -------------------------------------------------- |
+| TypeScript / ESLint / Prettier              | PASS; strict aynı, lint uyarısı 0                  |
+| Vitest                                      | **328/328**, 22 dosya                              |
+| Production static export                    | **67 dosya**, noindex true, aynı ana rotalar       |
+| Static HTTP                                 | **3/3**                                            |
+| Playwright / sistem Chrome                  | **51/51**, out/ üzerinde                           |
+| Responsive                                  | **320, 393, 768, 1280 px**; DOM ve ekran görüntüsü |
+| İzole metin export                          | **4/4**                                            |
+| İzole kategori / ürün / şube / medya export | **3/3, 4/4, 5/5, 5/5**                             |
+
+Metin fixture'ı gerçek kaynağı değiştirmeden JSON başlık ve Hakkımızda metni
+HTML'e yansımasını; kırmızı vurgu, XSS'nin çalışmamasını; onaysız iletişim ve
+draft/future/expired duyuruların HTML/RSC/JS'de görünmemesini doğrular. Draft duyuru
+fotoğrafı 404'tür. Malformed home JSON, geçersiz sosyal URL ve teknik SEO alanı
+üç negatif build ile reddedilir. Saat ilerlemesi statik duyuruyu değiştirmez.
+
+## WARNING
+
+- Bu bir veri altyapısıdır; Ali Bey için gerçek CMS paneli, .pages.yml, upload
+  metadata adaptörü, otomatik aktarım ve Cloudflare yayını henüz yoktur. Üç gerçek
+  panel → otomatik kontrol → Cloudflare içerik/SHA kabul akışı hâlâ bekleniyor.
+- verified iletişim işareti insanın sahiplik teyidini belirtir; URL biçim kontrolü
+  veya bu işaret tek başına hesap sahipliğini kanıtlamaz. Gerçek telefon/e-posta,
+  sosyal hesap, logo/fotoğraf/ürün, şube kimlik/adres/saat bilgileri beklenir.
+- Tarihli duyuruların devreye girmesi/kalkması yeni build/deployment ister;
+  zamanlanmış tetikleme kurulmadı. JSON sonrası dev sunucusunu yeniden başlatın.
+- Bu fazda yeni WebKit/Firefox/fiziksel cihaz/axe taraması yapılmadı.
+- İlk sandbox HTTP turu listen EPERM ile çalışamadı. Gerekli erişimle tekrar
+  çalıştırılan son tam check, HTTP, Playwright ve fixture'lar başarılıdır.
+
+## FAIL
+
+Son doğrulamada başarısız test veya açık kritik hata yok. Negatif build reddi
+beklenen koruma davranışıdır; gerçek kaynağa sahte duyuru/fotoğraf eklenmedi.
+
+## Dosyalar, Git ve manuel kabul
+
+- Yeni: yedi sayfa/ayar JSON, announcements/.gitkeep; editorial schema/server ve
+  page-copy; announcement schema/loader/query; build-clock; ContactDetails,
+  koşullu AnnouncementsSection; build-site/test-editorial-export araçları.
+- Kullanım: beş rota, home bölümleri/footer/OG, site/social erişimi, katalog copy
+  props, kök denetim ve medya fingerprint/duyuru yayın seçimi. Uzun kelime taşmasına
+  karşı yalnız body overflow-wrap eklendi. Renk/tipografi tokenları değişmedi.
+- Yeni testler: editorial/announcement/build-clock/contact unit dosyaları,
+  editorial-json E2E. Önceki kategori/ürün/şube/galeri/media testleri değişmedi.
+- Belgeler: EDITORIAL_GUIDE, AGENTS/README/CONTENT_GUIDE/ARCHITECTURE/CMS_SETUP/
+  ROADMAP/EDITOR_GUIDE/SECURITY/DEPLOYMENT/ROLLBACK, plan ve bu rapor.
+
+Başlangıç main/697db94; başarılı değişiklikler
+`feat: migrate corporate copy and announcements to validated JSON` yerel commit'inde
+kaydedilir. Son hash teslim yanıtında/git log'da bulunur. .env/otomatik çıktılar,
+node_modules ve raporlar Git dışıdır. Remote/push/hesap/secret/deploy/c5 yoktur.
+
+Güncel kanıt: /private/tmp/bal-c4-final/ altında check-final.log, playwright.log,
+editorial-fixture.log, diğer dört fixture log'u, copy-parity.json ve
+preservation-report.json. playwright-report/ ve test-results/ Git dışındadır.
+Manuel inceleme: npm run build → npm run preview → http://127.0.0.1:4173.
+c5 önerisi: ayrı yetkiyle medya metadata adaptörü ve CMS alan eşleme/round-trip
+planını ele almak. Bu rapor c5'i başlatmaz.
+
+---
+
+## Tarihsel Faz 4.1-c3 raporu
+
 # Faz 4.1-c3 — Galeri ve medya kalite raporu
 
 Tarih: **1 Kasım 2026**. Yerel altyapı tamamlandı; gerçek CMS/push/deployment yoktur.

@@ -42,3 +42,11 @@ validation reddetti. Önceki doğru binary git show ile okunup yeni düzeltme co
 oluşturuldu; decode doğrulaması geçti. Ana repo resetlenmedi/force edilmedi.
 Gerçek CMS/GitHub/Cloudflare kurtarması bu testle tamamlanmış sayılmaz. JSON boyut/
 alt/varyant referansları görselle birlikte tutarlı sürüme dönmelidir.
+
+## C4 metin/ayar/duyuru geri dönüşü
+
+Yanlış metin için ilgili content/pages veya content/settings kaydının doğru sürümünü
+Git geçmişinden geri alıp tüm kontroller ve yeniden build çalıştırın. Duyuru için
+aynı ID'yi koruyarak draft seçmek yayından kaldırma yoludur; yeni build gerekir.
+Kaynak düzeltilmeden yalnız eski deployment'a dönmek sonraki build'de hatayı tekrar
+getirir. Gerçek CMS/Cloudflare rollback entegrasyonu bu yerel testlerle kurulmuş sayılmaz.

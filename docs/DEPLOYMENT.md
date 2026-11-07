@@ -72,3 +72,12 @@ sırasında input değişimi kontrolü durdurur. Kaynak raw EXIF temizlenmiş sa
 Ali Abi'nin gerçek CMS değişikliği → trusted kontroller → otomatik korunan aktarım →
 Cloudflare yayın → HTTP/source SHA kanıtı gerçek hesaplarda geçmeden CMS tamamlanmaz.
 Bu belge bu dış işlemleri başlatma yetkisi değildir; bu fazda deployment yapılmadı.
+
+## C4 teknik build anı ve duyurular
+
+Standart `npm run build`, build-site.mjs üzerinden tek SITE_BUILD_AT ile medya
+check → Next → sanitize → verify çalıştırır. Tarih canonical UTC milisaniye biçimidir;
+CMS ayarı veya public env değildir. Boş/bozuk açık değer build'i durdurur.
+Duyurunun başlangıç/bitişinin uygulanması yeni başarılı build/deployment gerektirir.
+Zamanlanmış tetikleme bu fazda kurulmadı; bu ihtiyaç ayrıca tasarlanıp gerçek
+Cloudflare yayın geçmişinde sınanmalıdır. Yerel tarih testi harici yayın kanıtı değildir.

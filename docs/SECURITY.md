@@ -142,3 +142,18 @@ re-encode edilip kaynak EXIF/XMP/IPTC/ICC taşınmaz. Kaynak/Git blob'u temizlen
 public repo'ya upload öncesi EXIF mahremiyet kontrolü ayrıca gerekir.
 Build drift fingerprint'i yereldir; exact Git SHA/candidate/branch protection güvenliği
 hâlâ ayrı kurulacaktır. Başarısız build'in out'u yayımlanmaz. [MEDIA_GUIDE](MEDIA_GUIDE.md).
+
+## C4 düz metin ve iletişim sınırı
+
+Yeni gerçek kaynak yolları content/pages/{home,about,contact,catalog,branches}.json
+ve content/settings/{site,social}.json'dur. Yerel content-change-policy bunları
+kabul eder; önceki singleton aday yolları prototip uyumluluğu için durur fakat
+uygulama bunları okumaz. Gelecek CMS/CI yalnız gerçek kaynaklara bağlanmalıdır.
+Bu helper hâlâ aktif CI veya yetki sınırı değildir.
+
+Strict nested şema bilinmeyen alanı, HTML/CSS ayarı, href/domain/noindex değişikliğini
+reddeder. Metin içindeki HTML düz metin olarak escape edilir. Sosyal URL host/protokol
+kuralları güvenli hedef biçimini doğrular; verified editoryal beyanı hesap sahipliğini
+kanıtlamaz. Gerçek sahiplik ürün sahibince doğrulanmalıdır. İletişim taslak değerleri
+ziyaretçi props/bağlantılarına aktarılmaz. SITE_BUILD_AT güvenilir build sürecinindir;
+içerik şemasında yoktur. Statik tarih seçimi bir otomatik yayın servisi değildir.

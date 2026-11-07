@@ -1,3 +1,4 @@
+import type { CatalogCopy } from '@/content/editorial-schema';
 import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { ContentNotice } from '@/components/ui/content-notice';
@@ -9,7 +10,7 @@ import type { Product, ProductCategory } from '@/types/content';
 export interface CatalogContentProps {
   categories: readonly ProductCategory[];
   products: readonly Product[];
-  branchCountText: string;
+  copy: CatalogCopy;
   selected?: ProductCategory;
   invalid?: boolean;
 }
@@ -17,7 +18,7 @@ export interface CatalogContentProps {
 export function CatalogContent({
   categories,
   products,
-  branchCountText,
+  copy,
   selected,
   invalid = false,
 }: CatalogContentProps) {
@@ -29,11 +30,9 @@ export function CatalogContent({
       <Container>
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <h2 id="catalog-heading" className="font-display text-3xl">
-            Ürün kategorileri
+            {copy.heading}
           </h2>
-          <p className="text-xs leading-6 text-muted">
-            Gerçek ürün bilgileri ve fotoğraflar yakında.
-          </p>
+          <p className="text-xs leading-6 text-muted">{copy.description}</p>
         </div>
         <nav
           aria-label="Ürün kategorileri"
@@ -88,21 +87,16 @@ export function CatalogContent({
           <div className="mt-12">
             <ContentNotice
               title={
-                selected
-                  ? `${selected.name} ürünleri hazırlanıyor.`
-                  : 'Ürünlerle yakında tanışın.'
+                selected ? `${selected.name} ürünleri hazırlanıyor.` : copy.emptyTitle
               }
             >
-              <p>
-                Ürün açıklamaları ve gerçek ürün fotoğrafları tamamlandığında bu alanda
-                yer alacak.
-              </p>
+              <p>{copy.emptyDescription}</p>
             </ContentNotice>
           </div>
         )}
         <p className="mt-7 flex items-start gap-3 text-xs leading-6 text-muted">
           <LineIcon name="location" className="h-5 w-5 shrink-0 text-brand-red" />
-          Bal Kuruyemiş ile İzmir Buca’daki {branchCountText} şubemizde buluşabilirsiniz.
+          {copy.visitDescription}
         </p>
       </Container>
     </section>

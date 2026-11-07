@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "npm run media:check && next dev --webpack",
-    "build": "npm run media:check && next build --webpack && node scripts/run-media.mjs export && node scripts/verify-export.mjs",
+    "build": "node scripts/build-site.mjs",
     "start": "npm run preview --",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint . --max-warnings=0",

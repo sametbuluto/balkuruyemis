@@ -93,6 +93,7 @@ export interface BrandAssets {
 }
 
 export interface ContactChannel {
+  actionLabel?: string;
   id: 'instagram' | 'whatsapp';
   name: string;
   description: string;

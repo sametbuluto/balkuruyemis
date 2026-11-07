@@ -8,14 +8,14 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
 - Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
 - Faz 3 kabul edildi, commit `78df0f7`. Faz 4.1-a/b/c1/c2 kabul edildi ve yerel Git
-  ile kaydedildi. Aktif kapsam yalnız 4.1-c3 galeri/medya altyapısı ve yerel commit;
-  4.1-c4 ve sonraki türlere kendiliğinden geçme.
+  ile kaydedildi. 4.1-c3 kabul edildi; aktif kapsam yalnız 4.1-c4 kurumsal metin,
+  sosyal/iletişim ve duyuru JSON mimarisi ile yerel commit. c5 ve sonraki fazlara geçme.
 - Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
   kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
   kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
 - Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
   kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
-- Plan ve rapor kaynakları: plan.md §18, docs/CMS_SETUP.md, SECURITY.md,
+- Plan ve rapor kaynakları: plan.md §19, docs/CMS_SETUP.md, SECURITY.md,
   DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
 - Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
   deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.
@@ -63,12 +63,19 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Galeri tek kaynağı content/gallery/<id>.json; ürün/kategori/şube medya nesneleri
   ebeveynlerinde kalır. İkinci düzenlenebilir medya registry'si ekleme. Galeri usages
   alanıyla hero/ortak/şube galerisini seçer; embedded status/sortOrder isteğe bağlıdır.
-- Medya için standart npm run build pipeline'ını koru: decode/doğrulama → Next →
+- Medya için standart npm run build pipeline'ını koru: tek build anıyla decode/doğrulama → Next →
   sanitize out/images → export denetimi. SVG şimdilik kapalı; yalnız JPEG/PNG/WebP/AVIF.
   .generated araç/raporları Git'e veya client'a taşıma. Source dosyaları değiştirme;
   taslak/orphan raw dosyaları statik çıktıdan dışla. MEDIA_GUIDE limitlerini koru.
-- Site/ana sayfa metni ve diğer kaynaklar henüz src/content TS modüllerinde kalır.
-  Taşıma tip/schema/kimlik eşitliği testleriyle aşamalıdır. `src/config/site.ts` ve
+- Kurumsal metinlerin tek kaynağı content/pages/{home,about,contact,catalog,branches}.json;
+  marka/iletişim/sosyal ayarlar content/settings/{site,social}.json; duyurular
+  content/announcements/announcement-*.json dosyalarıdır. editorial.server.ts yalnız
+  Node/build katmanında strict yükler; client yalnız gerekli copy props alır.
+  React düz metin renderını koru; HTML/CSS, href veya teknik SEO/env alanı açma.
+  Temel sayfalar zorunlu; draft/published ve tarihler duyuru koleksiyonuna uygulanır.
+  SITE_BUILD_AT teknik build anıdır; tarihli duyuruların değişmesi yeni build ister.
+  verified iletişim bayrağı insan doğrulamasını belirtir, hesap sahipliğini kanıtlamaz.
+  Ayrıntılar EDITORIAL_GUIDE.md içinde. Taşıma tip/schema/kimlik eşitliği testleriyle aşamalıdır. `src/config/site.ts` ve
   eski feature data modülleri yalnızca uyumluluk re-export noktalarıdır. Şube sayısını
   kayıt listesinden türet; UI içine sabit sayı yazma. Renk ve tipografi tokenlarını
   `src/styles/tokens.css` üzerinden yönet.

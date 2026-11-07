@@ -2,7 +2,7 @@
 
 30 Ekim 2026 araştırması; 1 Kasım 2026 yerel tamamlama. **Kurulu CMS veya gerçek editör testi değildir.** Bu belge master
 prompt V5'in ilk görevinin araştırma kaydıdır. Statik tasarım korunur. Faz 4.1-b kategori ve 4.1-c1 ürün ve 4.1-c2 şube ve 4.1-c3 galeri JSON/medya doğrulaması uygulandı; .pages.yml,
-diğer içerik geçişleri ve workflow'lar sonraki küçük işlerdir.
+metin/duyuru geçişi c4 ile yerelde tamamlandı. Metadata adaptörü ve workflow'lar sonraki küçük işlerdir.
 
 ## Mevcut durum
 
@@ -15,8 +15,8 @@ diğer içerik geçişleri ve workflow'lar sonraki küçük işlerdir.
 - package/lockfile exact sürümleri eşleşiyor: Next 16.4.3, React 19.3.1,
   TS 6.0.3 strict, Tailwind 4.3.3; c3 için mevcut Sharp 0.35.5 doğrudan exact bağımlılık oldu.
 - Kategoriler content/categories altında altı JSON dosyasında; ürünler content/products
-  altında boş JSON koleksiyonu. Dört fiziksel şube content/branches JSON kaynağında; galeri content/gallery JSON kaynağında, site metinleri TS modüllerinde. Dört koordinat var;
-  gerçek ürün/galeri/logo/sosyal hesap yok. Başlıkların/metinlerin bir bölümü JSX'te.
+  altında boş JSON koleksiyonu. Dört fiziksel şube content/branches JSON kaynağında; galeri content/gallery, metinler content/pages ve content/settings JSON kaynaklarında. Dört koordinat var;
+  gerçek ürün/galeri/logo/sosyal hesap ve duyuru yok. İşlevsel UI metinleri kodda kalır.
 - Kategori/ürün/şube için strict JSON parse/schema, referans, kimlik onayı ve dosya denetimi uygulandı. Diğer
   içeriklerde mevcut tipli iş kuralları geçerli; medya decode c3 ile çalışır, aktif CI silme farkı henüz yok.
 
@@ -56,20 +56,23 @@ Kaynaklar: [configuration](https://pagescms.org/docs/configuration/),
 Dal UI: [sabit kaynak](https://github.com/hunvreus/pagescms/blob/6f4e860a35d934406580287e7042e5e111e207a1/components/repo/repo-branches.tsx).
 Şema: [sabit kaynak](https://github.com/hunvreus/pagescms/blob/6f4e860a35d934406580287e7042e5e111e207a1/lib/config-schema.ts).
 
-## Tek kaynaklı içerik hedefi — kategori, ürün ve şube geçişi uygulandı
+## Tek kaynaklı içerik — c4 dahil uygulanan kaynaklar
 
-| CMS adı / Türkçe etiket           | Planlanan tek kaynak          | Alan sözleşmesi                                                                   |
-| --------------------------------- | ----------------------------- | --------------------------------------------------------------------------------- |
-| Products / Ürünler                | content/products/id.json      | id, slug, kategori ID, ad, açıklama, medya, sıra, status                          |
-| Categories / Kategoriler          | content/categories/id.json    | Mevcut ProductCategory; gerçek id/slug korunur                                    |
-| Branches / Şubeler                | content/branches/id.json      | Aynı fiziksel kayıt; koordinat, nullable iletişim, medya, status                  |
-| Gallery / Galeri                  | content/gallery/id.json       | Görsel yolu, zorunlu alt, sıra, status                                            |
-| Announcements / Duyurular         | content/announcements/id.json | Düz metin, tarih, status; şu an kayıt/rota yok                                    |
-| Home Content / Ana Sayfa          | content/home.json             | Başlık parçaları, alt metin ve tanıtım metinleri                                  |
-| Site Settings / Site Bilgileri    | content/settings.json         | Kamuya açık marka/Hakkımızda metinleri, logo; env/renk/CSS/SEO yayın anahtarı yok |
-| Social Links / Sosyal Bağlantılar | content/social.json           | Doğrulanmış URL veya null; teknik ayar yok                                        |
+| CMS adı / Türkçe etiket           | Tek kaynak                    | Alan sözleşmesi                                                              |
+| --------------------------------- | ----------------------------- | ---------------------------------------------------------------------------- |
+| Products / Ürünler                | content/products/id.json      | id, slug, kategori ID, ad, açıklama, medya, sıra, status                     |
+| Categories / Kategoriler          | content/categories/id.json    | Mevcut ProductCategory; gerçek id/slug korunur                               |
+| Branches / Şubeler                | content/branches/id.json      | Aynı fiziksel kayıt; koordinat, nullable iletişim, medya, status             |
+| Gallery / Galeri                  | content/gallery/id.json       | Görsel yolu, zorunlu alt, sıra, status                                       |
+| Announcements / Duyurular         | content/announcements/id.json | Düz metin, tarih, status; şu an kayıt/rota yok                               |
+| Home Content / Ana Sayfa          | content/pages/home.json       | Başlık parçaları, alt metin ve tanıtım metinleri                             |
+| Site Settings / Site Bilgileri    | content/settings/site.json    | Marka, iletişim, footer; diğer sayfalar content/pages; logo/teknik SEO kodda |
+| Social Links / Sosyal Bağlantılar | content/settings/social.json  | Doğrulanmış URL veya null; teknik ayar yok                                   |
 
-Kategori, ürün, şube ve galeri yolları uygulamanın gerçek tek kaynakları oldu; diğer yollar henüz hedeflerdir.
+Tablodaki yollar artık uygulamanın gerçek kaynaklarıdır; duyuru koleksiyonu boştur.
+Diğer dört kurumsal sayfa content/pages/{about,contact,catalog,branches}.json altındadır.
+Sekiz üst CMS girişi ilk hedeftir; site ayarları/sayfalar gruplaması ileride gerçek
+CMS round-trip ile doğrulanacak. Bu tur .pages.yml oluşturulmadı.
 TS modülleri yalnız tipli erişim sunar; ikinci kategori/ürün literal listesi yoktur.
 Ürün koleksiyonu gerçek kayıt beklediği için yalnız .gitkeep içerir. categoryId
 strict yüklenmiş kategori JSON kayıtlarına referans verir; draft ürün veya draft
@@ -85,9 +88,10 @@ alt ile birlikte, güvenilir decode aşamasında gerçek width/height ve varyant
 normalize edilir. Ali Bey'den piksel ölçüsü girmesi istenmez. Boş opsiyonel metinler
 null'a normalize edilir; yarım koordinat ve kısmi medya nesnesi hata verir.
 
-Başlık/CTA metinleri sınırlı düz alanlar olacak; tasarım sınıfı, stil, rastgele link
-ve env ayarı editöre açılmayacak. React escaping korunur. Duyuruların kayıt türü ve
-gösterim ihtiyacı ayrı işte ele alınır; bu tur boş duyuru veya yeni rota üretilmez.
+Başlık/CTA metinleri sınırlı düz alanlardır; tasarım sınıfı, stil, rastgele link
+ve env ayarı açılmaz. React escaping korunur. Duyurular c4 ile strict JSON,
+build-time status/tarih filtresi ve isteğe bağlı ana sayfa bölümü kullanır.
+Gerçek kayıt yoktur; yeni rota üretilmez. [Metin sözleşmesi](EDITORIAL_GUIDE.md).
 
 ## Küçük işler ve kabul kriterleri
 
@@ -98,7 +102,8 @@ gösterim ihtiyacı ayrı işte ele alınır; bu tur boş duyuru veya yeni rota 
 | 4.1-c1 Ürün JSON                   | Yerel uygulama                           | Boş koleksiyon; strict schema; kategori referansı; draft dışlama; negatif build ve statik E2E                              |
 | 4.1-c2 Şube JSON                   | Yerel uygulama                           | Dört konum/14 alan eşit; strict schema/Maps; korunan kimlik hash onayı; export/404/draft testleri                          |
 | 4.1-c3 Galeri / medya              | Yerel altyapı tamamlandı                 | Strict JSON, decode, temiz statik çıktı; CMS upload hesabı yok                                                             |
-| 4.1-c4 ve diğer tipler             | Başlatılmadı                             | Site metinleri ve upload metadata adaptörü ayrı işler                                                                      |
+| 4.1-c4 Metinler ve duyurular       | Yerel altyapı tamamlandı                 | Beş sayfa, site/sosyal JSON; strict şema, statik tarih ve kaçış testleri                                                   |
+| 4.1-c5 önerisi                     | Başlatılmadı                             | Upload metadata adaptörü tasarımı, alan eşleme ve round-trip test planı                                                    |
 | 4.2-a Yerel .pages.yml prototipi   | Bekliyor                                 | Gerçek JSON kaynaklarına sekiz Türkçe giriş; silme/rename kapalı; schema ve fixture round-trip testleri                    |
 | 4.2-b Gerçek CMS bağlantısı        | Kullanıcı yetkisi bekler                 | Yalnız hedef repo App kurulumu; main kaydı reddi; editörün kod/ayar erişemediği negatif test                               |
 | 4.3-a Güvenilir candidate CI       | Bekliyor                                 | main kodu + yalnız veri; path/şema/medya/build/test; source/target SHA kaydı                                               |
@@ -107,7 +112,7 @@ gösterim ihtiyacı ayrı işte ele alınır; bu tur boş duyuru veya yeni rota 
 | 4.5 Ali Bey gerçek kullanıcı testi | Davet için ayrı onay                     | Sekiz içerik/medya akışı ve destek prosedürü; yayın ve rollback kanıtı                                                     |
 
 4.1-b kategorileri, 4.1-c1 ürünleri, 4.1-c2 şubeleri, 4.1-c3 galeriyi taşıdı.
-Site metinleri ve CMS adaptörü sonraki ayrı işlerdir; 4.1-c4 başlatılmadı. Şube kimlik onayı korunan ID/hash kaydı
+Site metinleri c4 ile taşındı; CMS upload adaptörü sonraki ayrı iştir. Şube kimlik onayı korunan ID/hash kaydı
 üzerinden uygulanır; henüz hiçbir gerçek şube kimliği onaylanmadı. Kullanıcının kapsam sınırı gereği .pages.yml
 henüz oluşturulmadı; CMS hesabı/App/workflow/depoyla yazma veya deployment yoktur.
 4.2 tamamlandı sayılmaz. Önceki uyum matrisi 30 Ekim araştırma kaydıdır.
@@ -135,7 +140,7 @@ kendi ebeveyninde kalır. Resmî image + object-list alan eşlemesi ve güvenli 
 build akışı [MEDIA_GUIDE](MEDIA_GUIDE.md) içinde. Eski matristeki “decode yok” ve
 hedef satırları araştırma tarihini gösterir; decode/EXIF'siz çıktı artık yerelde çalışır.
 Otomatik boyut yazan upload adaptörü, .pages.yml, gerçek hesap/round-trip/CI/Pages yoktur.
-4.1-c4/site metni geçişi ayrıca talimat gerektirir.
+4.1-c4/site metni geçişi yerelde tamamlandı; CMS bağlantısı hâlâ ayrıca talimat gerektirir.
 
 Ürün sahibi kabulü: Ali Abi gerçek panelde ürün adını, fotoğrafı veya ana sayfa metnini
 düzenler; otomatik kontroller ve korunan aktarım geçer; Cloudflare'da yeni içerik ve

@@ -8,6 +8,7 @@
   }
 
   body {
+    overflow-wrap: anywhere;
     background: white;
     color: var(--color-ink);
     font-family: var(--font-sans);

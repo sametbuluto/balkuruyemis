@@ -1,3 +1,4 @@
+import { getFooterCopy } from '@/content/page-copy';
 import { site } from '@/content/site';
 import Link from 'next/link';
 import { navigation } from '@/config/site';
@@ -6,6 +7,7 @@ import { Container } from '@/components/ui/container';
 import { getPublishedCategories } from '@/features/catalog/data';
 
 export function Footer() {
+  const copy = getFooterCopy();
   return (
     <footer className="border-t-4 border-brand-dark bg-ink text-white">
       <Container>
@@ -16,8 +18,7 @@ export function Footer() {
               {site.slogan}.
             </p>
             <p className="mt-4 max-w-60 text-xs leading-6 text-white/55">
-              İzmir Buca’daki {site.branchCountText} fiziksel şubemizde sizinle
-              buluşuyoruz.
+              {copy.description}
             </p>
           </div>
           <div>
@@ -53,17 +54,15 @@ export function Footer() {
           </div>
           <div>
             <p className="eyebrow text-brand-gold">Bizi ziyaret edin</p>
-            <p className="mt-6 font-display text-2xl">
-              Buca’da {site.branchCountText} şube.
-            </p>
+            <p className="mt-6 font-display text-2xl">{copy.visitTitle}</p>
             <Link
               href="/subelerimiz"
               className="mt-3 inline-flex min-h-11 items-center text-sm text-white/80 underline decoration-white/30 underline-offset-4 hover:text-white"
             >
-              Şubelerimizi keşfedin
+              {copy.visitAction}
             </Link>
             <p className="mt-7 text-xs leading-6 text-white/55">
-              Instagram ve WhatsApp bağlantılarımız yakında burada.
+              {copy.socialDescription}
             </p>
           </div>
         </div>
@@ -71,7 +70,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {site.name}. Tüm hakları saklıdır.
           </p>
-          <p>Lezzetin Doğal Adresi · Buca, İzmir</p>
+          <p>{copy.signature}</p>
         </div>
       </Container>
     </footer>

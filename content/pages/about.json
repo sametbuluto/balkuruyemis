@@ -1,0 +1,25 @@
+{
+  "seo": {
+    "title": "Hakkımızda",
+    "description": "{slogan} {name} ile tanışın. İzmir Buca’da {branchCountText} fiziksel şube ve başlangıç kategorilerimiz."
+  },
+  "intro": {
+    "eyebrow": "Hakkımızda",
+    "title": "Buca’dan, sizin için.",
+    "description": "{name}, İzmir’in Buca ilçesinde {branchCountText} fiziksel şubesiyle hizmet veren bir perakende markasıdır."
+  },
+  "story": {
+    "eyebrow": "{name}",
+    "signature": "{slogan}",
+    "titleLead": "Günün küçük molalarına,",
+    "titleTail": "paylaşılan anlara.",
+    "description": "Bir sohbetin yanında, bir fincan kahveyle ya da bir ikram sofrasında. {name}’in ürün dünyası, farklı buluşmalara eşlik eden kategorileri bir araya getiriyor.",
+    "continuation": "İzmir Buca’daki {branchCountText} fiziksel şubemizde sizinle buluşuyoruz. Mağazalarımızı ve ürün kategorilerimizi keşfederek bizi daha yakından tanıyabilirsiniz.",
+    "action": "Şubelerimizi keşfedin"
+  },
+  "categories": {
+    "eyebrow": "Ürün dünyamız",
+    "title": "Farklı kategoriler. Tek bir adres.",
+    "action": "Kategorileri keşfedin"
+  }
+}

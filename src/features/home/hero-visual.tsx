@@ -1,9 +1,11 @@
+import { getPageCopy } from '@/content/page-copy';
 import { site } from '@/content/site';
 import { StaticImage } from '@/components/ui/static-image';
 import { BrandMark } from '@/components/brand/brand-mark';
 import { getHeroImage } from '@/content/gallery';
 
 export function HeroVisual() {
+  const copy = getPageCopy('home').heroVisual;
   const photo = getHeroImage();
   return (
     <div className="relative isolate flex min-h-96 w-full min-w-0 flex-col overflow-hidden bg-ink text-white sm:min-h-[30rem] lg:min-h-[34rem]">
@@ -26,7 +28,7 @@ export function HeroVisual() {
         </div>
       )}
       <div className="m-6 flex items-center justify-between gap-4 border-b border-white/20 pb-5 sm:m-8">
-        <p className="eyebrow text-white">Bal Kuruyemiş</p>
+        <p className="eyebrow text-white">{site.name}</p>
         <span aria-hidden="true" className="h-1 w-8 bg-brand-red" />
       </div>
       <div className="flex flex-1 items-center justify-center px-7 py-9">
@@ -34,17 +36,13 @@ export function HeroVisual() {
       </div>
       <div className="relative mt-auto grid grid-cols-[1fr_auto] border-t border-white/20 bg-ink">
         <div className="min-w-0 px-6 py-6 sm:px-8">
-          <p className="eyebrow text-white">Bizden kareler</p>
+          <p className="eyebrow text-white">{copy.eyebrow}</p>
           <p className="mt-2 max-w-52 text-xs leading-6 text-white/75">
-            {photo
-              ? 'Mağazalarımızdan bir kare.'
-              : 'Gerçek mağaza ve ürün fotoğraflarımız yakında burada.'}
+            {photo ? copy.photoDescription : copy.pendingDescription}
           </p>
         </div>
         <div className="flex items-center bg-brand-red px-4 py-6 sm:px-6">
-          <span className="eyebrow max-w-20 text-white">
-            {site.branchCountCapitalized} şubede
-          </span>
+          <span className="eyebrow max-w-20 text-white">{copy.countLabel}</span>
         </div>
       </div>
     </div>

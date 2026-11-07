@@ -1,6 +1,8 @@
 import type { BrandAssets } from '../types/content';
 import { getVisibleBranches } from './branches';
 import { capitalize, countLabel } from './format';
+import { getSiteSettings } from './editorial.server';
+import { formatCopy, siteSchema } from './editorial-schema';
 
 const branchCount = getVisibleBranches().length;
 const branchCountText = countLabel(branchCount);
@@ -8,11 +10,29 @@ const knownLocationCount = getVisibleBranches().filter(
   (branch) => branch.coordinates,
 ).length;
 
+const settings = getSiteSettings();
+const context = {
+  name: settings.name,
+  slogan: settings.slogan,
+  location: settings.location,
+  branchCountText,
+  branchCountCapitalized: capitalize(branchCountText),
+  knownLocationCountText: countLabel(knownLocationCount),
+};
+const description = formatCopy(settings.description, context);
+const shareDescription = formatCopy(settings.shareDescription, {
+  ...context,
+  siteDescription: description,
+});
+// Çözülmüş metinler de uzunluk sınırlarından geçer.
+siteSchema({ ...settings, description, shareDescription }, 'site(çözülmüş)');
 export const site = {
-  name: 'Bal Kuruyemiş',
-  slogan: 'Lezzetin Doğal Adresi',
-  location: 'Buca, İzmir',
-  description: `Bal Kuruyemiş ile tanışın. Ürünlerimizi ve İzmir Buca’daki ${branchCountText} şubemizi keşfedin.`,
+  name: settings.name,
+  slogan: settings.slogan,
+  location: settings.location,
+  shareLocation: settings.shareLocation,
+  description,
+  shareDescription,
   branchCount,
   branchCountText,
   branchCountCapitalized: capitalize(branchCountText),

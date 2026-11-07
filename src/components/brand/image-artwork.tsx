@@ -1,3 +1,4 @@
+import { getPageCopy } from '@/content/page-copy';
 import { site } from '@/config/site';
 
 // PNG üretimi CSS çalıştırmaz; UI tokenlarının raster çıktılardaki karşılıkları.
@@ -25,6 +26,7 @@ export function BrandIconArtwork({ size }: { size: number }) {
 }
 
 export function BrandShareArtwork() {
+  const copy = getPageCopy('home');
   return (
     <div
       style={{
@@ -48,7 +50,7 @@ export function BrandShareArtwork() {
         }}
       >
         <span>{site.name.toLocaleUpperCase('tr-TR')}</span>
-        <span>İZMİR · BUCA</span>
+        <span>{site.shareLocation}</span>
       </div>
       <div
         style={{
@@ -59,8 +61,8 @@ export function BrandShareArtwork() {
           letterSpacing: -3,
         }}
       >
-        <span>Lezzetin</span>
-        <span>Doğal Adresi.</span>
+        <span>{copy.hero.titleLead}</span>
+        <span>{copy.hero.titleAccent}</span>
       </div>
       <div
         style={{
@@ -71,7 +73,7 @@ export function BrandShareArtwork() {
           color: palette.white,
         }}
       >
-        Buca’da {site.branchCountText} fiziksel şube.
+        {site.shareDescription}
       </div>
     </div>
   );

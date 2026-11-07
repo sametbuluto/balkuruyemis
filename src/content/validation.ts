@@ -6,6 +6,7 @@ import type {
   Product,
   ProductCategory,
 } from '../types/content';
+import type { Announcement } from './announcement-schema';
 import { coordinateText } from './maps';
 
 export interface ContentBundle {
@@ -15,6 +16,7 @@ export interface ContentBundle {
   gallery: readonly MediaAsset[];
   brandAssets: BrandAssets;
   channels: readonly ContactChannel[];
+  announcements?: readonly Announcement[];
 }
 
 export function allMedia(content: ContentBundle): MediaAsset[] {
@@ -22,6 +24,7 @@ export function allMedia(content: ContentBundle): MediaAsset[] {
     content.brandAssets.logo,
     content.brandAssets.inverseLogo,
     ...content.gallery,
+    ...(content.announcements ?? []).map((entry) => entry.image),
     ...content.categories.map((item) => item.image),
     ...content.products.flatMap((item) => item.images),
     ...content.branches.flatMap((item) => item.images),

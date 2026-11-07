@@ -177,12 +177,12 @@ server/build doğrulaması var. Faz 4.1-c1 ürün JSON sözleşmesini ve gerçek
 referanslarını ekledi; boş ürün koleksiyonu geçerli, sahte ürün yok. Yalnız published
 ürün + published kategori ziyaretçiye gider. Faz 4.1-c2 dört fiziksel şubeyi JSON
 kaynağına taşıdı. Kimlik onayı ayrı korunan hash kaydıdır; location kayıtlar detay
-üretmez. c3 ile galeri JSON oldu; site metinleri TS olarak kalır.
+üretmez. c3 ile galeri, c4 ile sayfa/ayar/duyuru metinleri JSON oldu.
 Ürün export kontrolü: `node scripts/test-product-export.mjs`; test verileri yalnız geçici kopyadadır.
 
 GitHub public API kontrolünde repo Public ve ref listesi boştu. Public/Private
 tercihi ve hesap planı, push öncesi kesinleştirilecek. Remote/push/App/davet/deploy yok.
-Güncel Faz 4.1-c3 raporu [QUALITY_REPORT](docs/QUALITY_REPORT.md); master kayıt plan.md §18.
+Güncel Faz 4.1-c4 raporu [QUALITY_REPORT](docs/QUALITY_REPORT.md); master kayıt plan.md §19.
 Önceki [görsel Faz 4 planı](docs/PHASE4_PLAN.md) tarihsel korunur; gerçek logo/fotoğraf
 çalışmaları V5'te Faz 5'e taşındı. Başarılı veri mimarisi kod/test ve teslim belgeleri yerel Git ile kaydedilir;
 harici push/remote/deployment yoktur. Commit kaydı plan.md §17 içindedir.
@@ -251,3 +251,16 @@ exact bağımlılık oldu. Yeni gerçek fotoğraf veya ürün yoktur.
 [Medya sözleşmesi ve sınırlar](docs/MEDIA_GUIDE.md). CMS metadata adaptörü ve gerçek
 panel → otomatik kontrol → Cloudflare kabul testi henüz yapılmadı. Yerel inceleme
 build + preview üzerinden yapılır; yalnız Next CLI çalıştırmak tam yayın pipeline'ı değildir.
+
+## Faz 4.1-c4 — Kurumsal metinler ve duyurular
+
+Ana sayfa ve dört iç sayfanın işletme metinleri `content/pages/`, marka/iletişim ve
+sosyal ayarları `content/settings/` JSON dosyalarından gelir. Duyuruların koleksiyonu
+boştur; uydurma kayıt eklenmedi. Strict server/build doğrulaması ve güvenli düz metin
+renderı kullanılır. UI/rota/stil ve teknik SEO yetkisi editöre açılmaz.
+[Alanlar ve sınırlar](docs/EDITORIAL_GUIDE.md).
+
+`npm run build` tek bir teknik UTC anıyla medya kontrolü → Next → temiz medya → export
+denetimi çalıştırır. Duyuru başlangıç/bitiş tarihinin yayına yansıması yeni build ister;
+otomatik zamanlayıcı kurulmadı. Ek izole kontrol: `node scripts/test-editorial-export.mjs`.
+Bu altyapı CMS hesabı, fotoğraf seçici veya otomatik Cloudflare yayını değildir.

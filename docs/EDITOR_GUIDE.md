@@ -56,3 +56,17 @@ Bunu sağlayacak metadata adaptörü ve gerçek editör testi henüz yapılmadı
 boyutu yanlış yazılmış veya bozuk dosya build'i durdurur; siteye gönderilmez.
 Tam kabul: panelden ürün adı/fotoğraf/ana sayfa metni değiştirilince otomatik kontroller
 geçer ve yeni içerik Cloudflare üzerinde görülür. Bu sonuç henüz doğrulanmadı.
+
+## Metinler ve duyurular için hazır veri alanları
+
+Ana sayfa, Hakkımızda, İletişim, Ürünlerimiz ve Şubelerimiz yazıları; marka/slogan,
+footer, sosyal açıklamalar ve CTA yazıları için JSON sözleşmesi hazır. Gerçek panel
+henüz yok; şimdilik teknik sorumlu [EDITORIAL_GUIDE](EDITORIAL_GUIDE.md) üzerinden düzenler.
+HTML/CSS veya bağlantı hedefi girilmez. Telefon/e-posta ve resmî sosyal hesaplar
+bilinmiyorsa boş kalır. verified işareti gerçek sahiplik teyidinden sonra verilir;
+bu işareti seçmek sistemin hesabı otomatik doğruladığı anlamına gelmez.
+
+Duyurular taslak/yayında, sıra ve isteğe bağlı başlangıç/bitiş zamanı kullanır.
+Zamanlar UTC'dir; Türkiye saatini teknik sorumlu doğru dönüştürmelidir. Tarihin
+geçmesi yayınlanan statik sayfayı kendi kendine değiştirmez; yeni build/yayın gerekir.
+Zamanlanmış yayın, gerçek CMS kullanıcı arayüzü ve fotoğraf metadata adaptörü bekleniyor.

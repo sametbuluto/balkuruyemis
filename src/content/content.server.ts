@@ -1,3 +1,5 @@
+import { assertEditorialContent } from './editorial.server';
+import { getAnnouncements } from './announcements';
 import { getCategories } from './categories';
 import { getProducts } from './products';
 import { getBranches } from './branches';
@@ -8,12 +10,14 @@ import { contactChannels } from './social';
 import { allMedia, validateContent } from './validation';
 
 export function getContentBundle() {
+  assertEditorialContent();
   const categories = getCategories();
   return {
     categories,
     products: getProducts(undefined, categories),
     branches: getBranches(),
     gallery: getGalleryEntries(),
+    announcements: getAnnouncements(),
     brandAssets,
     channels: contactChannels,
   };

@@ -28,7 +28,7 @@ export function ContactChannels({
                 rel="noopener noreferrer"
                 className="text-link"
               >
-                {channel.name}’a gidin <ArrowIcon />
+                {channel.actionLabel ?? `${channel.name}’a gidin`} <ArrowIcon />
                 <span className="sr-only">(yeni sekmede açılır)</span>
               </a>
             ) : (

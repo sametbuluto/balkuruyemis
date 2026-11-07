@@ -68,17 +68,17 @@ Bu fazda GitHub, Cloudflare hesabı, domain, push ve deployment yoktur.
 V5 önceki “CMS kapsam dışı” kararını değiştirir. Tasarım ve static export korunur.
 Ayrıntılı küçük işler/kabul kriterleri: [CMS_SETUP](CMS_SETUP.md).
 
-| Faz                                   | Durum / küçük işler                                                                                             |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| 4.1 GitHub ve güvenli içerik mimarisi | Audit/izin politikası, kategori/ürün/şube/galeri JSON ve medya kapısı hazır; metinler bekliyor; remote/push yok |
-| 4.2 Pages CMS prototipi               | Gerçek JSON kaynağı sonrası .pages.yml, round-trip ve yetki testleri; App bağlantısı ayrıca onay                |
-| 4.3 Actions doğrulama/aktarımı        | Güvenilir candidate, required checks, bot PR ve race/conflict testleri; şu an yalnız tasarım                    |
-| 4.4 Pages ücretsiz önizleme           | Ayrı deployment onayı; main/noindex, content-edit doğrudan yayın yok                                            |
-| 4.5 Ali Bey hesabı ve gerçek testler  | Davet/yetki için onay; editör, yayın ve kurtarma akışları                                                       |
-| 5 Gerçek marka varlıkları             | Orijinal logo, ürün/mağaza fotoğrafları ve görsel sadeleştirme                                                  |
-| 6 Kesin şube/sosyal bilgiler          | Konumları koruyarak ad/adres/telefon/saat eşleşmesi                                                             |
-| 7 Domain ve kurumsal yayın            | Onaylı domain/HTTPS/canonical/robots/sitemap/Search Console/yerel SEO                                           |
-| 8 Bakım ve kurtarma                   | İçerik ve deployment rollback, izleme ve destek prosedürü                                                       |
+| Faz                                   | Durum / küçük işler                                                                                                     |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 4.1 GitHub ve güvenli içerik mimarisi | Audit/izin politikası, kategori/ürün/şube/galeri/metin/duyuru JSON ve medya kapısı hazır; CMS bekliyor; remote/push yok |
+| 4.2 Pages CMS prototipi               | Gerçek JSON kaynağı sonrası .pages.yml, round-trip ve yetki testleri; App bağlantısı ayrıca onay                        |
+| 4.3 Actions doğrulama/aktarımı        | Güvenilir candidate, required checks, bot PR ve race/conflict testleri; şu an yalnız tasarım                            |
+| 4.4 Pages ücretsiz önizleme           | Ayrı deployment onayı; main/noindex, content-edit doğrudan yayın yok                                                    |
+| 4.5 Ali Bey hesabı ve gerçek testler  | Davet/yetki için onay; editör, yayın ve kurtarma akışları                                                               |
+| 5 Gerçek marka varlıkları             | Orijinal logo, ürün/mağaza fotoğrafları ve görsel sadeleştirme                                                          |
+| 6 Kesin şube/sosyal bilgiler          | Konumları koruyarak ad/adres/telefon/saat eşleşmesi                                                                     |
+| 7 Domain ve kurumsal yayın            | Onaylı domain/HTTPS/canonical/robots/sitemap/Search Console/yerel SEO                                                   |
+| 8 Bakım ve kurtarma                   | İçerik ve deployment rollback, izleme ve destek prosedürü                                                               |
 
 Önceki görsel Faz 4 önerisi [PHASE4_PLAN](PHASE4_PLAN.md) içinde tarihsel korunur.
 Public/Private tercihi ve GitHub planı kesinleşmeden koruma gereksinimleri kaldırılmaz.
@@ -107,3 +107,14 @@ Gerçek medya 0; .pages.yml/hesap/CI/Cloudflare yok. c4 önerisi: site metinleri
 upload metadata adaptörünü ayrı işler halinde netleştirmek; başlatılmadı.
 CMS ancak Ali Abi'nin gerçek panel değişikliği otomatik kontrollerden geçip
 Cloudflare'da yayımlandığında kabul edilecek; yerel altyapı bu hedefi tamamlamaz.
+
+## Faz 4.1-c4 — Kurumsal metin ve duyuru JSON · Yerel altyapı
+
+Beş sayfa ve site/sosyal ayarları tek JSON kaynağından gelir. Sınırlı düz metin/CTA,
+güvenli URL ve nullable iletişim, boş duyuru koleksiyonu, statik yayın/tarih filtresi
+ve gerçek çıktı kabul testleri hazır. Tasarım/rotalar, altı kategori ve dört koordinat
+korundu. Gerçek CMS, otomatik aktarım ve Cloudflare yayını tamamlanmadı.
+
+c5 önerisi: kullanıcıdan ayrıca kapsam alarak medya metadata adaptörünü, CMS Türkçe
+alan eşlemesini ve round-trip testlerini ele almak. .pages.yml/hesap/CI/yayın bu tur
+yoktur. Gerçek panel → otomatik kontroller → Cloudflare üç kabul akışı hâlâ beklenir.

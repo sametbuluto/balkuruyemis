@@ -1,0 +1,19 @@
+{
+  "name": "Bal Kuruyemiş",
+  "slogan": "Lezzetin Doğal Adresi",
+  "location": "Buca, İzmir",
+  "shareLocation": "İZMİR · BUCA",
+  "description": "{name} ile tanışın. Ürünlerimizi ve İzmir Buca’daki {branchCountText} şubemizi keşfedin.",
+  "phone": null,
+  "phoneVerified": false,
+  "email": null,
+  "emailVerified": false,
+  "footer": {
+    "description": "İzmir Buca’daki {branchCountText} fiziksel şubemizde sizinle buluşuyoruz.",
+    "visitTitle": "Buca’da {branchCountText} şube.",
+    "visitAction": "Şubelerimizi keşfedin",
+    "socialDescription": "Instagram ve WhatsApp bağlantılarımız yakında burada.",
+    "signature": "{slogan} · {location}"
+  },
+  "shareDescription": "Buca’da {branchCountText} fiziksel şube."
+}
