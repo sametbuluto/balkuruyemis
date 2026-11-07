@@ -140,3 +140,23 @@ PENDING; kullanıcı işlemleri CMS_ACCEPTANCE.md içindedir. Bağlantı/yayın 
 Yeni içerik/tasarım veya .pages.yml değişimi yok. Public/Private değişimi, push, App,
 davet, secret ve deployment yapılmadı. Plan §21, GITHUB_READINESS ve AUTOMATION_DESIGN
 güncel kaynaklardır. Sonraki harici aşama kendiliğinden başlamaz.
+
+## Faz 4.2-b — İlk push öncesi son kontrol · Yerel kontrol tamamlandı
+
+- [x] Kesin Public + Free kararı kaydedildi; aa1ea3e/8 commit ve temiz başlangıç doğrulandı.
+- [x] Reachable blob/EXIF/secret/çıktı ve ek binary taraması; testler tekrarlandı.
+- [x] Uzak Public/boş ref/workflow/deployment doğrulandı; remote/dry-run/push yapılmadı.
+- [x] Güvenli komut planı ve Free bootstrap/required check sırası hazırlandı.
+- [ ] Webhook/App/Cloudflare UI doğrulaması; tetikleyici UNKNOWN → push BLOCKED.
+- [ ] Tam aday SHA için ayrı açık push izni. 4.2-c/harici kurulum başlatılmadı.
+
+Yerel belge değişiklikleri uncommitted; onaylı Git geçmişi korunur. Detay plan §22
+ve [PUSH_PREFLIGHT](PUSH_PREFLIGHT.md) içindedir.
+
+### 4.2-b son durum
+
+Kullanıcı webhook yokluğu, Railway/Vercel kaldırma ve Cloudflare No projects found
+kontrolünü tamamladı. Son Public/boş uzak ref kontrolü ve yerel belge commit/audit
+bu görevin kapsamıdır. Onaylı tam SHA için gerçek push izni hâlâ verilmedi.
+Dry-run/auth ve 4.2-c/CI/CMS/deployment başlatılmaz. Son kayıt plan §22.9 ve
+PUSH_PREFLIGHT içindedir; önceki UNKNOWN/BLOCKED maddeleri tarihseldir.

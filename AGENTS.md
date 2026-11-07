@@ -7,17 +7,20 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
 - Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
-- Faz 3 kabul edildi, commit `78df0f7`. Faz 4.1-a/b/c1/c2 kabul edildi ve yerel Git
-  ile kaydedildi. c3/c4/c5 kabul edildi; c5 checkpoint 8d0046d. Aktif kapsam
-  Faz 4.2-a GitHub/CMS bağlantı hazırlığı, salt okunur uzak inceleme ve testli yerel
-  Git candidate araçlarıdır. Hesap bağlantısı, push, App, davet, secret veya deployment
-  başlatma; başarılı yerel hazırlığı geri dönüş noktası olarak kaydet.
+- Faz 3 ve 4.1-a/b/c1/c2/c3/c4/c5 kabul edildi. Kabul edilen teknik checkpoint aa1ea3e.
+  Aktif kapsam Faz 4.2-b ilk push öncesi son kontrol ve yerel belgelerdir.
+  Kesin karar Public repository + GitHub Free; Pro/Team yükseltmesi yok.
+  Dış servis yokluğu kullanıcı UI doğrulamasıyla tamamlandı; yerel belge commit
+  yetkisi verildi. Remote/dry-run hazırlığı incelenir; gerçek push ve dış kurulum
+  yapılmaz. Yeni HEAD için ayrıca açık ilk push izni beklenir.
+  Deployment tetikleyicisi doğrulanamazsa PUSH_READY=BLOCKED, DEPLOYMENT_TRIGGER=UNKNOWN.
+  Tam SHA için ayrı açık push onayı bekle; 4.2-c'ye kendiliğinden geçme.
 - Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
   kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
   kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
 - Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
   kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
-- Plan ve rapor kaynakları: plan.md §21, docs/CMS_SETUP.md, SECURITY.md,
+- Plan ve rapor kaynakları: plan.md §22, docs/PUSH_PREFLIGHT.md, docs/CMS_SETUP.md, SECURITY.md,
   DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
 - Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
   deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.

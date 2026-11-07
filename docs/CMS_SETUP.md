@@ -6,6 +6,29 @@ prompt V5'in araştırma kaydını korur. 7 Kasım C5 güncellemesi: tüm JSON k
 Gerçek hesap/CI/workflow/yayın yoktur. Güncel [CMS_ADAPTER](CMS_ADAPTER.md) ve
 [gerçek kabul planı](CMS_ACCEPTANCE.md) önceki fazların plan satırlarından önceliklidir.
 
+## Faz 4.2-b — Son dış servis doğrulaması ve commit hazırlığı
+
+Ürün sahibi webhook'ların boşluğunu, Railway/Vercel Apps'in kaldırıldığını ve
+Cloudflare Workers & Pages ekranında No projects found olduğunu doğruladı.
+Bu kullanıcı UI beyanıdır; yetkili API incelemesi değildir. Yeni anonim kontrol
+hedef deponun hâlâ Public ve bütün ref'lerinin boş olduğunu doğruladı. Önceki
+UNKNOWN/BLOCKED kayıtları tarihseldir. Son audit/temiz belge checkpoint'i başarılıysa
+PUSH_READY=YES (teknik hazırlık), DEPLOYMENT_TRIGGER=NONE (kullanıcı doğrulaması),
+REMOTE_MAIN=EMPTY; PUSH_AUTHORIZED=NO. Güncel plan [PUSH_PREFLIGHT](PUSH_PREFLIGHT.md)
+içinde. Gerçek push, dry-run/auth denemesi, remote ve dış kurulum yapılmaz.
+
+## Faz 4.2-b — Kesin Public / Free kararı ve push kapısı
+
+7 Kasım 2026: ürün sahibi **Public repository + GitHub Free** kararını kesinleştirdi;
+ücretli plan/transfer yapılmayacak. Başlangıç main/aa1ea3e temiz, remote yok; 8 commit
+aynı. Uzak ref/branch/ruleset/workflow/deployment listeleri boş. Webhook/App GET'leri
+401; Cloudflare yetkili oturumu yok. **PUSH_READY=BLOCKED, DEPLOYMENT_TRIGGER=UNKNOWN,
+REMOTE_MAIN=EMPTY.** Anonim boş deployment listesi tetikleyici yokluğu değildir.
+
+Güncel kullanıcı UI adımları, onay sonrası komut planı ve Free bootstrap sırası
+[PUSH_PREFLIGHT](PUSH_PREFLIGHT.md) içinde; bu kayıt eski tercih-bekleniyor
+ifadelerinden önceliklidir. Push/dry-run/remote veya harici ayar işlemi yapılmadı.
+
 ## Faz 4.2-a — Güncel bağlantı hazırlığı (7 Kasım 2026)
 
 C5 checkpoint **8d0046d** kabul edildi. Hedef repo anonim API ve ls-remote ile

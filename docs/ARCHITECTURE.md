@@ -8,7 +8,7 @@ mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri c
 Bugün kategori/ürün/şube/galeri JSON → strict Node/RSC loader → published server props → statik
 sayfa/client filtresi akışı kullanılır. Üretilmiş manifest bu pilotta gerekmemiştir. Diğer türlere
 geçiş ayrı 4.1-c işleridir. Detaylar [CMS_SETUP](CMS_SETUP.md), [CONTENT_GUIDE](CONTENT_GUIDE.md)
-ve [SECURITY](SECURITY.md); ana kayıt plan.md §21. Güvenlik policy kodu hâlâ aktif CI değildir.
+ve [SECURITY](SECURITY.md); ana kayıt plan.md §22. Güvenlik policy kodu hâlâ aktif CI değildir.
 
 Aşağıdaki Faz 3/2.1 kayıtları tarihsel olarak korunur; önceki CMS yasağı ve V5'in
 ilk aşamasındaki manifest önerisi güncel kategori pilotunun önüne geçmez.
@@ -408,3 +408,21 @@ Komutlar publishing:simulate (ayrı boş dizine data/report), publishing:audit
 (reachable geçmiş; sır değerlerini loglamaz); test-publishing-export.mjs izole
 Git candidate → trusted static build/HTTP/Chrome kontrolüdür. tsconfig.media.json
 teknik CLI derlemesini de kapsar; ana strict ayarları/dependency lockfile aynı.
+
+## Faz 4.2-b — Değişmeyen uygulama ve Public/Free bootstrap
+
+Bu tur uygulama/içerik/paket/test/config mimarisi değişmedi. Public + GitHub Free
+kesin karardır; ücretli push ruleset/Enterprise required workflow/native merge queue
+şartı eklenmez. Branch PR/check/strict ve admin/App bypass engeli gerçek kurulumla
+kanıtlanmalıdır. Henüz bulunmayan check context required olarak açılmaz. İlk main
+sonrası koruma → teknik CI/gerçek check → required App/context → content-edit →
+CMS → ayrı deployment sırası [PUSH_PREFLIGHT](PUSH_PREFLIGHT.md) içindedir.
+Uzak tetikleyici UNKNOWN olduğundan ilk push BLOCKED; boş repo güvence sayılmaz.
+
+### 4.2-b son kontrol eki
+
+Dış servis yokluğu kullanıcı tarafından doğrulandı; son anonim repo/ref okuması
+Public ve boş. Yalnız belge checkpoint'i oluşturulur; uygulama/JSON/test/config
+mimarisi değişmez. PUSH_READY teknik hazır oluşu, PUSH_AUTHORIZED ayrı kullanıcı
+iznini belirtir. Actual auth/dry-run ve tüm dış kurulumlar bekler. Güncel sözleşme
+PUSH_PREFLIGHT ve plan §22.9'dur; eski UNKNOWN bulguları tarihsel olarak korunur.

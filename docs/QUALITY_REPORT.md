@@ -1,3 +1,177 @@
+# Faz 4.2-b — Dış servisler tamamlandı; ilk push adayı son kontrol
+
+7 Kasım 2026. Ürün sahibi Webhooks boş, Railway/Vercel Apps kaldırıldı ve Cloudflare
+No projects found bilgisini doğruladı. Bunlar **kullanıcı UI doğrulaması**; ajanın
+yetkili dış servis API denetimi değildir. Son anonim repo/ref sorgusu Public/boş.
+[Güncel kontrol/komut planı](PUSH_PREFLIGHT.md), [plan §22.9](../plan.md).
+
+```text
+PUSH_READY = YES (teknik hazırlık; gönderim izni değil)
+DEPLOYMENT_TRIGGER = NONE (kullanıcı UI doğrulaması)
+REMOTE_MAIN = EMPTY (yeniden anonim okuma)
+PUSH_AUTHORIZED = NO
+```
+
+## PASS
+
+- Başlangıç main/aa1ea3e; yalnız bekleyen belgeler. Kullanıcının PUSH_PREFLIGHT
+  içindeki görev metni korunup altına güncel plan eklendi; kaynak snapshot alındı.
+- Uzak hedef sametbuluto/balkuruyemis, Public; anonim ls-remote exit 0 ve ref'ler boş.
+- Uygulama/JSON/.pages/config/test/paket/lockfile ve tasarım değiştirilmedi.
+- Başlangıç reachable audit 8 commit/365 blob: bilinen sır/yasak çıktı/raster/EXIF/
+  büyük/atlanmış blob bulgusu 0. Yeni belge commit'i sonrası audit ayrıca çalışır;
+  nihai SHA ve sayımlar teslim yanıtı/QA raporunda raporlanır.
+- Yerel belge commit'i yetkilendirildi. Yeni commit aa1ea3e'nin çocuğu; reset/rebase yok.
+
+## WARNING
+
+Gerçek push izni **verilmedi**. PUSH_READY=YES teknik hazırlık koşullarının
+başarılı olmasını belirtir; PUSH_AUTHORIZED=NO kalır. DEPLOYMENT_TRIGGER=NONE
+kullanıcı doğrulamasına, REMOTE_MAIN=EMPTY anonim uzak okumaya dayanır. Commit/audit
+ve temiz ağaç son kontrolde teyit edilir. Tam SHA teslim yanıtında paylaşılır.
+
+Actual git push --dry-run/auth ve yazma yetkisi testi yapılmadı; yalnız güvenli
+main-only hazırlığı incelendi. Origin eklenmedi, gerçek push yok. Uzak durum sonraki
+izin anında yeniden kontrol edilir. Main koruması/checks/App/CMS/Cloudflare hâlâ
+kurulmadı. Kaydet → otomatik güvenli yayın kabulü tamamlandı denmez.
+
+## Doğrulama
+
+| Bu görevde yeniden çalıştırılan kontrol | Sonuç                                                                 |
+| --------------------------------------- | --------------------------------------------------------------------- |
+| npm run check                           | PASS; strict TS, ESLint, Prettier, test/config, build ve HTTP         |
+| Vitest                                  | **426/426**, 27 dosya                                                 |
+| Resmî .pages.yml kontrolü               | PASS                                                                  |
+| Static export / HTTP                    | **67 dosya**, noindex true / **3/3**                                  |
+| Chrome Playwright                       | **51/51**; 320/393/768/1280 regresyonları dahil                       |
+| Korunan kaynaklar                       | **200 dosya byte eşit**, dört koordinat aynı                          |
+| Kullanıcının PUSH_PREFLIGHT metni       | Byte prefix aynen korundu                                             |
+| Dry-run planı                           | **bash -n PASS**, tek explicit main:main, sabit hedef; çalıştırılmadı |
+| Yerel pre-push hook                     | Aktif pre-push veya custom hooksPath yok                              |
+| Reachable geçmiş audit                  | Commit öncesi PASS; commit sonrası final ayrıca raporlanır            |
+
+WebKit/Firefox/fiziksel cihaz/yeni axe/gerçek hosted CMS veya deployment testi yok.
+Önceki izole candidate 2/2 bu görevde tekrar çalıştırılmadı; aşağıda tarihsel kaldı.
+
+## FAIL
+
+Son çalıştırılan kontrollerde hata veya beklenmeyen uzak ref bulunmadı. Yerel belge
+commit'i sonrası temiz ağaç ve yeni geçmiş taraması teslim öncesi kontrol edilir;
+bir hata olursa gerçek push yapılmadan durulur. Kanıt: /private/tmp/bal-firstpush-final-20261107/.
+
+Başarılı yerel commit mesajı: `docs: finalize public GitHub first-push readiness`.
+Tam SHA teslim yanıtı ve git log'da bulunur. Gerçek push/remote/dry-run/auth veya
+harici kurulum yok; tam SHA için ayrıca açık kullanıcı onayı beklenir.
+
+---
+
+## Tarihsel Faz 4.2-b — Dış servisler beklenirken
+
+# Faz 4.2-b — Public GitHub Free / ilk push öncesi son kontrol
+
+7 Kasım 2026. Son onaylı SHA **aa1ea3ebf713cc0f4319582e51d4b85811d4cdf5**.
+Hedef **https://github.com/sametbuluto/balkuruyemis**; Public + Free kesin karardır.
+[Güvenli komutlar/UI adımları](PUSH_PREFLIGHT.md), [plan §22](../plan.md).
+
+```text
+PUSH_READY = BLOCKED
+DEPLOYMENT_TRIGGER = UNKNOWN
+REMOTE_MAIN = EMPTY
+```
+
+## Kullanıcı UI geri bildirimi — API gözleminden ayrı
+
+Ürün sahibi son kontrolden sonra şu bilgileri verdi:
+
+| Alan                             | Kullanıcının bildirdiği durum                                                                               |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| GitHub Webhooks                  | Boş; kullanıcı UI üzerinden doğruladı                                                                       |
+| Railway ve Vercel GitHub Apps    | İkisi de All repositories erişimine sahip                                                                   |
+| Bal Kuruyemiş deployment projesi | Bu servislerde proje/tetikleyici varlığı doğrulanmadı                                                       |
+| Erişim daraltma                  | Kullanıcı eski repolarla sınırlamayı ve balkuruyemis'i dışlamayı planlıyor; henüz tamamlandığı bildirilmedi |
+| Cloudflare Pages                 | Henüz kontrol edilmedi                                                                                      |
+| İlk push izni                    | Açıkça verilmedi                                                                                            |
+
+All repositories erişimi, tek başına bir deployment projesinin varlığını kanıtlamaz.
+Bu nedenle DEPLOYMENT_TRIGGER=UNKNOWN ve PUSH_READY=BLOCKED korunur. Kullanıcı
+beyanı, ajanın yetkili API incelemesi veya tamamlanmış izin değişikliği gibi sunulmaz.
+Sonraki eksik bilgi: Railway/Vercel kapsamından balkuruyemis'in gerçekten çıkarıldığı
+ve Cloudflare/diğer yayın tetikleyicilerinin kontrol sonucu. Başka repolara veya App
+ayarlarına ajan müdahale etmez; ilk push için yine ayrı açık onay gerekir.
+
+## PASS
+
+- Başlangıç main/aa1ea3e temiz, 8 commit/ataları aynı, remote yok. Yeni commit,
+  geçmiş rewrite/reset veya origin değişikliği yapılmadı. fsck corruption bulmadı;
+  eski dangling nesneler silinmedi ve normal main push'una dahil değildir.
+- Anonim API: doğru hedef Public/size 0; ls-remote exit 0, refs boş. Branches/rulesets
+  ve deployment listeleri boş; workflows total_count 0. Bunlar gözlenen uzak okumalardır.
+- Reachable 8 commit / 365 blob; en büyük 307409 byte. Env/build/test çıktısı,
+  bilinen sır deseni, raster/EXIF ve büyük/atlanmış blob bulgusu 0. Ek 365 blob
+  UTF-8/NUL/yaygın binary imzası taramasında binary bulgusu 0; modlar 100644.
+- .gitignore ile yetinilmedi. Bilinen desen taraması her parola/kişisel veriyi
+  tespit garantisi değildir. Gerçek kişisel/EXIF fotoğraf gözlenmedi.
+- Public Free bootstrap planı ve onay sonrası guard'lı main-only komutları hazır.
+  Remote add, dry-run ve push komutları bu tur çalıştırılmadı.
+
+| Kontrol                    | Sonuç                                                           |
+| -------------------------- | --------------------------------------------------------------- |
+| npm run check              | PASS; strict TS/lint/format/test/config/build/HTTP              |
+| Vitest                     | **426/426**, 27 dosya; 363 eski + 63 publishing testi           |
+| Resmî CMS config kontrolü  | PASS; mevcut .pages.yml değişmedi                               |
+| Production static export   | **67 dosya**, noindex true                                      |
+| Statik HTTP                | **3/3**                                                         |
+| Playwright / sistem Chrome | **51/51**                                                       |
+| Responsive                 | **320 / 393 / 768 / 1280 px**, mevcut regresyonlar              |
+| İzole Git candidate export | **2/2**; normalizasyon/merge/build/HTTP/Chrome + conflict reddi |
+| npm run publishing:audit   | PASS; mevcut gerçek script adı budur                            |
+
+## WARNING
+
+- Webhooks GET **401**, repo installation GET **401**; Apps envanteri okunamadı.
+  gh/mevcut ortam token oturumu yok. Cloudflare hesabı/proje/Git bağlantısı da
+  görülmedi. **Deployment tetikleyicisi yokluğu doğrulanamadı**, bu nedenle push BLOCKED.
+- Boş deployment/workflow listesi dış App/webhook bağlantısının yokluğunu kanıtlamaz.
+  Pages GET 404 de Cloudflare kontrolü değildir. Yukarıdaki kullanıcı UI yanıtı
+  kısmi doğrulamadır; App kapsam değişikliği ve Cloudflare sonucu hâlâ beklenir.
+- Uzak main ve required checks yok; branch protection veya CMS main yazma reddi
+  kurulmuş/test edilmiş sayılamaz. Public Free destekleri resmî belgelerle
+  doğrulandı; gerçek Billing ekranı okunmadı, Free kullanımı kullanıcı kararıdır.
+- Yeni required context üretilmeden eklenmez; skipped/neutral native kabulü güven
+  kanıtı sayılmaz. Trusted check kaynağı, teknik/içerik PR ayrımı, main-only secret
+  sınırı ve otomatik aktarım sonraki açık yetkili kurulumda kanıtlanacak.
+- Bu görev sonunda yalnız yerel belge değişiklikleri uncommitted; başlangıç temizdi.
+  HEAD/ref/geçmiş korunur. Push öncesi belge checkpoint'i/temiz ağaç ve gönderilecek
+  tam SHA ayrıca kararlaştırılır; değişiklikler silinerek temizlenmez.
+- Public/Private EXIF temizliği değildir; ilk gerçek test metadata'sızlığı/yayın
+  hakkı onaylı kişisel veri içermeyen görsellerle yapılmalıdır. Ali Bey JSON/piksel/
+  terminal kullanmaz. Gerçek fotoğraf/ürün hâlâ bekleniyor.
+- Yeni WebKit/Firefox/fiziksel cihaz/axe/hosted CMS veya gerçek yayın testi yok.
+
+## FAIL
+
+Son yerel doğrulamalarda başarısız test veya açık kritik uygulama hatası yok.
+Push/gerçek GitHub korumaları/CMS/Cloudflare bu görevde uygulanmadı. PUSH_READY'nin
+BLOCKED olması test başarısızlığı değil, eksik yetkili tetikleyici kontrolü ve açık
+push izni nedeniyle beklenen güvenli duruştur; otomasyon tamamlandı denmez.
+
+## Dosya, Git ve kanıt
+
+Yalnız hazırlık belgeleri güncellendi, yeni PUSH_PREFLIGHT.md eklendi. Uygulama/
+JSON/.pages/paket/config/test dahil **200 korunan kaynak byte eşit**; yeni özellik veya bağımlılık yok.
+Commit/remote/dry-run/push/ayar/App/davet/secret/deployment yapılmadı. 4.2-c başlamadı.
+
+Kanıt /private/tmp/bal-phase42b/: kaynak arşivi, before refs/history/status, API GET
+sonuçları, history/binary audit, preservation ve publishing-audit/playwright/candidate
+logları. Toplu check: /private/tmp/bal-phase42b-check.log. İzole candidate sonucu:
+/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-publishing-export-fcAcJ4.
+QA çıktıları Git dışıdır. Ayrı push onayı beklenir; dış tetikleyici UNKNOWN iken
+push için izin verilse de önce bu engel çözülmelidir.
+
+---
+
+## Tarihsel Faz 4.2-a raporu
+
 # Faz 4.2-a — GitHub / gerçek Pages CMS bağlantı hazırlığı
 
 Tarih: **7 Kasım 2026**. C5 checkpoint **8d0046d** kabul edildi. Bu rapor yerel

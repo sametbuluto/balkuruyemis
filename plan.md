@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.2-a — GitHub/CMS bağlantı hazırlığı yerelde tamamlandı; harici yetki bekliyor**.
+Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.2-b — Dış servisler kullanıcı tarafından doğrulandı; son yerel kontroller başarılı, belge checkpoint adayı; gerçek push izni bekleniyor**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -27,7 +27,8 @@ doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte
 | Faz 3 — Statik mimari            | Tamamlandı         | Static export, Git içerik kaynakları ve dört gerçek konum                           |
 | Faz 4.1 — CMS ön hazırlık        | Yerel hazırlık     | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
 | Faz 4.2-a — Bağlantı hazırlığı   | Yerelde tamamlandı | Git ingress/merge negatif testleri, güncel izin/plan ve ilk push hazırlığı          |
-| Faz 4.2-b–4.5 — Gerçek CMS/yayın | Başlatılmadı       | Hesap/App, korumalar/Actions, Pages ve Ali Bey testleri; ayrı yetki gerekir         |
+| Faz 4.2-b — İlk push ön kontrolü | Kontrol tamamlandı | Public/Free; tetikleyici UNKNOWN, PUSH_READY BLOCKED; henüz push izni yok           |
+| Faz 4.2-c–4.5 — Gerçek CMS/yayın | Başlatılmadı       | Koruma/CI/App/Pages ve gerçek kabul; ayrı yetki gerekir                             |
 | Faz 5 — Gerçek varlıklar         | Başlatılmadı       | Logo ve gerçek fotoğraflar                                                          |
 | Faz 6 — Kesin bilgiler           | Başlatılmadı       | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
 | Faz 7 — Kurumsal yayın           | Başlatılmadı       | Domain/SEO/HTTPS ve yayın onayı                                                     |
@@ -1564,3 +1565,209 @@ doğrular; sonra **yalnız ilk push için ayrı açık izin** verir. Bir sonraki
 bootstrap koruma/CI'dır; CMS App/hesap ve davet/deployment ayrı ayrı onaylanır.
 GitHub tokenı/parola/ödeme bilgisi sohbetten istenmez. Uzak geçmiş push öncesi yeniden
 kontrol edilir; refs değişmişse işlem durur, force/mirror/all kullanılmaz.
+
+## 22. Faz 4.2-b — Public GitHub Free ilk push öncesi son kontrol
+
+### 22.1. Karar, başlangıç ve koruma
+
+7 Kasım 2026: kullanıcı Public repository + GitHub Free kararını kesinleştirdi;
+ücretli Pro/Team veya transfer yok. Kaydet sonrası insan onayı beklemeyen, fakat
+trusted otomatik kapılardan geçen içerik yayını hedefi korundu. Bu görevde **push
+izni verilmedi**; remote/dry-run/ayar/App/davet/secret/Cloudflare işlemleri yasak.
+
+Başlangıç main/aa1ea3ebf713cc0f4319582e51d4b85811d4cdf5, temiz ağaç; remote yok.
+Sekiz commit sırası/ataları korundu. Git fsck missing/corrupt nesne bulmadı; eski
+reachable olmayan dangling tree/blob'lar silinmedi, normal main push'una dahil
+olmaz. Yedek/kanıt: /private/tmp/bal-phase42b/source-before.tar, before-status,
+before-refs ve before-history. Git geçmişine yeni commit/reset/rebase eklenmedi.
+
+### 22.2. Yeni gerçek uzak okuma ve kesin durum
+
+Hedef https://github.com/sametbuluto/balkuruyemis.git. Anonim API 200 Public/size 0,
+owner User/full_name doğru; ls-remote exit 0 ve ref'ler boş. Branches/rulesets GET
+200 boş, workflows GET 200 total_count 0, deployments GET 200 boş. Repo Pages GET
+404; GitHub Pages gözlemidir, Cloudflare yokluğunu kanıtlamaz. Webhooks ve repo
+installation GET 401 Requires authentication. Repo installation endpoint'i tüm
+App'leri listeleyen genel kullanıcı endpoint'i sayılmaz. gh kurulu ve mevcut
+GH_TOKEN/GITHUB_TOKEN oturumu yok; yeni yetki/token/oturum kurulmadı. Keychain veya
+parola dosyaları aranmadı. Cloudflare hesabı/projeleri yetkili görülmedi.
+
+**PUSH_READY = BLOCKED; DEPLOYMENT_TRIGGER = UNKNOWN; REMOTE_MAIN = EMPTY.**
+
+Uzak main default_branch metadata'sına rağmen henüz yok ve korunmuş sayılmaz.
+Anonim boş workflow/deployment listesi webhook/harici yayın yokluğu değildir.
+Kullanıcı UI kontrolü soruldu; yanıt gelene kadar UNKNOWN kalır. Hiçbir uzak
+sistem değişmedi. Ref/visibility push'tan hemen önce yeniden kontrol edilecek;
+beklenmeyen dolulukta durulacak, overwrite/otomatik merge yapılmayacak.
+
+### 22.3. Reachable geçmiş denetimi ve sınırları
+
+Mevcut gerçek script npm run publishing:audit; publishing alias'ı yok, eklenmedi.
+8 commit / 365 benzersiz blob; en büyük 307409 byte. Gerçek env, node_modules,
+.next/out/.generated/coverage/test raporu yolu 0, bilinen sır deseni 0, raster ve
+EXIF/XMP/IPTC bulgusu 0, 10 MiB üstü/atlanmış blob 0. .env.example şablon.
+
+İlave geçici tarama 365 blob'un tamamını strict UTF-8, NUL ve JPEG/PNG/GIF/RIFF/ZIP/
+ELF/PDF imzalarıyla inceledi; binary bulgusu 0. Tree entry modları 100644. Tarama
+.gitignore ile sınırlı değildir; Git blob byte'ları okundu. Tüm sır/parola/gizlenmiş
+veri/kişisel veri türlerini bulma garantisi yok; reachable dışı nesne veya ignored
+çalışma dosyası taraması gibi sunulmaz. Normal sadece main push'u onaylı reachable
+geçmişi taşır. Gerçek kişisel/EXIF'li fotoğraf gözlenmedi. İlk gerçek CMS testinde
+metadata'sızlığı ve yayın hakkı önceden onaylı kişisel veri içermeyen fotoğraf şartı
+korundu; Public/Private seçimi EXIF temizliği değildir. Ali Bey terminal/piksel girmez.
+
+### 22.4. Public/Free mimarisi ve güvenli bootstrap — uygulanmadı
+
+Resmî GitHub branch protection/rulesets/environment belgeleri ve Cloudflare Git
+branch kontrolü yeniden okundu. Public Free PR/required checks/strict up-to-date,
+force/deletion ve admin/App bypass engeli destekleri kullanılacak. Paid push
+rulesets/Enterprise required workflows/native merge queue ön koşul değil. Path
+sınırı trusted içerik kapısındadır; UI veya CODEOWNERS tek başına yetki sayılmaz.
+Gerçek hesabın Billing ekranı okunmadı; Free kullanımı ürün sahibi kararıdır.
+
+1. UI tetikleyici yokluğu + tam SHA için açık izin; yalnız main ilk push. CMS ve
+   Cloudflare bağlı olmamalı; başka writer olmayan bootstrap penceresi doğrulanır.
+2. Main oluşunca Active PR koruması, force/deletion/bypass engeli. Henüz üretilmemiş
+   check context eklenmez. CMS bu başlangıç korumasıyla bağlanmaz.
+3. Teknik PR ile trusted CI/attester/writer; validator sırsız/read-only main kodu.
+   Main-only environment ve dar App yetkisi gerekiyorsa ayrı onayla kurulur.
+4. Gerçek candidate SHA üzerinde tam başarılı check/context/App kaynağı görülür;
+   sonra required check + expected App + strict açılır. Native skipped/neutral
+   kabulüne güvenilmez; attester tüm kontroller bitmeden success vermez.
+5. Teknik kod PR'ı ayrı trusted teknik inceleme/validation; içerik PR'ı data-only
+   otomasyon. İçerik için global manuel approval şartı yok, teknik değişiklik CMS
+   akışına sokulmaz. Yanlış context ile teknik PR'lar kilitlenmez.
+6. Content-edit protected main'den; üç yönlü source-sync/conflict/race ve main direct
+   write reddi gerçek denenir. CMS App'e bypass verilmez; kimlik/verified korunur.
+7. CMS App, Ali Bey daveti ve Cloudflare deployment birbirinden ayrı onaylı işlerdir.
+   Yalnız main production; content-edit/candidate preview kapalı. Önceki başarılı
+   yayının hatalı değişimde korunması gerçek SHA/HTTP kabulüyle doğrulanır.
+
+Bu sıra bir uygulama değil hazırlık planıdır. Gerçek required check/koruma, API
+attester/writer veya Cloudflare kabulü hâlâ yoktur. Ürün sahibi önce UI kontrolünü
+yapar, sonra ilk push için ayrıca izin verir; bu görevle 4.2-c başlatılmaz.
+
+### 22.5. Komut planı ve kullanıcı işlemleri
+
+Tam guard'lı komut planı ve post-push API/tree doğrulaması docs/PUSH_PREFLIGHT.md
+İçindedir. Branch/clean tree/aa1ea3e/empty refs/public URL → yalnız doğru origin →
+main dry-run → SHA/clean/empty refs tekrar → explicit main:main normal push → uzak
+SHA/main/tree kontrolü. Komutlar **çalıştırılmadı**; NO onay/tetikleyici işaretleriyle
+kopyalanınca da durur. Birden çok pushurl/farklı URL/beklenmeyen ref durumunda durur.
+Force/force-with-lease/mirror/all/tag toplu yükleme yok. Dry-run deployment kanıtı
+veya ref kilidi değildir; kısa onaylı pencerede eşzamanlı yazma olmamalıdır.
+
+Kullanıcı repo Settings/Webhooks, Integrations/GitHub Apps (All repositories dahil),
+kişisel Installed Apps ve Cloudflare Workers & Pages Git/branch controls ekranlarını
+inceleyip sonucu bildirir. Bir bağlantı varsa PRESENT ve push BLOCKED; kaldırma/
+devre dışı bırakma ayrı izin ister. Şifre/token paylaşılmaz, yeni App kurulmaz.
+
+### 22.6. Yeniden çalıştırılan kontroller
+
+| Kontrol                      | Sonuç                                                                  |
+| ---------------------------- | ---------------------------------------------------------------------- |
+| npm run check                | strict TS, ESLint, Prettier, Vitest, CMS config, build/HTTP PASS       |
+| Vitest                       | **426/426**, 27 dosya; önceki tüm testler ve 63 publishing testi       |
+| Resmî CMS config             | PASS; pinned 6f4e860a... şema, .pages.yml aynı                         |
+| Static export                | **67 dosya**, noindex true                                             |
+| Static HTTP                  | **3/3**                                                                |
+| Chrome Playwright            | **51/51**, out/ üzerinde                                               |
+| Responsive regresyon         | **320, 393, 768, 1280 px**, mevcut test kapsamında                     |
+| İzole candidate export       | **2/2**; gerçek temp Git/normalize/build/HTTP/Chrome ve conflict reddi |
+| Publishing + ek binary audit | PASS; 8/365, bulgu/atlanmış blob 0                                     |
+
+Yerel testler uzak main write reddi veya Cloudflare publish davranışı değildir.
+Yeni hosted CMS/WebKit/Firefox/fiziksel cihaz/axe testi yapılmadı. Kategori/ürün/
+şube/media/metin export fixture script'leri bu görevde ayrı tekrar çalıştırılmadı.
+Hata/gevşetilen güvenlik kapısı yok. Loglar /private/tmp/bal-phase42b-check.log ve
+/private/tmp/bal-phase42b/{publishing-audit,playwright,candidate-export}.log; HTTP
+kanıtları aynı dizinde. Candidate temp yolu candidate-export.log içinde kayıtlıdır.
+
+### 22.7. Dosyalar ve Git teslimi
+
+Yalnız belgeler: yeni PUSH_PREFLIGHT; AGENTS/README/plan/QUALITY_REPORT ve güncel
+Public/Free banner'ları için GITHUB_READINESS/AUTOMATION_DESIGN/SECURITY/CMS_ACCEPTANCE/
+DEPLOYMENT/CMS_SETUP; ARCHITECTURE/ROADMAP. Uygulama/JSON/.pages/test/paket/config ve
+renk/tasarım değişmedi. **200 korunan kod/data/test/config dosyası HEAD ile byte eşittir**;
+ref/index/geçmiş aynı kalır. Belgeler uncommitted bırakılır; aa1ea3e onaylı SHA
+korundu. Yeni commit seçilirse yeni tam SHA ayrıca incelenip onaylanmalıdır.
+
+PASS: yerel güvenlik/kalite kontrolleri ve boş Public repo okuması tamamlandı.
+WARNING: deployment UNKNOWN, push BLOCKED ve izinsiz; kullanıcı UI doğrulaması ve
+belge checkpoint'i/temiz ağaç işi bekler. Gerçek korumalar kurulmuş sayılmaz.
+FAIL: son yerel kontrollerde başarısız test/açık kritik uygulama hatası yok; gerçek
+push/CMS/yayın hedefi bu tur gerçekleştirilmedi ve başarılı raporlanmadı.
+
+### 22.8. Kullanıcı UI yanıtı — kısmi doğrulama ve devam eden engel
+
+Ürün sahibi GitHub Webhooks bölümünün boş olduğunu doğruladı. Railway ve Vercel
+GitHub Apps hesabında kurulu, ikisi de All repositories erişimine sahip. Bal
+Kuruyemiş için gerçek deployment projesi/tetikleyici varlığı doğrulanmadı. Kullanıcı
+bu erişimleri yalnız eski kullanılan repository'lerle sınırlandırıp balkuruyemis'i
+kapsam dışında bırakmayı planlıyor; tamamlandığı henüz bildirilmedi. Cloudflare
+Pages bağlantısı kontrol edilmedi. İlk push izni açıkça verilmedi.
+
+Bu yeni kayıt kullanıcı UI beyanıdır; önceki anonim API 401 gözlemi değişmez ve
+ajanın yetkili entegrasyon denetimi sayılmaz. App erişimi tek başına deployment
+projesi kanıtı olmadığından DEPLOYMENT_TRIGGER **UNKNOWN**, PUSH_READY **BLOCKED**
+korundu. REMOTE_MAIN önceki son okuma itibarıyla EMPTY; bu yanıtta uzak ref'ler
+tekrar sorgulanmadı. Railway/Vercel kapsam değişikliğinin tamamlanması ve Cloudflare
+kontrol sonucu beklenir. Sonrasında da tam SHA için ayrı açık push izni gerekir.
+
+Yalnız PUSH_PREFLIGHT/QUALITY_REPORT ve bu plan güncellendi; uygulama, Git HEAD,
+remote, App izinleri ve harici sistemler değiştirilmedi. Belgelerde Prettier ve
+Git whitespace denetimi yapıldı; bu yalnız belge güncellemesinde uygulama/test/build
+tekrar çalıştırılmadı. Önceki test sonuçları yeni çalıştırma gibi sunulmaz.
+
+### 22.9. Son dış servis doğrulaması ve ilk push adayı
+
+Ürün sahibi webhook listesinin boş olduğunu, Railway ve Vercel GitHub Apps'in
+kaldırıldığını, Cloudflare hesabında Workers & Pages ekranında No projects found
+olduğunu ve proje/deployment bağlantısı olmadığını bildirdi. Bu kullanıcı UI
+kanıtıdır; ajanın yetkili App/Cloudflare API denetimi değildir. Public + Free kararı
+aynı kalır. Önceki §22.2/22.8 UNKNOWN kayıtları geçmiş durumu tutar.
+
+Yeni görev, bekleyen dokümantasyonu yerel commit ile kaydetmeyi ve yeni tam HEAD'i
+raporlamayı yetkilendirdi; **gerçek push izni yine verilmedi**. Başlangıç main/aa1ea3e,
+önceki 12 belge değişikliği ve untracked PUSH_PREFLIGHT vardı. PUSH_PREFLIGHT son
+görev metniyle değiştirilmişti; bu kullanıcı metni byte prefix olarak korundu,
+güncel kontrol ve main-only dry-run planı altına eklendi. Başlangıç kaynak/diff/
+kullanıcı dosyası /private/tmp/bal-firstpush-final-20261107 içinde yedeklendi.
+
+Hedef repo yeniden anonim GET ile Public/doğru full_name ve HTML URL olarak
+kontrol edildi; ls-remote exit 0 ve ref'ler tamamen boş. Beklenmeyen uzak geçmiş
+bulunmadı. Önceki 8 commit/365 blob audit'inde bilinen sır, yasak env/build/test
+çıktısı, raster/EXIF veya büyük/atlanmış blob bulgusu 0. Belge commit'i sonrası
+nihai reachable geçmiş ve binary imzası kontrolü ayrıca yapılır; tam SHA ve sayımlar
+teslim yanıtı/QA raporunda tutulur. Aynı commit kendi SHA'sını içeremez; belgede
+push adayı kendiliğinden HEAD seçilmez, tam SHA açık kullanıcı onayına bağlanır.
+
+AGENTS/README, hazırlık/güvenlik/CMS/yayın/kalite/mimari/roadmap ve bu plan yalnız
+belge düzeyinde güncellendi. Önceki 200 kod/data/test/config kaynağı ve dört konum
+aynı kalır; test/paket/dependency veya tasarım değişimi yok. Uygun yerel mesaj:
+`docs: finalize public GitHub first-push readiness`. Reset/rebase veya geçmiş
+rewrite yok; yeni doc commit aa1ea3e'nin çocuğu olacaktır. Env/QA/çıktı Git dışıdır.
+
+Koşullar başarıyla tamamlandığında PUSH_READY=YES teknik hazır oluşu gösterir;
+DEPLOYMENT_TRIGGER=NONE kullanıcı doğrulamasına dayanır, REMOTE_MAIN=EMPTY son
+anonim okuma kanıtıdır. PUSH_AUTHORIZED=NO kalır. Transport auth/yazma yetkisi veya
+actual dry-run başarılı diye raporlanmaz; bu görev yalnız dry-run hazırlığını
+kontrol eder. Main-only guard'lı plan SHA/clean/URL/public/empty-refs kontrolü,
+no-follow-tags/recurse-submodules=no ve force/mirror/all yasaklarını içerir.
+
+Son check/audit sonuçları QUALITY_REPORT ve /private/tmp/bal-firstpush-final-20261107
+loglarında kaydedilir. Önceki sonuçlar yeni test gibi sunulmaz. Gerçek ilk push,
+Pages CMS App/davet, Actions yayın otomasyonu ve Cloudflare deployment başlatılmaz.
+Push sonrası koruma/CI sırası yalnız plan olarak kalır. Bir sonraki işlem tam yeni
+SHA için kullanıcının ayrı açık ilk push onayını beklemektir; onay anında uzak
+ref'ler/Public durumu yeniden kontrol edilir ve beklenmeyen değişimde durulur.
+
+Son yeniden çalıştırılan sonuçlar: npm run check PASS; 426/426 Vitest (27 dosya),
+resmî CMS config PASS, 67 dosya noindex static export ve 3/3 HTTP; Chrome E2E 51/51.
+Dört genişlik regresyonları geçti. 200 korunan kaynak byte eşit, kullanıcı görev
+metni PUSH_PREFLIGHT başında byte prefix olarak aynı. Dry-run planı bash -n PASS;
+aktif pre-push/custom hooksPath yok. Gerçek auth/dry-run/remote/push yok. Belge
+commit'i sonrası final audit/temiz ağaç kontrol edilir ve tam SHA teslim edilir.
+Teknik PUSH_READY=YES ile PUSH_AUTHORIZED=NO ayrıdır; sonraki işlem yalnız açık
+ilk push onayını bekler. Bu görevde izole candidate export veya yeni tarayıcı
+motoru/hosted CMS/deployment testleri yeniden çalıştırılmadı.

@@ -303,3 +303,14 @@ Ali Bey bu komutları kullanmaz; hosted panel henüz bağlanmadığından admin 
 Hedef Public/Private ve gerçek GitHub planı kararı, mevcut yayın entegrasyonlarının
 kontrolü ve **ayrı ilk push onayı** gerekir. İzin gelmeden remote/push/App/davet/
 secret/yayın işlemi yapılmaz. Private repository EXIF temizliği sağlamaz.
+
+## Faz 4.2-b — Public / Free ilk push kontrolü
+
+Kesin tercih Public + GitHub Free; gerçek push izni henüz yok. Ürün sahibi boş
+webhook listesini, Railway/Vercel Apps'in kaldırıldığını ve Cloudflare No projects
+found ekranını doğruladı. Son anonim sorguda uzak ref'ler boş/Public. Son yerel
+belge checkpoint'i ve audit geçince PUSH_READY=YES teknik hazırlığı gösterir;
+PUSH_AUTHORIZED=NO kalır. Authentication/dry-run henüz çalıştırılmadı.
+[Güncel kontrol ve main-only plan](docs/PUSH_PREFLIGHT.md),
+[son kalite raporu](docs/QUALITY_REPORT.md), master plan §22.9 güncel kayıtlardır.
+Yeni tam HEAD teslim yanıtında/git log'da raporlanır; önceki UNKNOWN kayıtları tarihseldir.
