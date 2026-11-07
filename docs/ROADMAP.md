@@ -118,3 +118,11 @@ korundu. Gerçek CMS, otomatik aktarım ve Cloudflare yayını tamamlanmadı.
 c5 önerisi: kullanıcıdan ayrıca kapsam alarak medya metadata adaptörünü, CMS Türkçe
 alan eşlemesini ve round-trip testlerini ele almak. .pages.yml/hesap/CI/yayın bu tur
 yoktur. Gerçek panel → otomatik kontroller → Cloudflare üç kabul akışı hâlâ beklenir.
+
+## Faz 4.1-c5 — CMS alanları ve medya adaptörü · Yerel prototip tamamlandı
+
+12 Türkçe form içeren .pages.yml, pinlenmiş resmî şema doğrulaması ve automatic ID/
+ölçü/EXIF'siz canonical candidate aracı hazır. Kaynak tabanlı round-trip ürün ekleme,
+ad/fotoğraf değiştirme ve sayfa/şube/kategori/duyuru akışlarını gerçek statik çıktı ile
+sınar. Gerçek hosted editor, GitHub koruması/otomatik aktarım ve Cloudflare kabulü
+PENDING; kullanıcı işlemleri CMS_ACCEPTANCE.md içindedir. Bağlantı/yayın bu tur yoktur.

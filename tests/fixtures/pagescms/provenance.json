@@ -1,0 +1,43 @@
+{
+  "repository": "https://github.com/pages-cms/pages-cms",
+  "commit": "6f4e860a35d934406580287e7042e5e111e207a1",
+  "file": "lib/config-schema.ts",
+  "sha256": "c09e507c8f978c774ee8bfe38a3d9804c16dc1fea02eec53e1b68e2e0f302df6",
+  "fieldTypes": [
+    "boolean",
+    "code",
+    "date",
+    "file",
+    "image",
+    "number",
+    "reference",
+    "rich-text",
+    "select",
+    "string",
+    "text",
+    "uuid"
+  ],
+  "retrieved": "2026-11-07",
+  "wireSources": {
+    "state.ts.txt": {
+      "file": "lib/schema.ts",
+      "sha256": "6b1344a4ea98c7de5b66bf147179477b2121adb8b474e8c0da4b5fcd53d4b6ad"
+    },
+    "image.ts.txt": {
+      "file": "fields/core/image/index.tsx",
+      "sha256": "0a413dcf21f647e9272bed664ce74accaa6a7b8ab37610b5e360d75444e4bac4"
+    },
+    "uuid.ts.txt": {
+      "file": "fields/core/uuid/index.tsx",
+      "sha256": "73236f63e8a2d44cad3eb3e9fc61b8f570d0158b18d9acd96ef77da13a3fd845"
+    },
+    "paths.ts.txt": {
+      "file": "lib/utils/file.ts",
+      "sha256": "ae963d9e644a1f322f84fed1e03bb7b641ec7d6a8ae35b70f69ba5d441963ac8"
+    },
+    "prefix.ts.txt": {
+      "file": "lib/github-image.ts",
+      "sha256": "ea1d4147cb2b4d325b71d56e68a26a34612998bfe7bbbd516645575f1f0c8c9a"
+    }
+  }
+}

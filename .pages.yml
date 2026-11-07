@@ -1,0 +1,1877 @@
+# Yerel prototip; hesap/CI henüz bağlı değil. docs/CMS_ADAPTER.md
+media:
+  - name: products
+    label: Ürün fotoğrafları
+    input: public/images/products
+    output: /images/products
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - webp
+      - avif
+    rename: random
+  - name: categories
+    label: Kategori fotoğrafları
+    input: public/images/categories
+    output: /images/categories
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - webp
+      - avif
+    rename: random
+  - name: branches
+    label: Şube fotoğrafları
+    input: public/images/branches
+    output: /images/branches
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - webp
+      - avif
+    rename: random
+  - name: gallery
+    label: Ana sayfa ve galeri
+    input: public/images/gallery
+    output: /images/gallery
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - webp
+      - avif
+    rename: random
+content:
+  - name: products
+    label: Ürünler
+    type: collection
+    path: content/products
+    format: json
+    subfolders: false
+    exclude:
+      - .gitkeep
+      - .DS_Store
+    operations:
+      create: true
+      rename: false
+      delete: false
+    filename:
+      template: product-{fields.editorKey}.json
+      field: false
+    view:
+      primary: name
+      sort:
+        - sortOrder
+      default:
+        sort: sortOrder
+        order: asc
+    fields:
+      - name: editorKey
+        label: Otomatik kayıt anahtarı
+        type: uuid
+        hidden: true
+        required: true
+        options:
+          editable: false
+          generate: false
+      - name: name
+        label: Ürün adı
+        type: string
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 120
+      - name: categoryId
+        label: Kategori seçin
+        type: reference
+        required: true
+        options:
+          collection: categories
+          value: '{fields.id}'
+          label: '{fields.name}'
+          search: name
+      - name: description
+        label: Ürün açıklaması
+        type: text
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 1200
+      - name: images
+        label: Fotoğraflar
+        type: object
+        list: true
+        default: []
+        fields:
+          - name: url
+            label: Fotoğraf seçin
+            type: image
+            required: true
+            options:
+              media: products
+              extensions:
+                - jpg
+                - jpeg
+                - png
+                - webp
+                - avif
+              rename: random
+          - name: alt
+            label: Fotoğrafta ne var? Türkçe açıklama
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 320
+          - name: status
+            label: Yayın durumu
+            type: select
+            required: true
+            default: published
+            options:
+              values:
+                - value: draft
+                  label: Taslak
+                - value: published
+                  label: Yayında
+          - name: sortOrder
+            label: Sıra
+            type: number
+            required: true
+            default: 0
+            options:
+              min: 0
+              step: 1
+      - name: sortOrder
+        label: Sıra
+        type: number
+        required: true
+        default: 0
+        options:
+          min: 0
+          step: 1
+      - name: status
+        label: Yayın durumu
+        type: select
+        required: true
+        default: draft
+        options:
+          values:
+            - value: draft
+              label: Taslak
+            - value: published
+              label: Yayında
+  - name: categories
+    label: Kategoriler
+    type: collection
+    path: content/categories
+    format: json
+    subfolders: false
+    exclude:
+      - .gitkeep
+      - .DS_Store
+    operations:
+      create: false
+      rename: false
+      delete: false
+    view:
+      primary: name
+      sort:
+        - sortOrder
+      default:
+        sort: sortOrder
+        order: asc
+    fields:
+      - name: name
+        label: Kategori adı
+        type: string
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 120
+      - name: description
+        label: Kategori açıklaması
+        type: text
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 1200
+      - name: image
+        label: Kapak fotoğrafı (isteğe bağlı)
+        type: object
+        fields:
+          - name: url
+            label: Fotoğraf seçin
+            type: image
+            required: true
+            options:
+              media: categories
+              extensions:
+                - jpg
+                - jpeg
+                - png
+                - webp
+                - avif
+              rename: random
+          - name: alt
+            label: Fotoğrafta ne var? Türkçe açıklama
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 320
+      - name: sortOrder
+        label: Sıra
+        type: number
+        required: true
+        default: 0
+        options:
+          min: 0
+          step: 1
+      - name: status
+        label: Yayın durumu
+        type: select
+        required: true
+        default: draft
+        options:
+          values:
+            - value: draft
+              label: Taslak
+            - value: published
+              label: Yayında
+  - name: branches
+    label: Şubeler / Konumlar
+    type: collection
+    path: content/branches
+    format: json
+    subfolders: false
+    exclude:
+      - .gitkeep
+      - .DS_Store
+    operations:
+      create: false
+      rename: false
+      delete: false
+    view:
+      primary: name
+      sort:
+        - sortOrder
+      default:
+        sort: sortOrder
+        order: asc
+    fields:
+      - name: name
+        label: Şube / konum adı
+        type: string
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 120
+      - name: description
+        label: Şube açıklaması
+        type: text
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 1200
+      - name: address
+        label: Açık adres
+        type: text
+        required: false
+        options:
+          maxlength: 500
+        default: ''
+        description: >-
+          Yalnız doğrulanmış bilgi girin; bilinmiyorsa boş bırakın. Kimlik değişikliği teknik onay
+          bekleyebilir.
+      - name: phone
+        label: Telefon
+        type: text
+        required: false
+        options:
+          maxlength: 500
+        default: ''
+        description: >-
+          Yalnız doğrulanmış bilgi girin; bilinmiyorsa boş bırakın. Kimlik değişikliği teknik onay
+          bekleyebilir.
+      - name: openingHours
+        label: Çalışma saatleri
+        type: text
+        required: false
+        options:
+          maxlength: 500
+        default: ''
+        description: >-
+          Yalnız doğrulanmış bilgi girin; bilinmiyorsa boş bırakın. Kimlik değişikliği teknik onay
+          bekleyebilir.
+      - name: whatsappUrl
+        label: WhatsApp bağlantısı
+        type: text
+        required: false
+        options:
+          maxlength: 500
+        default: ''
+        description: >-
+          Yalnız doğrulanmış bilgi girin; bilinmiyorsa boş bırakın. Kimlik değişikliği teknik onay
+          bekleyebilir.
+      - name: images
+        label: Fotoğraflar
+        type: object
+        list: true
+        default: []
+        fields:
+          - name: url
+            label: Fotoğraf seçin
+            type: image
+            required: true
+            options:
+              media: branches
+              extensions:
+                - jpg
+                - jpeg
+                - png
+                - webp
+                - avif
+              rename: random
+          - name: alt
+            label: Fotoğrafta ne var? Türkçe açıklama
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 320
+          - name: status
+            label: Yayın durumu
+            type: select
+            required: true
+            default: published
+            options:
+              values:
+                - value: draft
+                  label: Taslak
+                - value: published
+                  label: Yayında
+          - name: sortOrder
+            label: Sıra
+            type: number
+            required: true
+            default: 0
+            options:
+              min: 0
+              step: 1
+      - name: sortOrder
+        label: Sıra
+        type: number
+        required: true
+        default: 0
+        options:
+          min: 0
+          step: 1
+      - name: status
+        label: Yayın durumu
+        type: select
+        required: true
+        default: draft
+        options:
+          values:
+            - value: draft
+              label: Taslak
+            - value: published
+              label: Yayında
+  - name: gallery
+    label: Ana sayfa ve galeri fotoğrafları
+    type: collection
+    path: content/gallery
+    format: json
+    subfolders: false
+    exclude:
+      - .gitkeep
+      - .DS_Store
+    operations:
+      create: true
+      rename: false
+      delete: false
+    filename:
+      template: gallery-{fields.editorKey}.json
+      field: false
+    view:
+      primary: alt
+      sort:
+        - sortOrder
+      default:
+        sort: sortOrder
+        order: asc
+    fields:
+      - name: editorKey
+        label: Otomatik kayıt anahtarı
+        type: uuid
+        hidden: true
+        required: true
+        options:
+          editable: false
+          generate: false
+      - name: url
+        label: Fotoğraf seçin
+        type: image
+        required: true
+        options:
+          media: gallery
+          extensions:
+            - jpg
+            - jpeg
+            - png
+            - webp
+            - avif
+          rename: random
+      - name: alt
+        label: Fotoğrafta ne var? Türkçe açıklama
+        type: string
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 320
+      - name: sortOrder
+        label: Sıra
+        type: number
+        required: true
+        default: 0
+        options:
+          min: 0
+          step: 1
+      - name: status
+        label: Yayın durumu
+        type: select
+        required: true
+        default: draft
+        options:
+          values:
+            - value: draft
+              label: Taslak
+            - value: published
+              label: Yayında
+      - name: usages
+        label: Nerede gösterilsin?
+        type: select
+        required: true
+        options:
+          multiple: true
+          values:
+            - value: home-hero
+              label: Ana sayfa büyük görseli
+            - value: brand-gallery
+              label: Marka galerisi
+            - value: branches-gallery
+              label: Şubeler galerisi
+  - name: announcements
+    label: Duyurular
+    type: collection
+    path: content/announcements
+    format: json
+    subfolders: false
+    exclude:
+      - .gitkeep
+      - .DS_Store
+    operations:
+      create: true
+      rename: false
+      delete: false
+    filename:
+      template: announcement-{fields.editorKey}.json
+      field: false
+    view:
+      primary: title
+      sort:
+        - sortOrder
+      default:
+        sort: sortOrder
+        order: asc
+    fields:
+      - name: editorKey
+        label: Otomatik kayıt anahtarı
+        type: uuid
+        hidden: true
+        required: true
+        options:
+          editable: false
+          generate: false
+      - name: title
+        label: Duyuru başlığı
+        type: string
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 120
+      - name: description
+        label: Duyuru açıklaması
+        type: text
+        required: true
+        pattern:
+          regex: \S
+          message: Boş bırakmayın.
+        options:
+          maxlength: 1200
+      - name: sortOrder
+        label: Sıra
+        type: number
+        required: true
+        default: 0
+        options:
+          min: 0
+          step: 1
+      - name: status
+        label: Yayın durumu
+        type: select
+        required: true
+        default: draft
+        options:
+          values:
+            - value: draft
+              label: Taslak
+            - value: published
+              label: Yayında
+      - name: image
+        label: Kapak fotoğrafı (isteğe bağlı)
+        type: object
+        fields:
+          - name: url
+            label: Fotoğraf seçin
+            type: image
+            required: true
+            options:
+              media: gallery
+              extensions:
+                - jpg
+                - jpeg
+                - png
+                - webp
+                - avif
+              rename: random
+          - name: alt
+            label: Fotoğrafta ne var? Türkçe açıklama
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 320
+      - name: startsAt
+        label: Başlangıç zamanı (isteğe bağlı)
+        type: date
+        default: ''
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ssxxx
+        description: Tarayıcının yerel saat dilimi kaydedilir. Tarihin yayına yansıması yeni build gerektirir.
+      - name: endsAt
+        label: Bitiş zamanı (isteğe bağlı)
+        type: date
+        default: ''
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ssxxx
+        description: Tarayıcının yerel saat dilimi kaydedilir. Tarihin yayına yansıması yeni build gerektirir.
+  - name: pages
+    label: Sayfa yazıları
+    type: group
+    items:
+      - name: page-home
+        label: Ana Sayfa
+        type: file
+        path: content/pages/home.json
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        fields:
+          - name: seo
+            label: Arama ve paylaşım metinleri
+            type: object
+            required: true
+            fields:
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 320
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: hero
+            label: Ana karşılama alanı
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: titleLead
+                label: Başlığın ilk kısmı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 60
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: titleAccent
+                label: Kırmızı vurgulu başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 60
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: descriptionLead
+                label: Açıklamanın ilk satırı
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: descriptionBody
+                label: Açıklamanın devamı
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: catalogAction
+                label: Ürün butonu yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: branchesAction
+                label: Şube butonu yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: countDescription
+                label: Şube sayısı açıklaması
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: heroVisual
+            label: Ana görsel açıklamaları
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: photoDescription
+                label: Fotoğraf açıklaması
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: pendingDescription
+                label: Fotoğraf bekleme açıklaması
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: countLabel
+                label: Şube sayısı etiketi
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: categories
+            label: Kategoriler bölümü
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: action
+                label: Buton yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: story
+            label: Marka hikâyesi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: titleLead
+                label: Başlığın ilk kısmı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: titleTail
+                label: Başlığın devamı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: signature
+                label: İmza / slogan
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: action
+                label: Buton yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: branches
+            label: Şubeler bölümü
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: action
+                label: Buton yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: notice
+                label: Bilgilendirme metni
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: gallery
+            label: Fotoğraf galerisi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: social
+            label: Sosyal iletişim
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: announcements
+            label: Duyurular bölümü
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+      - name: page-about
+        label: Hakkımızda
+        type: file
+        path: content/pages/about.json
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        fields:
+          - name: seo
+            label: Arama ve paylaşım metinleri
+            type: object
+            required: true
+            fields:
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 320
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: intro
+            label: Sayfa girişi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: story
+            label: Marka hikâyesi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: signature
+                label: İmza / slogan
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: titleLead
+                label: Başlığın ilk kısmı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: titleTail
+                label: Başlığın devamı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: continuation
+                label: Devam metni
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: action
+                label: Buton yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: categories
+            label: Kategoriler bölümü
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: action
+                label: Buton yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+      - name: page-contact
+        label: İletişim
+        type: file
+        path: content/pages/contact.json
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        fields:
+          - name: seo
+            label: Arama ve paylaşım metinleri
+            type: object
+            required: true
+            fields:
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 320
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: intro
+            label: Sayfa girişi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: visit
+            label: Mağaza ziyareti
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: placeTitle
+                label: Konum başlığı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: placeDescription
+                label: Konum açıklaması
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: action
+                label: Buton yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: digital
+            label: Dijital iletişim
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+      - name: page-catalog
+        label: Ürünlerimiz
+        type: file
+        path: content/pages/catalog.json
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        fields:
+          - name: seo
+            label: Arama ve paylaşım metinleri
+            type: object
+            required: true
+            fields:
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 320
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: intro
+            label: Sayfa girişi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: content
+            label: Katalog açıklamaları
+            type: object
+            required: true
+            fields:
+              - name: heading
+                label: Bölüm başlığı
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: emptyTitle
+                label: Ürün bekleme başlığı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: emptyDescription
+                label: Ürün bekleme açıklaması
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: visitDescription
+                label: Mağazaya davet
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+      - name: page-branches
+        label: Şubelerimiz
+        type: file
+        path: content/pages/branches.json
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        fields:
+          - name: seo
+            label: Arama ve paylaşım metinleri
+            type: object
+            required: true
+            fields:
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 320
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: intro
+            label: Sayfa girişi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: list
+            label: Şube listesi açıklamaları
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: noticeTitle
+                label: Bilgilendirme başlığı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: notice
+                label: Bilgilendirme metni
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: gallery
+            label: Fotoğraf galerisi
+            type: object
+            required: true
+            fields:
+              - name: eyebrow
+                label: Üst başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: title
+                label: Başlık
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+  - name: settings
+    label: İşletme ve sosyal bilgiler
+    type: group
+    items:
+      - name: settings-site
+        label: Marka ve iletişim
+        type: file
+        path: content/settings/site.json
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        fields:
+          - name: name
+            label: Marka adı
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 80
+            description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: slogan
+            label: Slogan
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 100
+            description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: location
+            label: Genel konum
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 80
+            description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: shareLocation
+            label: Paylaşım konumu
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 80
+            description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: description
+            label: Açıklama
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 320
+            description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: phone
+            label: Merkezi telefon
+            type: string
+            required: false
+            options:
+              maxlength: 30
+            default: ''
+            description: Bilinmiyorsa boş bırakın. Yeni iletişim bilgisi teknik doğrulama bekler.
+          - name: email
+            label: İletişim e-postası
+            type: string
+            required: false
+            options:
+              maxlength: 254
+            default: ''
+            description: Bilinmiyorsa boş bırakın. Yeni iletişim bilgisi teknik doğrulama bekler.
+          - name: footer
+            label: Alt bilgi alanı
+            type: object
+            required: true
+            fields:
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: visitTitle
+                label: Ziyaret başlığı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: visitAction
+                label: Ziyaret butonu yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: socialDescription
+                label: Sosyal hesap açıklaması
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: signature
+                label: İmza / slogan
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 120
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: shareDescription
+            label: Paylaşım görseli açıklaması
+            type: string
+            required: true
+            pattern:
+              regex: \S
+              message: Boş bırakmayın.
+            options:
+              maxlength: 120
+            description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+      - name: settings-social
+        label: Sosyal bağlantılar
+        type: file
+        path: content/settings/social.json
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        fields:
+          - name: instagram
+            label: Instagram
+            type: object
+            required: true
+            fields:
+              - name: url
+                label: Resmî bağlantı
+                type: text
+                required: false
+                options:
+                  maxlength: 500
+                default: ''
+                description: Bilinmiyorsa boş bırakın. Yeni iletişim bilgisi teknik doğrulama bekler.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: actionLabel
+                label: Bağlantı butonu yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+          - name: whatsapp
+            label: WhatsApp
+            type: object
+            required: true
+            fields:
+              - name: url
+                label: Resmî bağlantı
+                type: text
+                required: false
+                options:
+                  maxlength: 500
+                default: ''
+                description: Bilinmiyorsa boş bırakın. Yeni iletişim bilgisi teknik doğrulama bekler.
+              - name: description
+                label: Açıklama
+                type: text
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 1200
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+              - name: actionLabel
+                label: Bağlantı butonu yazısı
+                type: string
+                required: true
+                pattern:
+                  regex: \S
+                  message: Boş bırakmayın.
+                options:
+                  maxlength: 64
+                description: Düz metin. HTML/CSS girmeyin; mevcut otomatik sayım değişkenlerini koruyabilirsiniz.
+settings:
+  hide: true
+  content:
+    merge: true

@@ -81,3 +81,13 @@ CMS ayarı veya public env değildir. Boş/bozuk açık değer build'i durdurur.
 Duyurunun başlangıç/bitişinin uygulanması yeni başarılı build/deployment gerektirir.
 Zamanlanmış tetikleme bu fazda kurulmadı; bu ihtiyaç ayrıca tasarlanıp gerçek
 Cloudflare yayın geçmişinde sınanmalıdır. Yerel tarih testi harici yayın kanıtı değildir.
+
+## C5 bağlantıya geçiş ön koşulları
+
+.pages.yml ve medya adaptörü yerel prototiptir. Kullanıcı işlemleri/sıra ve PENDING
+kabul tablosu CMS_ACCEPTANCE.md içindedir. Önce EXIF/repo görünürlüğü kararı, açık
+push/App/koruma/davet yetkileri ve trusted candidate CI; sonra ayrıca Cloudflare
+önizleme deployment onayı gerekir. Yalnız main npm run build/out ile yayımlanır;
+content-edit otomatik preview'u kapalı olmalıdır. Raw CMS kaydı doğrudan Next build
+girdisi değildir, teknik candidate dönüşümü zorunludur. Normalizasyon raporu→tested
+candidate SHA→merge SHA→Cloudflare source commit/HTTP zinciri gerçek hesapta kanıtlanır.

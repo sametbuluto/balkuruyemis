@@ -289,3 +289,12 @@ ve duyuru tarih/yayın davranışı [EDITORIAL_GUIDE](EDITORIAL_GUIDE.md) içind
 `node scripts/test-editorial-export.mjs` gerçek içeriklere dokunmadan izole negatif
 build ve statik HTML/tarayıcı kabulünü çalıştırır. Gerçek CMS ekranı değildir.
 Kaynak JSON değişince dev sunucusunu yeniden başlatın; statik yayında yeniden build gerekir.
+
+## C5 editör hazırlığı
+
+.pages.yml yerel prototipi beş koleksiyon ve yedi dosyayı Türkçe formlara eşler.
+Ürün/galeri/duyuru oluştururken teknik UUID/filename otomatik; fotoğraf picker ve
+Türkçe alt alanı vardır. Kullanıcı piksel/JSON yazmaz. Kaynak CMS wire şekli ayrı
+trusted candidate adaptöründen geçmelidir; doğrudan main build girdisi değildir.
+[CMS_ADAPTER](CMS_ADAPTER.md) ve [gerçek kabul](CMS_ACCEPTANCE.md). C4 rehberindeki
+"adaptör bekleniyor" ifadeleri tarihseldir; çalışan hosted panel hâlâ yoktur.

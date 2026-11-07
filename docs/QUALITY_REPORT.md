@@ -1,3 +1,93 @@
+# Faz 4.1-c5 — CMS alan/medya adaptörü kalite raporu
+
+Tarih: **7 Kasım 2026**. Yerel c5 ve .pages.yml hazırlığı tamamlandı. Gerçek CMS
+hesabı/aktarımı/Cloudflare **tamamlanmadı**. [Teknik sözleşme](CMS_ADAPTER.md),
+[gerçek editör kabul planı](CMS_ACCEPTANCE.md), [plan §20](../plan.md).
+
+## PASS
+
+- .pages.yml beş koleksiyon/yedi dosyayı 12 Türkçe forma eşler. Ürün/galeri/duyuru
+  native UUID ve dosya şablonu kullanır; kategori picker gerçek ID'yi saklar.
+  Teknik ID/slug/piksel/filepath alanı manuel giriş değildir; code/CSS/env/kimlik/
+  verified/domain/noindex formda yoktur. Rename/delete bütün içeriklerde kapalıdır.
+- Trusted Node adaptörü aynı raw content yollarını ayrı canonical candidate'a
+  dönüştürür. Bilinen boş/null alanlar normalize edilir; bozuk/unknown/ref/ID/slug,
+  eksik dosya ve raw medya silme/rename reddedilir. Strict uygulama loader'ı aynı.
+- JPEG/PNG/WebP/AVIF decode/limit/path/symlink güvenliği; otomatik ID/gerçek ölçü ve
+  EXIF'siz candidate çalışır. Raw byte'lar değişmez. Fotoğraf değişiminde eski ölçü/
+  varyantlar taşınmaz; aynı URL'de byte değişimi için de test vardır.
+- Protected şube kimliği/koordinatlar ve verified kapısı korunur; onaylı iletişim
+  değeri değişirse onayı düşer. Draft ve location detay/schema ayrımı aynı.
+- 148 mevcut kaynak byte eşit; altı kategori/dört koordinat aynı. Ürün/galeri/
+  duyuru/fotoğraf gerçek sayıları 0; tüm test verileri temp projelerde.
+
+| Kontrol                                       | Sonuç                                                                  |
+| --------------------------------------------- | ---------------------------------------------------------------------- |
+| TypeScript / ESLint / Prettier                | PASS; strict aynı                                                      |
+| Vitest                                        | **363/363**, 24 dosya                                                  |
+| .pages.yml                                    | Pinned resmî Zod şeması + negatif ve semantic field/path testleri PASS |
+| Production static export                      | **67 dosya**, noindex true, rotalar aynı                               |
+| Statik HTTP                                   | **3/3**                                                                |
+| Playwright / Chrome                           | **51/51**, gerçek out/                                                 |
+| Kategori / ürün / şube / medya / metin export | **3/3, 4/4, 5/5, 5/5, 4/4**                                            |
+| CMS kaynak tabanlı yerel round-trip           | PASS; yeniden save/ad/fotoğraf, static HTML ve dört genişlik           |
+| Responsive                                    | **320 / 393 / 768 / 1280 px**                                          |
+
+MIT upstream 6f4e860 şeması ve form/default/deepMap/sanitize/image write fonksiyonları
+hash'li fixture'dan kullanılır. Yerel wire ürünü ID/ölçü olmadan oluşturur; ikinci
+save'de aynı ID/slug ile ad ve fotoğraf değişir. Piksel ölçüsü otomatik 60×30 olur.
+Ana sayfa/Hakkımızda/şube/kategori/duyuru değişimi statik HTML'de doğrulanır. Draft
+işareti out metinlerinde yok, source JSON 404; hero preload ve fotoğraf lazy/decode
+çalışır. EXIF raw kaynakta var, candidate/out temiz; raw orijinal byte eşittir.
+
+## WARNING
+
+- Gerçek hosted editor, reference arama API'si/date picker UI, upload/save/auth,
+  App/davet/GitHub korumaları, otomatik aktarım ve Cloudflare kabulü **çalıştırılmadı**.
+  Yerel native-helper wire testi bu harici akışları kanıtlamaz. 12 gerçek kabul
+  senaryosu PENDING; kullanıcı işlemleri CMS_ACCEPTANCE.md içinde.
+- **Hosted upload için EXIF'in Git'e yazılmadan temizlenmesi garanti edilemez.**
+  Raw blob zaten GitHub'a gidebilir; candidate/out temizliği geçmişi temizlemez.
+  Public/private ve EXIF kararı gerçek upload/App ön koşuludur; ayrıntılı alternatifler
+  CMS_ADAPTER'da. Ali Bey'e terminalde temizleme işi verilmedi.
+- CLI Git merge/CI yetkisi değildir: immutable SHA, üç yönlü fark, path/mode manifest,
+  PR/required checks, conflict/race ve canonical source senkronizasyonu kurulmalıdır.
+  content-edit main/Cloudflare'a doğrudan bağlanmaz. Hidden/readonly yetki değildir.
+- Yeni kategori/fiziksel şube onboarding ve verified sahiplik/kimlik onayı teknik
+  işlemdir. Gerçek ürün/fotoğraf/logo/şube kimliği/sosyal hesaplar beklenir.
+- WebKit/Firefox/fiziksel cihaz/yeni axe bu görevde çalıştırılmadı. Resize/varyant
+  üretimi, pre-upload sanitizer ve zamanlanmış yayın servisi eklenmedi.
+
+## FAIL
+
+Son yerel doğrulamada başarısız test veya açık kritik uygulama hatası yoktur.
+Tam pre-Git EXIF şartı mevcut hosted-only çözümle karşılandı diye raporlanmaz.
+İlk testte hero loading attribute varsayımı, gerçek Next preload davranışına göre
+düzeltildi; uygulama bileşeni değiştirilmedi. İlk config view şema ve lint module
+adı hataları giderildi; son kontroller geçti.
+
+## Git, dosyalar ve kabul
+
+Başlangıç main/ec334f8 temizdi. Yeni .pages.yml, src/cms adapter/CLI ve iki test,
+beş CMS teknik script'i, MIT/provenance/hash'li upstream test fixture'ları ve
+CMS_ADAPTER/CMS_ACCEPTANCE belgeleri eklendi. Package scripts/yardımcı TS include
+ve rehber/plan/kalite kuralları güncellendi. js-yaml 4.3.2 ve zod 4.6.7 zaten kurulu
+sürümlerinden exact doğrudan dev bağımlılık oldu; başka sürüm/paket değişimi yoktur.
+
+Yerel commit: `feat: prepare Pages CMS forms and trusted media adapter`.
+Tam hash teslim yanıtında/git log'da. Secret/.env/otomatik çıktı/test raporları Git
+dışıdır. Remote/push/hesap/App/davet/deployment yapılmadı.
+Kanıtlar /private/tmp/bal-c5/; roundtrip-final.log son izole fixture yolunu gösterir.
+
+Manuel yerel inceleme: npm run build, npm run preview, http://127.0.0.1:4173.
+Bu site önizlemesidir, admin girişi değildir. Gerçek kabul: Ali Bey kendi panelinden
+ürün adı/fotoğraf/ana sayfa metni değiştirir; otomatik trusted kapılar geçer ve
+Cloudflare HTTP içerik/SHA zinciri kanıtlanır. Bu kabul henüz gerçekleşmedi.
+
+---
+
+## Tarihsel Faz 4.1-c4 raporu
+
 # Faz 4.1-c4 — Kurumsal metin ve duyuru JSON kalite raporu
 
 Tarih: **7 Kasım 2026**. Önceki c3 ve tüm veri mimarisi korundu. Yalnız yerel

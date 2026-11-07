@@ -1,0 +1,3 @@
+# Hash-pinned upstream test sources must retain exact bytes on every platform.
+# Whitespace in these licensed raw fixtures belongs to upstream, not application code.
+tests/fixtures/pagescms/*.txt -text -whitespace

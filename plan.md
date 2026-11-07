@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.1-c4 — Kurumsal metin/duyuru JSON altyapısı tamamlandı; gerçek CMS entegrasyonu bekliyor**.
+Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.1-c5 — Yerel CMS alan/medya adaptörü ve .pages.yml hazır; gerçek editör/CI/yayın kabulü bekliyor**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -1291,3 +1291,137 @@ ve CMS alan eşleme/round-trip planını ayrı küçük kapsam olarak netleştir
 Bu faz başlatılmadı. Ali Abi'nin gerçek panelden ürün adı/fotoğraf/ana sayfa metni
 → otomatik trusted kontroller → korunan aktarım → Cloudflare içerik/SHA üç kabulü
 henüz gerçekleşmedi; yerel fixture bu dış entegrasyonların yerine geçmez.
+
+## 20. Faz 4.1-c5 — CMS alan eşlemesi, medya adaptörü ve yerel .pages.yml
+
+### 20.1. Yetki ve başlangıç
+
+7 Kasım 2026. Ürün sahibi c4'ü kabul edip c5'i, .pages.yml prototipini ve gerçek
+editör kabul hazırlığını yetkilendirdi. Başlangıç main/ec334f8500daa691fe4e9cd100e0f32945033a40;
+çalışma ağacı temizdi. Başlangıç arşivi `/private/tmp/bal-c5/source-before.tar`.
+Mevcut bütün fazlar/testler korundu; GitHub push/App/hesap/davet/Cloudflare yoktur.
+
+148 korunan mevcut kaynak dosyası byte eşit: app/components/content/features/styles/
+types/config/lib, bütün önceki testler ve content/public verileri dahil. Altı kategori,
+dört koordinat ve kırmızı/siyah/beyaz tasarım aynı. Ürün/galeri/duyuru/fotoğraf gerçek
+kayıtları 0 kaldı. Test ürün/görselleri yalnız temp dizinlerdedir.
+
+### 20.2. Resmî uyum ve .pages.yml
+
+Resmî Pages CMS 2.1.8 commit'i `6f4e860a35d934406580287e7042e5e111e207a1`, güncel
+field/filename/reference/media/date/settings belgeleriyle birlikte salt okunur
+incelendi. Native UUID otomatik üretir fakat prefix'li mevcut ID UUID değildir.
+Gizli editorKey UUID + sabit filename template ile ürün/galeri/duyuru yaratılır;
+canonical ID/slug dosya adından trusted adaptörde çıkarılır. Ali Bey ID/slug/JSON/
+piksel/dosya yolu girmez. Eski ID/slug ve koordinatlar korunur.
+
+.pages.yml 5 koleksiyon + 7 dosya, 12 Türkçe form sunar. Kategori reference gerçek
+kayıttan ID alır; kategori listesi ikinci sabit seçenek listesi değildir. Ürün/galeri/
+duyuru create açık; kategori/şube create teknik onboarding; bütün dosya/collection
+rename/delete kapalı. Medya UI için hayalî delete/EXIF/byte hook ayarı eklenmedi.
+Code/CSS/env/kimlik onayı/domain/noindex/verified bayrakları içerik formunda yoktur.
+
+MIT lisanslı upstream config şeması hash'li txt fixture'dan derlenip gerçek Zod v3
+uyumluluk modunda doğrulanır; yalnız Zod ve field registry importları bağlanır.
+Bilinmeyen root anahtarı/field tipi negatif kontrolü ve 12 form/path/field semantic
+unit testleri vardır. Resmî options şemasının iç option garantisi yok; alan eşlemesi
+proje sözleşmesiyle ayrıca denetlenir. İlk view.sort/order biçimi resmî şemada
+reddedildi, array + view.default yapısına düzeltildi.
+
+### 20.3. Trusted candidate adaptörü
+
+src/cms altındaki Node aracı raw CMS snapshot + trusted canonical baseline okur;
+aynı content yollarını ayrı boş output içinde canonical hale getirir. İkinci kalıcı
+editör registry'si yoktur. Native sanitizeObject null/boş string/liste/nesne anahtarını
+sildiği için yalnız bilinen opsiyoneller null/[] normalize edilir. Zorunlu/unknown/
+bozuk/ref/ID/slug/UTF-8/256 KiB hatasında fallback yoktur. Kalıcı ürün slug'ı ad değişince
+korunur. Raw CMS verisi normal build'e doğrudan verilmez; strict loader gevşetilmedi.
+
+Medya seçimi image picker + Türkçe alt alanıdır. Mevcut full decode/MIME/imza/path/
+symlink/5 MiB/20 MiB/128 dosya/24 MP/8000 px kapıları korunur. SVG kapalıdır.
+Auto-orientation + sRGB/re-encode ile metadata'sız candidate; gerçek width/height ve
+owner/slot/URL tabanlı ID otomatik üretilir. Yeni fotoğraf, aynı URL'de byte değişimi
+dahil, eski varyantı taşımaz; resize/varyant üretimi kurulmadı. Tüm medya ID'leri ve
+referanslar canonical şemayla tekrar doğrulanır. Raw medya silme/rename de reddedilir.
+
+Şube ID/slug/kind/koordinat/Maps değişimi baseline'a karşı reddedilir; verified kimlik
+hash kapısı aynı. İletişim verified yükseltmesi reddedilir, mevcut onaylı değer değişirse
+onayı sıfırlanır. UI hidden/readonly yetki sayılmaz. Source script/paketi çalıştırılmaz;
+source/baseline yerinde yazılmaz; ayrı/boş output gerekir. Çıktı content/public-images
+ve candidate-report'tur, Git merge veya deployment değildir.
+
+Bu CLI aktif trusted CI sayılmaz: gerçek Git diff/mode envanteri, immutable M/C/SHA,
+üç yönlü fark/çatışma, exact candidate PR/required checks, race ve source canonical
+senkronizasyon hâlâ kurulmalı. Eski content-edit'i main üstüne kör kopyalamak yasaktır.
+
+### 20.4. EXIF ve gerçek kullanıcı kabul sınırı
+
+Hosted kaynak upload API'si extension kontrolünden sonra base64 içeriği GitHub'a
+yazabilir; destekli config'te pre-upload sanitize hook'u doğrulanmadı. **Raw Git blob'u
+EXIF temizliği garanti edilmez.** Candidate/out temizliği kaynak/history mahremiyeti
+değildir. Public/private ve EXIF kararı gerçek bağlantıdan önce tamamlanmalıdır.
+Private raw erişimini sınırlar ama pre-upload temizliği sağlamaz. Önceden temizlenmiş
+medya kütüphanesi seçimi veya ayrı pre-upload çözümünün ödünleşimleri CMS_ADAPTER'da;
+Ali Bey'e terminalde fotoğraf temizleme görevi verilmez.
+
+Kaynak tabanlı wire fixture gerçek upstream initializeState/deepMap/sanitizeObject/
+image write yardımcılarını kullanır; backend merge'in yerel arrays-replace karşılığı
+vardır. Auth, canlı reference arama/date picker/upload/save API'si ve hosted sürüm
+sınanmadı. Bu, gerçek editor testi diye sunulmaz. CMS_ACCEPTANCE.md 12 PENDING
+senaryo, önkoşul/kullanıcı işlemleri ve source→candidate→main→Cloudflare SHA/HTTP
+kanıt zincirini tanımlar. Üç gerçek panel akışı tamamlanmadan CMS bitmiş sayılmaz.
+
+### 20.5. Doğrulama ve kanıtlar
+
+| Kontrol                                       | Sonuç                                                                         |
+| --------------------------------------------- | ----------------------------------------------------------------------------- |
+| TypeScript / ESLint / Prettier                | PASS; strict aynı                                                             |
+| Vitest                                        | **363/363**, 24 dosya; önceki 328 test ve 35 yeni CMS testi                   |
+| Resmî .pages.yml kontrolü                     | PASS; hash'li pinned şema, negatif ve field/path denetimi                     |
+| Production static export                      | **67 dosya**, noindex true; ana rotalar aynı                                  |
+| Statik HTTP                                   | **3/3**                                                                       |
+| Playwright / Chrome                           | **51/51**, gerçek out/ üzerinde                                               |
+| Kategori / ürün / şube / medya / metin export | **3/3, 4/4, 5/5, 5/5, 4/4**                                                   |
+| CMS kaynak tabanlı round-trip                 | PASS; yeni/ikinci save, fotoğraf değişimi, kimlik/draft ve gerçek statik HTML |
+| Responsive                                    | **320, 393, 768, 1280 px**; ana site ve izole CMS fixture                     |
+| Kaynak koruma                                 | **148 dosya byte eşit**, altı kategori/dört koordinat aynı                    |
+
+CMS fixture ürün ekleme, gerçek kategori ID seçimi, şube metni, ana sayfa/Hakkımızda,
+galeri/hero ve duyuru kaydını temsil eder. EXIF'li test JPEG'in orijinali byte eşit;
+candidate ölçüleri orientation sonrası otomatik ve metadata temizdir. Canonical
+ürün ikinci save'de yeniden adlandırılır ve 60×30 fotoğrafla değişir; ID/slug aynı,
+piksel alanı formda yoktur. Draft işareti tüm out metin dosyalarında yoktur. Static
+HTTP'de ürün fotoğrafı decode/lazy, hero preload, gizli kaynak 404, location detay
+404 ve noindex korunur. Test resmi yalnız geometrik temp fixture'dır.
+
+İlk round-trip testi hero'da loading=eager attribute varsayımı nedeniyle durdu;
+Next gerçek preload link'i ve lazy olmama davranışıyla düzeltildi, uygulama görsel
+bileşeni değiştirilmedi. İlk lint teknik araçtaki module değişken adını reddetti;
+wireSource olarak düzeltildi. Offline npm cache yoktu; sistem TLS'li okuma/kurulumla
+zaten kurulu exact js-yaml 4.3.2/zod 4.6.7 doğrudan dev bağımlılık oldu. Diğer paket
+sürümleri/runtime bağımlılıkları değişmedi; ana strict/Next/Playwright aynı.
+
+Kanıt: `/private/tmp/bal-c5/` içindeki check/roundtrip/playwright/export logları,
+preservation-report.json ve source-before.tar. Son CMS temp yolu roundtrip-final.log
+ve result.json içinde; browser PNG'ler o dizindedir. Resmî kaynak hash/provenance/MIT
+lisansı tests/fixtures/pagescms altında, .generated araçları Git dışındadır.
+
+### 20.6. Teslim ve bağlantı için gerekenler
+
+Güncel sözleşme CMS_ADAPTER.md; gerçek editör kabulü/kullanıcı adımları CMS_ACCEPTANCE.md.
+.pages.yml, src/cms/*, beş teknik script, upstream test fixture'ları, package/lock ve
+yardımcı TS include; AGENTS/README/mimari/CMS/medya/içerik/SEO-yayın/güvenlik/rehber/
+yol haritası/plan/kalite belgeleri değişti. Eski veri/UI/test dosyaları aynı kaldı.
+
+PASS: Yetkilendirilen yerel c5 ve .pages.yml/kabul hazırlığı tamamlandı.
+WARNING: Source pre-Git EXIF ve repo görünürlüğü kararı; gerçek içerik, hesap/CI/yayın
+ve gerçek kullanıcı testleri beklenir. WebKit/Firefox/fiziksel cihaz/yeni axe yok.
+FAIL: Son yerel doğrulamada başarısız test veya açık kritik uygulama hatası yok.
+Pre-Git temizlik şartı hosted-only çözümle sağlanmış sayılmaz.
+
+Başarılı yerel commit mesajı: `feat: prepare Pages CMS forms and trusted media adapter`.
+Hash teslim yanıtı/git log'da raporlanır. .env/node_modules/out/.next/.generated/test
+raporları Git dışıdır. Remote/push/App/davet/token/Cloudflare değişmedi; c5 sonrası
+harici entegrasyon kendiliğinden başlatılmaz. Ürün sahibinin ayrıca repo/EXIF seçimi,
+push/App/koruma/davet ve deployment yetkileri gereklidir; Ali Bey'den JSON/piksel/Git
+komutu istenen bir gerçek akış kabul edilmez.

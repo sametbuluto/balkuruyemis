@@ -70,3 +70,15 @@ Duyurular taslak/yayında, sıra ve isteğe bağlı başlangıç/bitiş zamanı 
 Zamanlar UTC'dir; Türkiye saatini teknik sorumlu doğru dönüştürmelidir. Tarihin
 geçmesi yayınlanan statik sayfayı kendi kendine değiştirmez; yeni build/yayın gerekir.
 Zamanlanmış yayın, gerçek CMS kullanıcı arayüzü ve fotoğraf metadata adaptörü bekleniyor.
+
+## C5 sonrası beklenen panel akışı
+
+.pages.yml form hazırlığı tamamlandı; henüz bir giriş hesabı veya davet yoktur.
+Panel bağlandığında ürün adı/açıklama girip kategoriyi seçebilecek, fotoğrafı seçip
+Türkçe açıklamasını yazabilecek, ana sayfa başlığının ilk/kırmızı kısmını ayrı
+alanlarda düzenleyebileceksiniz. ID, JSON, dosya yolu veya piksel ölçüsü girmeniz
+istenmeyecek. Böyle bir alan/komut istenirse teknik sorumluya bildirin; hedef kabul
+sağlanmamıştır. Kaydetmenin otomatik yayın kanıtı ayrıca CMS_ACCEPTANCE ile sınanacak.
+Yeni kategori/şube kimliği ve iletişim sahiplik onayı teknik sorumlu kontrolünde kalır.
+Ham upload'un Git'e gitmeden EXIF temizliği garanti edilmediği için gerçek fotoğraf
+yüklemeden önce ürün sahibi/teknik sorumlu gizlilik kararını tamamlayacaktır.

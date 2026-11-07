@@ -8,14 +8,15 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
 - Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
 - Faz 3 kabul edildi, commit `78df0f7`. Faz 4.1-a/b/c1/c2 kabul edildi ve yerel Git
-  ile kaydedildi. 4.1-c3 kabul edildi; aktif kapsam yalnız 4.1-c4 kurumsal metin,
-  sosyal/iletişim ve duyuru JSON mimarisi ile yerel commit. c5 ve sonraki fazlara geçme.
+  ile kaydedildi. c3/c4 kabul edildi; aktif kapsam c5 CMS alan eşlemesi/güvenilir
+  medya adaptörü, yerel .pages.yml ve gerçek kabul testlerinin hazırlığıdır.
+  Hesap bağlantısı, push veya deployment başlatma; başarılı işi yerel commit ile kaydet.
 - Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
   kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
   kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
 - Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
   kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
-- Plan ve rapor kaynakları: plan.md §19, docs/CMS_SETUP.md, SECURITY.md,
+- Plan ve rapor kaynakları: plan.md §20, docs/CMS_SETUP.md, SECURITY.md,
   DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
 - Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
   deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.
@@ -151,3 +152,27 @@ Ali Abi panelden ürün adı, fotoğraf veya ana sayfa metni değiştirir; otoma
 kontroller ve korunan aktarım geçer; Cloudflare'da yeni içerik/source SHA kanıtlanır.
 Kullanıcı kod/piksel metadata yazmaz. Bu gerçek üç akış geçmeden CMS tamamlandı denmez;
 yerel altyapı veya simülasyon yeterli değildir. Bu faz harici kurulum/yayın yetkisi vermez.
+
+## C5 CMS prototipi sınırı
+
+- .pages.yml artık yerel prototiptir; 12 Türkçe form sunar. src/cms trusted adaptörü
+  raw CMS verisini ayrı canonical candidate'a dönüştürür. Aynı dosya yolları kullanılır;
+  ikinci düzenlenebilir veri listesi yoktur. Native editorKey UUID/dosya şablonundan
+  ID/slug ve decode'dan piksel metadata üret; Ali Bey'den bunları yazmasını isteme.
+- Normal npm build canonical main verisini strict okur; raw CMS içeriğine fallback
+  ekleme. cms:prepare teknik CI aracıdır, Ali Bey için manuel komut akışı değildir.
+- Source/baseline üstüne yazma; output ayrı/boş olmalı. JSON/medya silme/rename,
+  korunan koordinat/kimlik ve verified yükseltmesi reddedilir. Onaylı iletişim değeri
+  değişince onayı düşür. Bu yerel gate aktif GitHub branch koruması veya atomik merge değildir.
+- Raw kaynak EXIF'i Git'e zaten gidebilir; candidate ve out temizliği pre-upload
+  mahremiyet garantisi değildir. Source dosyalarını yerinde dönüştürme. Public/private
+  ve EXIF kararı gerçek upload/App bağlantısından önce kesinleşmelidir.
+- .pages yapılandırmasını npm run cms:config:check ile pinlenmiş resmî şemaya karşı
+  doğrula. Upstream txt fixture'ları MIT lisanslı hash'li araştırma/test kaynaklarıdır;
+  uygulama/client'a veya editör içerik alanına taşınmaz. .gitattributes yalnız bu raw
+  txt dosyalarının orijinal byte/whitespace biçimini korur. TypeScript strict gevşemez.
+- node scripts/test-cms-roundtrip.mjs kaynak tabanlı yerel testtir. Hosted login,
+  reference picker API, upload, davet, GitHub aktarımı ve Cloudflare kabulü sayılmaz.
+  Gerçek senaryolar CMS_ACCEPTANCE.md içinde PENDING; harici izin verilmeden çalıştırma.
+- Tüm geçmiş testleri koru. docs/CMS_ADAPTER.md teknik katmanı, CMS_ACCEPTANCE.md
+  kullanıcı işlemleri/gerçek kanıt zincirini tutar. Sonraki harici faza kendiliğinden geçme.

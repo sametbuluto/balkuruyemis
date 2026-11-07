@@ -140,3 +140,12 @@ c5 önerisi: CMS alan eşleme/round-trip planını ve fotoğraf yolu → decode 
 metadata adaptörünü küçük bir yerel iş olarak ele almak. Kullanıcıdan piksel veya
 JSON yazmasını istemeyen akış ayrıca kurulmalıdır. Bu tur .pages.yml/hesap/CI/
 push/deployment yapılmadı; sıradaki faz kendiliğinden başlatılmaz.
+
+## C5 güncellemesi
+
+C5 yerel .pages.yml ve trusted normalizasyonu hazırlar. Ali Bey'e gösterilecek alanlar
+Türkçedir; ID/slug/ölçü/verified işaretleri/teknik SEO form değildir. CMS'nin kaldırdığı
+boş/null anahtarlar adapter'de yalnız bilinen opsiyoneller için geri normalize edilir.
+Telefon/e-posta/sosyal onayı yükseltmek teknik doğrulama gerektirir; onaylı değer
+sonradan değişirse onayı düşer. Gerçek panel akışı henüz kurulmadı. C4'teki c5 önerisi
+bu yerel görevle ele alındı; gerçek kabul CMS_ACCEPTANCE.md içindedir.

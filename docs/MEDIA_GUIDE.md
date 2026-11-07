@@ -137,3 +137,13 @@ Bu üç akış gerçek hesaplarda uçtan uca geçmeden **CMS entegrasyonu tamaml
 Yerel 4.1-c3 testleri bu kabulün yerine geçmez. 4.1-c4 önerisi: site/ana sayfa düz
 metin sözleşmesi ve upload metadata adaptörünü ayrı küçük işler olarak netleştirmek;
 uygulamaya bu görevde geçilmedi.
+
+## C5 güncel adaptör durumu
+
+Yukarıdaki c3 sınırı tarihsel kayıttır. C5'te dosya seçimi ve alt ile gelen CMS wire
+kaydı ayrı candidate için otomatik ID/gerçek ölçü ve temiz metadata'ya dönüştürülür.
+Normal strict loader değişmedi. Raw orijinaller byte eşit kalır; pre-Git EXIF temizliği
+hosted CMS için garanti edilmez. Yeni fotoğraf değişiminde eski ölçüler otomatik
+yenilenir, eski varyantlar taşınmaz; resize/varyant üretimi hâlâ yoktur. Tam kaynak/
+çıktı karşılaştırması [CMS_ADAPTER](CMS_ADAPTER.md) içinde. Hatalı medya ve mevcut
+raw medya silme/rename tüm candidate'ı durdurur. Gerçek upload ekranı/CI/yayın yoktur.

@@ -264,3 +264,16 @@ renderı kullanılır. UI/rota/stil ve teknik SEO yetkisi editöre açılmaz.
 denetimi çalıştırır. Duyuru başlangıç/bitiş tarihinin yayına yansıması yeni build ister;
 otomatik zamanlayıcı kurulmadı. Ek izole kontrol: `node scripts/test-editorial-export.mjs`.
 Bu altyapı CMS hesabı, fotoğraf seçici veya otomatik Cloudflare yayını değildir.
+
+## C5 — Yerel Pages CMS prototipi
+
+.pages.yml 12 Türkçe formu gerçek JSON yollarına bağlar; hesap bağlantısı yapılmadı.
+Güvenilir Node adaptörü raw CMS verisini ayrı canonical candidate'a dönüştürür:
+ID/slug, nullable alanlar ve fotoğrafın gerçek ölçüsü/metadata'sı otomatik hazırlanır.
+Ali Bey için manuel JSON/piksel/terminal akışı hedeflenmez; bu henüz gerçek panel değildir.
+
+Teknik kontroller: npm run cms:config:check ve node scripts/test-cms-roundtrip.mjs.
+Normal check zinciri resmî config kontrolünü de içerir. Candidate aracı kullanım ve
+EXIF sınırı [CMS_ADAPTER](docs/CMS_ADAPTER.md), kullanıcı hesap işlemleri ve gerçek
+kabul [CMS_ACCEPTANCE](docs/CMS_ACCEPTANCE.md) içinde. Kaynak raw upload EXIF'inin
+Git'e yazılmadan temizlenmesi garanti edilemez; bu karar bağlantıdan önce alınır.

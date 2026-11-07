@@ -8,7 +8,7 @@ mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri c
 Bugün kategori/ürün/şube/galeri JSON → strict Node/RSC loader → published server props → statik
 sayfa/client filtresi akışı kullanılır. Üretilmiş manifest bu pilotta gerekmemiştir. Diğer türlere
 geçiş ayrı 4.1-c işleridir. Detaylar [CMS_SETUP](CMS_SETUP.md), [CONTENT_GUIDE](CONTENT_GUIDE.md)
-ve [SECURITY](SECURITY.md); ana kayıt plan.md §19. Güvenlik policy kodu hâlâ aktif CI değildir.
+ve [SECURITY](SECURITY.md); ana kayıt plan.md §20. Güvenlik policy kodu hâlâ aktif CI değildir.
 
 Aşağıdaki Faz 3/2.1 kayıtları tarihsel olarak korunur; önceki CMS yasağı ve V5'in
 ilk aşamasındaki manifest önerisi güncel kategori pilotunun önüne geçmez.
@@ -364,3 +364,26 @@ başına statik yayını değiştirmez. Zamanlanmış yeniden build/deployment k
 
 [EDITORIAL_GUIDE](EDITORIAL_GUIDE.md) alan sözleşmesi; plan §19 kabul/test kaydıdır.
 Önceki faz bölümlerindeki TS metin/komut açıklamaları kendi tarihsel kapsamlarıdır.
+
+## C5 — CMS input ile canonical uygulama verisi arasındaki sınır
+
+src/cms/adapter.server ve media-adapter.server yalnız teknik Node aracıdır; App
+Router veya runtime API'ye bağlanmadı. CMS aynı içerik yollarına native form şekliyle
+raw kayıt yazar. Ayrı trusted süreç bu snapshot + güvenilir canonical baseline'dan
+normalleştirilmiş content/public-images candidate'ı üretir. ID/slug filename'den,
+medya ID ve ölçü decode'dan gelir; source yerinde değişmez. Mevcut strict loader,
+kolleksiyon/ref/identity/medya kuralları canonical candidate'ı tekrar doğrular.
+
+.pages.yml 12 formu code/HTML/CSS/env/teknik SEO dışında tutar. js-yaml ve zod mevcut
+sürümleri exact dev bağımlılıktır; resmî hash'li MIT config şeması .generated altında
+yalnız test edilir. Kaynak tabanlı native form/default/image write/sanitize fixture'ı
+boş/null ve array-replace davranışını sınar; hosted auth/save API taklidi bir başarı
+olarak raporlanmaz. Ürünler yeni ID için editorKey UUID kullanır; canonical kayda
+kalıcı ikinci kimlik registry'si eklenmez. Detay: CMS_ADAPTER.
+
+Bu araç Git üç yönlü merge, source/main SHA eşleme, branch koruması veya CI yetkisi
+kurmaz. Gelecekte immutable Git snapshot + path/mode/diff gate + trusted code +
+canonical normalization + tam kontroller + exact candidate PR gerekir. Source dalını
+main'e kör kopyalama yasaktır. Ham CMS upload source EXIF'i Git blob'una gidebilir;
+pre-upload hook kurulmuş sayılmaz. Cloudflare content-edit'i doğrudan yayımlamamalı.
+CMS_ACCEPTANCE hesap adımları/gerçek test kanıt zincirini, plan §20 sonuçları tutar.

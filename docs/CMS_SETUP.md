@@ -1,8 +1,10 @@
 # Pages CMS — V5 ön inceleme ve aşamalı kurulum planı
 
 30 Ekim 2026 araştırması; 1 Kasım 2026 yerel tamamlama. **Kurulu CMS veya gerçek editör testi değildir.** Bu belge master
-prompt V5'in ilk görevinin araştırma kaydıdır. Statik tasarım korunur. Faz 4.1-b kategori ve 4.1-c1 ürün ve 4.1-c2 şube ve 4.1-c3 galeri JSON/medya doğrulaması uygulandı; .pages.yml,
-metin/duyuru geçişi c4 ile yerelde tamamlandı. Metadata adaptörü ve workflow'lar sonraki küçük işlerdir.
+prompt V5'in araştırma kaydını korur. 7 Kasım C5 güncellemesi: tüm JSON kaynakları için
+.pages.yml yerel prototipi, trusted metadata adaptörü ve kaynak tabanlı round-trip hazır.
+Gerçek hesap/CI/workflow/yayın yoktur. Güncel [CMS_ADAPTER](CMS_ADAPTER.md) ve
+[gerçek kabul planı](CMS_ACCEPTANCE.md) önceki fazların plan satırlarından önceliklidir.
 
 ## Mevcut durum
 
@@ -72,7 +74,8 @@ Dal UI: [sabit kaynak](https://github.com/hunvreus/pagescms/blob/6f4e860a35d9344
 Tablodaki yollar artık uygulamanın gerçek kaynaklarıdır; duyuru koleksiyonu boştur.
 Diğer dört kurumsal sayfa content/pages/{about,contact,catalog,branches}.json altındadır.
 Sekiz üst CMS girişi ilk hedeftir; site ayarları/sayfalar gruplaması ileride gerçek
-CMS round-trip ile doğrulanacak. Bu tur .pages.yml oluşturulmadı.
+CMS round-trip ile doğrulanacak. C5 ile 12 formu sunan yerel .pages.yml oluşturuldu;
+hosted editor ile henüz bağlanmadı.
 TS modülleri yalnız tipli erişim sunar; ikinci kategori/ürün literal listesi yoktur.
 Ürün koleksiyonu gerçek kayıt beklediği için yalnız .gitkeep içerir. categoryId
 strict yüklenmiş kategori JSON kayıtlarına referans verir; draft ürün veya draft
@@ -103,8 +106,8 @@ Gerçek kayıt yoktur; yeni rota üretilmez. [Metin sözleşmesi](EDITORIAL_GUID
 | 4.1-c2 Şube JSON                   | Yerel uygulama                           | Dört konum/14 alan eşit; strict schema/Maps; korunan kimlik hash onayı; export/404/draft testleri                          |
 | 4.1-c3 Galeri / medya              | Yerel altyapı tamamlandı                 | Strict JSON, decode, temiz statik çıktı; CMS upload hesabı yok                                                             |
 | 4.1-c4 Metinler ve duyurular       | Yerel altyapı tamamlandı                 | Beş sayfa, site/sosyal JSON; strict şema, statik tarih ve kaçış testleri                                                   |
-| 4.1-c5 önerisi                     | Başlatılmadı                             | Upload metadata adaptörü tasarımı, alan eşleme ve round-trip test planı                                                    |
-| 4.2-a Yerel .pages.yml prototipi   | Bekliyor                                 | Gerçek JSON kaynaklarına sekiz Türkçe giriş; silme/rename kapalı; schema ve fixture round-trip testleri                    |
+| 4.1-c5 CMS alan/medya adaptörü     | Yerel uygulama tamamlandı                | Otomatik metadata/ID, native kaynak tabanlı wire, ayrı canonical candidate; gerçek upload yok                              |
+| 4.2-a Yerel .pages.yml prototipi   | Bu görevde ayrıca yetkilendirildi, hazır | 12 Türkçe form; resmî pinned şema ve yerel round-trip. Gerçek editör kabulü PENDING                                        |
 | 4.2-b Gerçek CMS bağlantısı        | Kullanıcı yetkisi bekler                 | Yalnız hedef repo App kurulumu; main kaydı reddi; editörün kod/ayar erişemediği negatif test                               |
 | 4.3-a Güvenilir candidate CI       | Bekliyor                                 | main kodu + yalnız veri; path/şema/medya/build/test; source/target SHA kaydı                                               |
 | 4.3-b Korunan otomatik aktarım     | Kullanıcı yetkisi + entegrasyon testleri | Required checks + bot PR; race/conflict/failure ana dalı güncellemez; bypass yok                                           |
@@ -112,9 +115,9 @@ Gerçek kayıt yoktur; yeni rota üretilmez. [Metin sözleşmesi](EDITORIAL_GUID
 | 4.5 Ali Bey gerçek kullanıcı testi | Davet için ayrı onay                     | Sekiz içerik/medya akışı ve destek prosedürü; yayın ve rollback kanıtı                                                     |
 
 4.1-b kategorileri, 4.1-c1 ürünleri, 4.1-c2 şubeleri, 4.1-c3 galeriyi taşıdı.
-Site metinleri c4 ile taşındı; CMS upload adaptörü sonraki ayrı iştir. Şube kimlik onayı korunan ID/hash kaydı
-üzerinden uygulanır; henüz hiçbir gerçek şube kimliği onaylanmadı. Kullanıcının kapsam sınırı gereği .pages.yml
-henüz oluşturulmadı; CMS hesabı/App/workflow/depoyla yazma veya deployment yoktur.
+Site metinleri c4 ile taşındı; C5 candidate adaptörü ve yerel .pages.yml hazırdır. Şube kimlik onayı korunan ID/hash kaydı
+üzerinden uygulanır; henüz hiçbir gerçek şube kimliği onaylanmadı. .pages.yml kullanıcı
+talebiyle C5 sonunda yerel prototip oldu; CMS hesabı/App/workflow/uzak yazma/deployment yoktur.
 4.2 tamamlandı sayılmaz. Önceki uyum matrisi 30 Ekim araştırma kaydıdır.
 
 ## Migration riskleri
@@ -146,3 +149,12 @@ Otomatik boyut yazan upload adaptörü, .pages.yml, gerçek hesap/round-trip/CI/
 düzenler; otomatik kontroller ve korunan aktarım geçer; Cloudflare'da yeni içerik ve
 source SHA görülür. Üç akış ve hatalı dosyanın eski yayını koruması gerçek hesaplarda
 kanıtlanmadan CMS tamamlandı denmez. Yerel fixture sonucu bu kabulün yerine geçmez.
+
+## C5 güncel uyumluluk — 7 Kasım 2026
+
+Yukarıdaki C3/C4 sınırlamaları kendi fazlarının tarihsel kaydıdır. Bugün yerel
+.pages.yml resmî 6f4e860 şemasıyla doğrulanır; otomatik ID/ölçü, boş/null dönüşümü
+ve EXIF'siz canonical candidate adaptörü çalışır. Uygulama strict loader'ı raw CMS
+kaydını doğrudan kabul etmez. Teknik ayrıntı ve pre-Git EXIF sınırı CMS_ADAPTER'dadır.
+Hosted sürüm/izinler, gerçek form/reference/upload, GitHub protected otomasyon ve
+Cloudflare kanıtı CMS_ACCEPTANCE planında PENDING. Bunlar kurulmuş sayılmaz.

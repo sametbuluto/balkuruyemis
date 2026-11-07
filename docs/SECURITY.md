@@ -157,3 +157,23 @@ kuralları güvenli hedef biçimini doğrular; verified editoryal beyanı hesap 
 kanıtlamaz. Gerçek sahiplik ürün sahibince doğrulanmalıdır. İletişim taslak değerleri
 ziyaretçi props/bağlantılarına aktarılmaz. SITE_BUILD_AT güvenilir build sürecinindir;
 içerik şemasında yoktur. Statik tarih seçimi bir otomatik yayın servisi değildir.
+
+## C5 input/candidate kapısı — çalışan yerel kontrol, aktif CI değil
+
+.pages.yml artık yerel prototiptir; allowlist içeriği olarak editöre .pages/kimlik/
+workflow/kod açılmaz. Adaptör protected branch alanlarını baseline'a karşı karşılaştırır;
+koordinat/Maps/kind/ID/slug ve verified yükseltmesini reddeder, yeni iletişim değerinin
+onayını düşürür. Eksik dosya veya raw medya silme/rename, bozuk/eksik ref/medya ve
+bilinmeyen alan paketin tamamını durdurur. Teknik onaylar source snapshot'ından
+okunmaz, trusted kodun branch-identity kaydı kullanılır.
+
+Candidate aracı source script'i çalıştırmaz; yalnız izinli veri okur ve ayrı boş
+dizine normalize/temiz veri yazar. Henüz Git nesnesinden manifest/üç yönlü fark,
+exact SHA/PR/race/conflict/atomic merge/branch protection kurmaz. Bu katman yokken
+CMS'yi main/Cloudflare'a doğrudan bağlamayın. CLI'ye immutable/premerged trusted
+snapshot verilmesi gelecekteki job'ın sorumluluğudur; kör kopyalama güvenli değildir.
+
+Hosted media upload kaynak base64'ü GitHub'a yazabilir; candidate EXIF temizliği eski
+raw blob'u silmez. Public/private ve pre-Git gizlilik kararı bağlantı ön koşuludur.
+Karşılaştırmalı seçenekler CMS_ADAPTER, gerçek başarısız upload/izin/rollback kabulü
+CMS_ACCEPTANCE içinde. Yerel unit/wire testi hosted yetki kanıtı sayılmaz.
