@@ -4,7 +4,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import yaml from 'js-yaml';
 import ts from 'typescript';
-import { createPagesConfig } from './pages-config.mjs';
+import { createPagesConfig, samePagesConfig } from './pages-config.mjs';
 const upstream = await readFile('tests/fixtures/pagescms/config-schema.ts.txt', 'utf8');
 const hash = createHash('sha256').update(upstream).digest('hex');
 const manifest = JSON.parse(
@@ -33,7 +33,7 @@ const { ConfigSchema } = await import(
 );
 const config = yaml.load(await readFile('.pages.yml', 'utf8'));
 ConfigSchema.parse(config);
-if (JSON.stringify(config) !== JSON.stringify(createPagesConfig()))
+if (!samePagesConfig(config, createPagesConfig()))
   throw new Error('.pages.yml alan eşleme kaynağıyla eşleşmiyor.');
 // Resmî options şeması iç seçenekleri doğrulamaz; bu sınırın testleri proje eşlemesindedir.
 for (const change of [

@@ -3,8 +3,10 @@ import { expect, test } from '@playwright/test';
 import { site } from '../../src/content/site';
 import { getPublishedCategories, getPublishedProducts } from '../../src/content/queries';
 import { expectCatalogProducts } from './catalog-assertions';
+import { getPageCopy } from '../../src/content/page-copy';
 
 const categories = getPublishedCategories();
+const homeCopy = getPageCopy('home');
 const routes = ['/', '/hakkimizda', '/urunlerimiz', '/subelerimiz', '/iletisim'];
 
 test('ana sayfa Türkçe açılır, bölümlerini sunar ve klavyeyle içeriğe geçilir', async ({
@@ -14,23 +16,19 @@ test('ana sayfa Türkçe açılır, bölümlerini sunar ve klavyeyle içeriğe g
   page.on('pageerror', (error) => errors.push(error.message));
   const response = await page.goto('/');
   expect(response?.status()).toBe(200);
-  await expect(page).toHaveTitle('Lezzetin Doğal Adresi | Bal Kuruyemiş');
+  await expect(page).toHaveTitle(`${homeCopy.seo.title} | ${site.name}`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'tr');
   await expect(page.locator('html')).toHaveAttribute('data-scroll-behavior', 'smooth');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Lezzetin Doğal Adresi.',
+    `${homeCopy.hero.titleLead} ${homeCopy.hero.titleAccent}`,
   );
   await expect(
-    page.getByRole('region', { name: 'Her buluşmaya bir eşlikçi.' }).getByRole('article'),
+    page.getByRole('region', { name: homeCopy.categories.title }).getByRole('article'),
   ).toHaveCount(categories.length);
   await expect(
-    page
-      .getByRole('region', { name: `Buca’da ${site.branchCountText} buluşma noktası.` })
-      .getByRole('article'),
+    page.getByRole('region', { name: homeCopy.branches.title }).getByRole('article'),
   ).toHaveCount(site.branchCount);
-  await expect(
-    page.getByRole('heading', { name: 'Bal Kuruyemiş’ten anlar.' }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: homeCopy.gallery.title })).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'İçeriğe geç' })).toBeFocused();
   await page.keyboard.press('Enter');
@@ -42,7 +40,9 @@ test('altı kategori URL ile seçilir, geri dönüş ve bilinmeyen kategori güv
   page,
 }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Ürünlerimizi keşfedin', exact: true }).click();
+  await page
+    .getByRole('link', { name: homeCopy.hero.catalogAction, exact: true })
+    .click();
   await expect(page).toHaveURL('/urunlerimiz');
   const filters = page.getByRole('navigation', {
     name: 'Ürün kategorileri',

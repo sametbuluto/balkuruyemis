@@ -160,3 +160,37 @@ kontrolünü tamamladı. Son Public/boş uzak ref kontrolü ve yerel belge commi
 bu görevin kapsamıdır. Onaylı tam SHA için gerçek push izni hâlâ verilmedi.
 Dry-run/auth ve 4.2-c/CI/CMS/deployment başlatılmaz. Son kayıt plan §22.9 ve
 PUSH_PREFLIGHT içindedir; önceki UNKNOWN/BLOCKED maddeleri tarihseldir.
+
+## Faz 4.2-d — Main/CI güvenlik yapılandırma planı
+
+- [x] Local/remote main, admin rolü ve gerçek ruleset/Actions ayarlarını salt GET ile oku.
+- [x] Public/Free uyumlu exact bootstrap JSON; approvals=0/bypass=[]/PR/force-delete kapıları.
+- [x] Trusted/technical/content/check-App ayrımı; safe canary ve required check geçiş protokolü.
+- [ ] Başlangıç ruleset uygulaması için ayrı açık izin; şu an main korunmuyor.
+- [ ] Ayrı CI diff/branch/push/PR/run yetkisi; gerçek workflow veya Check Run yok.
+- [ ] App/environment/canary testleri ve gerçek check'ten sonra ayrı required-check onayı.
+
+Mevcut API plan adı pro; Free özellik sınırı aynıdır, hesap değiştirilmedi. Kaynak
+plan §24, MAIN_PROTECTION_PLAN ve TRUSTED_CI_PLAN. Yerel belgeler uncommitted;
+4.2-e/CMS/davet/Cloudflare başlatılmaz.
+
+## Faz 4.2-E1 — Bootstrap API doğrulaması · Tamamlandı
+
+- [x] Kullanıcının kurduğu ruleset 26805718 Active/exact main/bypass=[] doğrulandı.
+- [x] Üç effective rule, approvals=0, admin bypass=never ve local/remote SHA eşit.
+- [x] Taslak stale-review=true / gerçek false farkı raporlandı; değiştirilmedi.
+- [x] E2 CI geliştirme/izin/teknik PR/gerçek check geçiş planı hazırlandı.
+- [ ] E2 uygulaması, branch/push/PR/run ve sonraki check/App kurulumları ayrı onay bekliyor.
+
+Yerel belgeler uncommitted; çalışma kaydı plan §25 ve MAIN_BOOTSTRAP_VERIFICATION.
+Bu tur uzak ayar veya yeni workflow/commit oluşturulmadı.
+
+## Faz 4.2-E2 — Yerel trusted CI
+
+- Yerel teknik branch üzerinde iki workflow, read-only API observer, gerçek Git
+  data-only gate ve credential'sız Docker doğrulayıcı hazırlandı.
+- Native check'ler authority değildir; App/attester, exact candidate commit,
+  gerçek GitHub run/required check ve otomatik aktarım henüz yok.
+- Push/teknik PR/merge/Actions ayarı ve sonraki E3 ayrıca açık onay gerektirir.
+
+Ayrıntı: [TRUSTED_CI_IMPLEMENTATION](TRUSTED_CI_IMPLEMENTATION.md), master plan §26.

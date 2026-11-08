@@ -1,0 +1,75 @@
+name: Trusted candidate diagnostics (non-authoritative)
+on:
+  workflow_run:
+    workflows: ['PR diagnostics (non-authoritative)']
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number (API verifies identity; input is not proof)'
+        required: false
+        type: string
+  push:
+    branches: [main]
+permissions: {}
+concurrency:
+  group: trusted-candidate-readonly
+  cancel-in-progress: true
+jobs:
+  observe:
+    name: Observe main and PR identities (no authority)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
+    outputs:
+      matrix: ${{ steps.observe.outputs.matrix }}
+      has_prs: ${{ steps.observe.outputs.has_prs }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.2'
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - id: observe
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          INPUT_PR_NUMBER: ${{ inputs.pr_number }}
+        run: node scripts/ci/observe-pr.mjs
+  validate:
+    name: Candidate validation only (NOT an attested required check)
+    needs: observe
+    if: needs.observe.outputs.has_prs == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix: ${{ fromJSON(needs.observe.outputs.matrix) }}
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.2'
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - name: Validate only allowlisted data, recheck API pins afterwards
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ matrix.pr }}
+        run: node scripts/ci/run-content-validation.mjs content "$PR_NUMBER"

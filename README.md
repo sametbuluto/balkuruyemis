@@ -11,6 +11,10 @@ Kırmızı/siyah/beyaz kimlik ve beş temel sayfa korunur.
 [Master plan](plan.md) · [Mimari](docs/ARCHITECTURE.md) ·
 [İçerik rehberi](docs/CONTENT_GUIDE.md) · [Kalite raporu](docs/QUALITY_REPORT.md)
 
+Yerel Faz 4.2-E2 CI uygulaması: [güven sınırları ve bootstrap adımları](docs/TRUSTED_CI_IMPLEMENTATION.md).
+Workflow dosyaları henüz GitHub'a gönderilmedi; native sonuçlar required check veya
+otomatik yayın yetkisi değildir. Güncel sonuçlar kalite raporundadır.
+
 ## Yerelde açma
 
 Node.js aralığı: `^20.19.0 || ^22.13.0 || >=24.0.0`; mevcut ortam 20.20.0.
@@ -314,3 +318,22 @@ PUSH_AUTHORIZED=NO kalır. Authentication/dry-run henüz çalıştırılmadı.
 [Güncel kontrol ve main-only plan](docs/PUSH_PREFLIGHT.md),
 [son kalite raporu](docs/QUALITY_REPORT.md), master plan §22.9 güncel kayıtlardır.
 Yeni tam HEAD teslim yanıtında/git log'da raporlanır; önceki UNKNOWN kayıtları tarihseldir.
+
+## Faz 4.2-d — Main/CI planı
+
+İlk push kabul edildi; main ac62779e3a5a8ad0de76dd4c040c32387bd1c474 yerel/uzak eşit.
+Main koruması veya workflow henüz yok. Bu tur yalnız
+[main ruleset planı](docs/MAIN_PROTECTION_PLAN.md),
+[trusted CI sözleşmesi](docs/TRUSTED_CI_PLAN.md) ve
+[başlangıç JSON payload'u](docs/github/main-bootstrap.ruleset.json) hazırlandı.
+Dosyalar yerel öneridir; .github/workflows oluşturulmadı, yeni push/ayar yok.
+Yeni ayarlar veya CI yayını için ayrı açık onay gerekir. Public/Free hedefi korunur;
+hesap API'sindeki pro gözlemi ve gerçek admin yetkisi plan/kalite raporunda ayrıdır.
+
+## Faz 4.2-E1 — Main bootstrap doğrulaması
+
+Kullanıcının kurduğu main-bootstrap ruleset'i **26805718** ID ile gerçek API'den
+Active/etkin doğrulandı; main protected=true, bypass=[]/admin=never, approvals=0.
+Required CI henüz yok. Yerel/uzak main ac62779 aynı. Stale-review farkı dahil
+[doğrulama ve E2 geliştirme planı](docs/MAIN_BOOTSTRAP_VERIFICATION.md) güncel kayıttır.
+Salt okunur inceleme yapıldı; ruleset/workflow/push/PR/hesap/deployment değiştirilmedi.

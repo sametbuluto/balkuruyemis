@@ -1,3 +1,214 @@
+# Faz 4.2-E2 — Yerel trusted CI kalite raporu
+
+8 Kasım 2026. **Yerel E2 uygulaması tamamlandı; gerçek GitHub CI/attester kurulmadı.**
+Kapsam: yerel teknik branch, workflow/driver ve commit; uzak işlem yok.
+[Teknik uygulama](TRUSTED_CI_IMPLEMENTATION.md), [plan §26](../plan.md).
+
+## PASS
+
+- İki workflow, GET observer, gerçek Git data-only gate ve Docker validator hazır.
+- main/origin main ac62779e3a5a8ad0de76dd4c040c32387bd1c474; Public repo ve active
+  main-bootstrap 26805718 birebir aynı; bypass=[]; workflow/deployment 0.
+- 164 korunan kaynak baseline ile byte eşit; dört koordinat aynı. İki eski test,
+  CMS metinlerini sabit literal yerine yayınlanan JSON üzerinden denetler; silinmedi.
+- Actions pinleri tam SHA, base image digest; cache kapalı, persist-credentials:false.
+  Host token read-only; sandbox token/ağ/host yazma erişimi almaz.
+
+| Yerel kontrol               | Sonuç                                                                                                             |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| npm run check               | PASS: strict TS, lint, Prettier, CMS config ve build/HTTP                                                         |
+| Vitest                      | **512/512**, 31 dosya; önceki 426 ve 86 yeni CI testi                                                             |
+| Production static export    | **67 dosya**, noindex true                                                                                        |
+| Statik HTTP                 | **3/3**                                                                                                           |
+| Chrome E2E                  | **51/51**, 320/393/768/1280 px                                                                                    |
+| CMS kaynak round-trip       | PASS; ürün/metin/fotoğraf/kimlik ve responsive                                                                    |
+| Publishing candidate export | **2/2**; Git B/M/C merge + conflict reddi                                                                         |
+| Media export                | **5/5**; bozuk JSON/alt/görsel, sanitize/responsive ve drift                                                      |
+| Publishing history audit    | PASS; kod commit'i sonrası 11 commit/419 blob; yasak yol/secret/raster/büyük dosya bulgusu 0                      |
+| Gerçek yerel Docker         | PASS: tam reçete 511 Vitest + 51 Chrome + CMS config/build/HTTP + round-trip/candidate/media; GitHub run değildir |
+
+API taklitleri ve gerçek yerel Git testleri: yanlış repo/owner/SHA, stale source/main,
+workflow ID/path spoofing, eksik kimlik, teknik kod/workflow/env'nin içerik sayılması,
+bozuk JSON/kategori ref/medya ve merge conflict reddi. Skipped/neutral sinyal sonucu
+kanıt sayılmaz. Bunlar gerçek GitHub enforcement veya Check Run attester testi değildir.
+
+## WARNING
+
+- Native check'ler **authoritative:false**; attester, required check, candidate commit,
+  PR writer ve otomatik merge yoktur. İlk PR için M'de driver yoksa H fallback yapılmaz;
+  ayrı teknik incelemeli bootstrap gerekir. İlk sürüm fork ve package/lock değişimini reddeder.
+- Docker Desktop ARM host üzerinde amd64 emülasyonu; gerçek Ubuntu Actions runtime,
+  API GITHUB_TOKEN izinleri, workflow tetikleri, check provenance ve enforcement henüz denenmedi.
+- İlk host koşularında 5 sn Git/decode timeout'u görüldü; dosya paralelliği kapatıldı,
+  integration bütçesi 15 sn yapıldı. Assertion kapıları korunuyor, son host turu 512/512.
+- Docker'da readonly cache, paket çözümleme yolu ve tmpfs noexec sorunları bulundu.
+  Onaylı dependency'ler geçici /work/node_modules'a kopyalandı; yalnız /work exec,
+  nosuid/nodev, readonly root/host ve ağsız non-root sınırı korunur. Relative .bin bağlantıları korundu; duplicate Vitest/Chai durumu giderildi.
+  Canonical JSON alan sırası config eşitliğinde anlamdan ayrıldı; alan türü/etiketi/required
+  değişiklikleri reddedilir. 5-worker Chrome 512 PID sınırına takıldı (max=185, OOM=0);
+  tek worker, retries0 ile aynı 51 test geçti. PID/memory sınırı yükseltilmedi.
+- Mevcut lockfile için npm audit: **8 moderate, 0 high/critical**; hepsi dev:true lint
+  zincirinde minimatch DoS transitif etkisi. ESLint deprecated uyarısı da var.
+  npm audit exit 1 ile bu bulguları bildirdi; paket/lock değiştirilmedi, force fix yapılmadı. Ayrı dependency teknik işi önerilir.
+- Hosted CMS, App, Ali Bey kabulü, Cloudflare, Safari/Firefox ve fiziksel cihaz testi yok.
+
+## FAIL
+
+Son host ve gerçek Docker doğrulama reçetelerinde açık başarısız test yok. Önceki
+başarısız koşular loglarda korunur; npm audit bulguları WARNING altında raporlandı.
+
+## Git, kanıt ve sonraki izin
+
+Branch chore/trusted-ci-bootstrap; main değişmedi. D/E1 belgeleri ayrı checkpoint
+cd9c1c62b6576cabdf5d3b6cd5888fa9fbb06b26 ile korundu. E2 kod commit'i
+**d4f5538da2fd8c1cf1e465b9e54d3a67ab9e1150**; belgeler ayrı
+`docs: record trusted CI implementation and runtime evidence` commit'ine alınır. Push/PR/ayar/App/CMS/deployment yapılmadı.
+
+Log ve preservation/API/pin/audit kanıtları /private/tmp/bal-phase42e2 altında.
+Başarılı gerçek Docker fixture sonucu:
+/var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-ci-runtime-plNDxF/result.json.
+Non-root, credential yokluğu, readonly host/imaj, cap-drop, seccomp ve ağ reddi
+runtime probe ile geçti; fixture Git ref'leri değişmedi ve kendi container/tag
+temizlendi. Bu, kernel güvenliği sertifikası veya GitHub enforcement kanıtı değildir.
+
+Host toplamı 512; tam Docker snapshot'ı 511 test içerir. Eklenen son nullable CMS
+metadata testiyle aynı helper Linux Node26 üzerinde ayrıca 5/5 doğrulandı
+(config-node26.log). Workflow host Node24.22.2, container Node26.13.0, yerel
+host Node20.20.0 ayrı tutulur. Alan doldurulunca optionality değişmez; .pages
+formları aynı kalır. Bu saf metadata düzeltmesi sonrasında tüm host check yeniden geçti.
+Tarama reachable Git blob'ları ve bilinen sır desenleriyle sınırlıdır; kapsamlı
+sır denetimi veya uzak secret envanteri sayılmaz.
+Chrome HTML raporu playwright-report içinde; generated/QA çıktıları Git dışı.
+Yeni dosyalar TRUSTED_CI_IMPLEMENTATION tablosunda; mevcut teknik değişiklikler
+media TS include, Vitest zamanlama, Hero/ana sayfa E2E içerik beklentileri ve
+CMS config karşılaştırmasının canonical JSON sırasından bağımsızlığıdır.
+.pages.yml/12 form alanı değişmedi; metadata değişimi negatif testleriyle reddedilir.
+Görünüm, veri ve eski güvenlik katmanları değişmedi; yeni npm paketi yok.
+
+Sonraki açık izin yalnız teknik branch push'u/PR içindir; merge/workflow run,
+attester ve required check geçişi ayrıca belirlenir. E3'e kendiliğinden geçilmez.
+
+---
+
+## Tarihsel Faz 4.2-E1 raporu
+
+# Faz 4.2-E1 — Main bootstrap gerçek API doğrulaması
+
+8 Kasım 2026. **Salt okunur inceleme; ruleset kullanıcı tarafından kurulmuştu.**
+[Gerçek alanlar ve E2 planı](MAIN_BOOTSTRAP_VERIFICATION.md), [plan §25](../plan.md).
+
+## PASS
+
+- Ruleset **26805718**, main-bootstrap, Active; exact refs/heads/main ve exclude=[].
+- Authenticated detail bypass_actors=[]; mevcut admin current_user_can_bypass=never.
+- main protected=true. Etkin deletion/non_fast_forward/pull_request kuralları aynı
+  ruleset ID ile doğrulandı; required approvals=0, ekstra reviewer/codeowner/lastpush yok.
+- Required status checks/restrict updates/creations bilinçli kapalı; başka kural yok.
+- Yerel/uzak main **ac62779e3a5a8ad0de76dd4c040c32387bd1c474**, eşit.
+- Uzak workflow/deployment 0. Mevcut 200 kaynak byte eşit; dört koordinat korundu.
+
+## WARNING
+
+- Taslak stale-review dismiss=true, gerçek **false**. Approvals=0 iken bootstrap
+  hedefini bozmaz; değiştirilmedi. Teknik onay ileride exact SHA'ya bağlanmalıdır.
+- require_extra_approval_for_unattributed_changes=true; nonzero approval count
+  koşulunda değerlendirilir, şu an count=0. Merge/squash/rebase açık varsayılanları
+  ve required_reviewers=[] de raporlandı.
+- Classic protection API 404 döndürdü; bu, active ruleset/effective main kanıtını
+  geçersiz kılmaz. İki koruma türü birbirine karıştırılmadı.
+- Gerçek main push/force/delete veya App bypass reddi denenmedi. API gözlemi canlı
+  negatif test değildir. Bootstrap required CI değildir; yetkili PR merge'ini
+  içerik/doğrulama açısından henüz durdurmaz.
+- Yeni ruleset/YAML/script/branch/commit/push/PR/run/App/CMS/deployment yok. E2 planı
+  uygulanmadı, ayrı açık onay bekler. Yerel belgeler uncommitted kalır.
+
+## Yerel doğrulama
+
+| Bu tur yeniden çalıştırılan kontrol                      | Sonuç                                                                |
+| -------------------------------------------------------- | -------------------------------------------------------------------- |
+| Gerçek ruleset detail/effective main/SHA karşılaştırması | PASS; çekirdek fark yok, belirtilen WARNING alanları korundu         |
+| npm run check                                            | PASS; strict TypeScript, ESLint, Prettier, Vitest, config/build/HTTP |
+| Vitest                                                   | **426/426**, 27 dosya                                                |
+| Pages CMS config                                         | PASS; .pages.yml aynı                                                |
+| Production export / Static HTTP                          | **67 dosya**, noindex true / **3/3**                                 |
+| Chrome Playwright                                        | **51/51**, 320/393/768/1280 regresyonları dahil                      |
+| Kaynak koruma                                            | **200 dosya byte eşit**                                              |
+
+Bu yerel QA sonuçları GitHub main push reddi/required CI kanıtı değildir. Yeni
+WebKit/Firefox/fiziksel cihaz/axe, ayrı fixture export veya gerçek hosted CMS/
+deployment testi çalıştırılmadı. API raw GET'ler, verification.json ve QA logları
+/private/tmp/bal-phase42e1-20261108 altında. Önceki belgeler/taslak korundu; yeni
+commit/push veya GitHub workflow/PR oluşturulmadı.
+
+## FAIL
+
+Çekirdek kullanıcı ayarı, effective main kuralları ve SHA eşitliğinde hata bulunmadı.
+Kapsamda gerçek GitHub ret deneyi veya güvenilir CI kurulumu tamamlandı iddiası yok.
+
+---
+
+## Tarihsel Faz 4.2-d raporu
+
+# Faz 4.2-d — Main koruması ve trusted CI yapılandırma planı
+
+7 Kasım 2026. **Yalnız yerel plan; uzak değişiklik yapılmadı.**
+[Exact ruleset/UI planı](MAIN_PROTECTION_PLAN.md), [trusted CI](TRUSTED_CI_PLAN.md),
+[başlangıç JSON](github/main-bootstrap.ruleset.json), [plan §24](../plan.md).
+
+## PASS
+
+- Local/remote main **ac62779e3a5a8ad0de76dd4c040c32387bd1c474**, eşit; başlangıç temiz.
+- Mevcut Git kimliğiyle sadece GET: login sametbuluto, repo admin rolü true.
+- Public durum ve gerçek current main/rules/Actions ayarları okundu; main protected=false,
+  classic protection 404 Branch not protected, effective rules/rulesets/workflows boş.
+- Actions enabled=true, allowed_actions=all, sha_pinning_required=false; GITHUB_TOKEN
+  default read, PR approval false. Hiçbir ayar değiştirilmedi.
+- Free uyumlu exact başlangıç payload'u, UI yolları, gerçek check'e geçiş, LP job/App
+  sınırları ve güvenli canary kabul planı yerelde hazırlandı. Aktif workflow yok.
+
+## WARNING
+
+- **API hesabın plan adını pro bildiriyor.** Bu ücret/fatura kanıtı değildir. Free
+  hedefi korunur; hesap/plan değişikliği yapılmadı, Pro-only özellik kullanılmadı.
+- Main henüz korunmuyor. Blueprint'in JSON kontrolü, gerçek GitHub kabul/enforcement
+  veya direct push reddi kanıtı değildir. Required check/App/PR/run yoktur.
+- PR-controlled workflow ve ortak Actions App kimliği tek başına güvenli check
+  kaynağı değildir. Ayrı attester/provenance/sandbox/teknik sign-off uygulanıp gerçek
+  test edilmeden tam otomasyon veya skipped/neutral sertleştirme tamamlandı denmez.
+- Gerçek force/delete/main yazma, App bypass, başarısız-check merge engeli ve hosted
+  CMS/Cloudflare testleri bu tur yapılmadı. Canary ayrıca izin ister.
+- Tasarım .github dosyası oluşturmaz; yeni branch/commit/push/PR/run/App/token/secret,
+  ruleset veya deployment yok. Yerel belgeler uncommitted kalır.
+
+## Doğrulama
+
+| Yerelde yeniden çalıştırılan kontrol | Sonuç                                                                              |
+| ------------------------------------ | ---------------------------------------------------------------------------------- |
+| npm run check                        | PASS; strict, lint, Prettier, test/config, build/HTTP                              |
+| Vitest                               | **426/426**, 27 dosya; mevcut negatif Git/schema/media/conflict/SHA testleri dahil |
+| CMS config                           | PASS; mevcut .pages.yml aynı                                                       |
+| Production export / Static HTTP      | **67 dosya**, noindex true / **3/3**                                               |
+| Chrome Playwright                    | **51/51**; 320/393/768/1280 regresyonları                                          |
+| Yerel ruleset taslağı                | JSON parse + hedef/boş bypass/PR/zero-approval/force-delete invariant'ları PASS    |
+| Kaynak koruma                        | **200 dosya byte eşit**; gerçek workflow dosyası yok                               |
+
+JSON taslağı GitHub server schema/enforcement testi değildir. Yerel typed proof
+ve data gate testleri yeni önerilen ortak CI/check/sandbox'un uygulandığını kanıtlamaz.
+Bağımsız fixture export script'leri, yeni axe/WebKit/Firefox/fiziksel cihaz/hosted
+CMS veya gerçek yıkıcı GitHub testi bu tur çalıştırılmadı.
+
+## FAIL
+
+Son yerel kontrollerde başarısız test veya açık uygulama hatası yok. Uzak koruma
+henüz uygulanmadı; bu bir PASS enforcement raporu değildir. Beklenmeyen uzak
+değişimde veya eksik gerçek güven kapısında işlem durur. Eksik kapı için güvenlik gevşetilmez.
+Kanıt GET JSON'ları/snapshot ve loglar /private/tmp/bal-phase42d altında. Mevcut
+credential değeri hiçbir çıktıya/proje dosyasına kaydedilmedi; yeni credential yok.
+
+---
+
+## Tarihsel Faz 4.2-b raporu
+
 # Faz 4.2-b — Dış servisler tamamlandı; ilk push adayı son kontrol
 
 7 Kasım 2026. Ürün sahibi Webhooks boş, Railway/Vercel Apps kaldırıldı ve Cloudflare
