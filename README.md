@@ -11,6 +11,10 @@ Kırmızı/siyah/beyaz kimlik ve beş temel sayfa korunur.
 [Master plan](plan.md) · [Mimari](docs/ARCHITECTURE.md) ·
 [İçerik rehberi](docs/CONTENT_GUIDE.md) · [Kalite raporu](docs/QUALITY_REPORT.md)
 
+Yerel Faz 4.2-E2 CI uygulaması: [güven sınırları ve bootstrap adımları](docs/TRUSTED_CI_IMPLEMENTATION.md).
+Workflow dosyaları henüz GitHub'a gönderilmedi; native sonuçlar required check veya
+otomatik yayın yetkisi değildir. Güncel sonuçlar kalite raporundadır.
+
 ## Yerelde açma
 
 Node.js aralığı: `^20.19.0 || ^22.13.0 || >=24.0.0`; mevcut ortam 20.20.0.

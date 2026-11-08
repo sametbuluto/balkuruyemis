@@ -1,5 +1,11 @@
 # Güvenlik ve otomatik içerik yayını — V5 tasarımı
 
+**8 Kasım 2026 / E2 güncellemesi:** Yerel workflow/GET observer/Git gate/Docker
+validator uygulaması [TRUSTED_CI_IMPLEMENTATION](TRUSTED_CI_IMPLEMENTATION.md)
+içinde kayıtlıdır. Main-bootstrap değişmedi; uzak workflow/run, attester, required
+check ve otomatik aktarım kurulmadı. Yerel ve gerçek GitHub kabulü ayrıdır.
+Aşağıdaki E1 ve daha eski bölümler tarihsel aşamaların kayıtlarıdır.
+
 30 Ekim 2026 araştırması; 1 Kasım 2026 yerel tamamlama. Tasarımdır; aktif bot/workflow/branch protection kurulmadı.
 
 ## Faz 4.2-E1 — Kullanıcının kurduğu gerçek bootstrap doğrulandı

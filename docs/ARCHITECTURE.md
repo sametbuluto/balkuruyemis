@@ -1,5 +1,10 @@
 # Mimari — Faz 3 / Static-first
 
+Faz 4.2-E2: yalnız yerel trusted CI driver/workflow uygulaması eklendi.
+[TRUSTED_CI_IMPLEMENTATION](TRUSTED_CI_IMPLEMENTATION.md) M/C/H/B gözlemini,
+Docker güven sınırlarını ve bootstrap/attester eksiklerini açıklar. Uzak CI/yayın
+hattı aktif değildir; uygulama/veri/render mimarisi değişmedi.
+
 Faz 3 kabul edildi; commit `78df0f7`. V5 hedefi hosted Pages CMS + GitHub/Actions +
 Cloudflare Pages'tir; uygulama static export kalır. DB/özel API/custom admin yoktur.
 Faz 4.1-a güvenlik hazırlığı korunur. **Faz 4.1-b kategorileri, Faz 4.1-c1 ürünleri tek kaynaklı JSON

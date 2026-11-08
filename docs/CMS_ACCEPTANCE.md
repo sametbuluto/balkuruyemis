@@ -1,5 +1,11 @@
 # Gerçek Pages CMS editör kabulü ve bağlantı kontrol listesi
 
+**8 Kasım 2026 / E2 güncellemesi:** Yerel workflow/GET observer/Git gate/Docker
+validator uygulaması [TRUSTED_CI_IMPLEMENTATION](TRUSTED_CI_IMPLEMENTATION.md)
+içinde kayıtlıdır. Main-bootstrap değişmedi; uzak workflow/run, attester, required
+check ve otomatik aktarım kurulmadı. Yerel ve gerçek GitHub kabulü ayrıdır.
+Aşağıdaki E1 ve daha eski bölümler tarihsel aşamaların kayıtlarıdır.
+
 7 Kasım 2026. **Hazırlanmış test planıdır; aşağıdaki gerçek hesap testleri çalıştırılmadı.**
 Yerel kaynak tabanlı round-trip PASS, gerçek panel/CI/Cloudflare kabulü PENDING'dir.
 Teknik sözleşme [CMS_ADAPTER](CMS_ADAPTER.md), güven sınırları [SECURITY](SECURITY.md).

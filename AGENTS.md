@@ -7,21 +7,20 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
 - Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
-- Faz 4.2-c ilk push kabul edildi; local/remote main ac62779e3a5a8ad0de76dd4c040c32387bd1c474.
-  Aktif kapsam yalnız Faz 4.2-E1: kullanıcının kurduğu main-bootstrap ruleset'ini
-  GET/detail/effective-main ile salt okunur doğrula ve E2 planını hazırla.
-  Gözlenen ruleset 26805718 Active, hedef refs/heads/main, bypass=[], admin bypass=never;
-  approvals=0, deletion/non_fast_forward/pull_request etkin. Stale review temizliği
-  false; önceki true taslağından farkı raporla, otomatik değiştirme.
-  Public + Free özellik sınırı korunur. Ruleset/Actions ayarı, workflow/script,
-  branch/commit/push/PR/run, App/token/CMS/davet/deployment başlatma/değiştirme.
-  Önceki uncommitted belgeleri koru; E2 uygulaması için ayrı açık onay bekle.
+- Faz 4.2-E1 kabul edildi. Aktif kapsam yalnız Faz 4.2-E2 yerel trusted CI
+  uygulaması ve teknik branch commit'leridir: chore/trusted-ci-bootstrap.
+  Yerel/uzak main ac62779e3a5a8ad0de76dd4c040c32387bd1c474 korunur.
+  main-bootstrap 26805718 Active, refs/heads/main, bypass=[], approvals=0,
+  deletion/non_fast_forward/pull_request korunur; dış değişiklik varsa dur.
+  Önceki belgeler ayrı checkpoint commit'inde korunur. Yeni workflow/driver'ları
+  yalnız yerelde hazırla; push/PR/run/ruleset/required check/App/token/CMS/davet/
+  deployment/otomatik merge başlatma. E3 için ayrıca açık onay gerekir.
 - Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
   kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
   kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
 - Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
   kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
-- Plan ve rapor kaynakları: plan.md §25, docs/MAIN_BOOTSTRAP_VERIFICATION.md, docs/TRUSTED_CI_PLAN.md, SECURITY.md,
+- Plan ve rapor kaynakları: plan.md §26, docs/TRUSTED_CI_IMPLEMENTATION.md, docs/MAIN_BOOTSTRAP_VERIFICATION.md, docs/TRUSTED_CI_PLAN.md, SECURITY.md,
   DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
 - Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
   deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.
@@ -147,7 +146,8 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
   blob/mode/byte envanteri ve üç yönlü canonical candidate hazırlığını yerelde yapar.
   Source commit kodunu checkout/execute etme; trusted main kodu/paketlerini kullan.
   simulatePromotionGate modeldir; payload bool/SHA alanı uzak yetki kanıtı değildir.
-  Aktif CI/API observer/check attester/PR writer veya atomik remote merge kurulmadı.
+  Yerel API observer ve credential’sız Docker validator src/ci altında bulunur;
+  uzak CI çalışması/check attester/PR writer veya atomik remote merge kurulmadı.
   Hesabın planı ve main enforcement görülmeden koruma başarılı sayılmaz.
 - İçerik silme/rename otomatik aktarımda kapalı; draft ile yayından kaldırma tercih edilir.
 - Kaynak rollback ile deployment rollback ayrıdır; yanlış kaynağı da düzelt.
@@ -185,3 +185,19 @@ yerel altyapı veya simülasyon yeterli değildir. Bu faz harici kurulum/yayın 
   Gerçek senaryolar CMS_ACCEPTANCE.md içinde PENDING; harici izin verilmeden çalıştırma.
 - Tüm geçmiş testleri koru. docs/CMS_ADAPTER.md teknik katmanı, CMS_ACCEPTANCE.md
   kullanıcı işlemleri/gerçek kanıt zincirini tutar. Sonraki harici faza kendiliğinden geçme.
+
+## E2 CI güven sınırı
+
+- Controller yalnız API'de doğrulanmış current main M kodu ve lockfile kullanır.
+  API GET gözlemi M/C/H/repo/owner/workflow/run/attempt ve effective rules ile bağlanır.
+  Gerçek Git nesneleri B ve izinli diff'i belirler; log/artifact/cache kanıt değildir.
+- PR diagnostics yardımcıdır; PR YAML'i değişebilir. Trusted controller workflow_run
+  sonucuna güvenmez, yalnız gerçek workflow ID/path/head ilişkisini uyanma sinyali sayar.
+  Native GitHub Actions App/check adı authority sağlamaz. Attester yokken sonuçlar
+  authoritative:false; skipped/neutral veya yeşil diagnostics required check değildir.
+- Host GITHUB_TOKEN yalnız GET için kullanılır; Docker build/runtime env'sine aktarılmaz.
+  PR kodu non-root, network:none, read-only root/bind ve capability-drop sandbox'ta kalır.
+  Teknik dependency/package script değişiklikleri v1'de ayrı quarantine gerektirdiği
+  için reddedilir. Fork PR'ları bu ilk sürümde desteklenmez.
+- M'de driver yoksa H'den fallback yoktur. İlk teknik PR ayrı incelemeli bootstrap
+  gerektirir; bu tur onu açma/merge etme. Yerel Docker kanıtı gerçek Actions run'ı değildir.

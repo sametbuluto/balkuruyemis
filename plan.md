@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **8 Kasım 2026**. Aktif durum: **Faz 4.2-E1 — Kullanıcının main-bootstrap ruleset'i API ile doğrulandı; E2 için ayrı onay bekleniyor**.
+Son güncelleme: **8 Kasım 2026**. Aktif durum: **Faz 4.2-E2 — Yerel trusted CI ve gerçek Docker doğrulaması tamamlandı; uzak run yapılmadı**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -19,23 +19,24 @@ doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte
 
 ## 2. Fazların durumu
 
-| Faz                               | Durum              | Sonuç / hedef                                                                       |
-| --------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| Faz 1 — Proje altyapısı           | Tamamlandı         | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
-| Faz 2 — Kurumsal tasarım          | Tamamlandı         | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
-| Faz 2.1 — Marka kimliği           | Tamamlandı         | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
-| Faz 3 — Statik mimari             | Tamamlandı         | Static export, Git içerik kaynakları ve dört gerçek konum                           |
-| Faz 4.1 — CMS ön hazırlık         | Yerel hazırlık     | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
-| Faz 4.2-a — Bağlantı hazırlığı    | Yerelde tamamlandı | Git ingress/merge negatif testleri, güncel izin/plan ve ilk push hazırlığı          |
-| Faz 4.2-b — İlk push ön kontrolü  | Tamamlandı         | Dış servisler kullanıcı tarafından doğrulandı; local checkpoint ac62779             |
-| Faz 4.2-c — İlk GitHub push       | Tamamlandı         | Public main ac62779; kullanıcı tarafından kabul edildi                              |
-| Faz 4.2-d — Main/CI planı         | Yerel plan         | Exact ruleset ve trusted CI güven sınırı; uzak ayar yok                             |
-| Faz 4.2-E1 — Bootstrap doğrulama  | Tamamlandı         | Kullanıcının ruleset 26805718 ayarları/effective main salt API ile doğrulandı       |
-| Faz 4.2-E2–4.5 — CI/kurulum/yayın | Başlatılmadı       | Ayrı workflow/PR/run/App/CMS/Pages yetkisi gerekir                                  |
-| Faz 5 — Gerçek varlıklar          | Başlatılmadı       | Logo ve gerçek fotoğraflar                                                          |
-| Faz 6 — Kesin bilgiler            | Başlatılmadı       | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
-| Faz 7 — Kurumsal yayın            | Başlatılmadı       | Domain/SEO/HTTPS ve yayın onayı                                                     |
-| Faz 8 — Bakım                     | Başlatılmadı       | İzleme ve iki ayrı geri alma süreci                                                 |
+| Faz                              | Durum              | Sonuç / hedef                                                                       |
+| -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
+| Faz 1 — Proje altyapısı          | Tamamlandı         | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
+| Faz 2 — Kurumsal tasarım         | Tamamlandı         | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
+| Faz 2.1 — Marka kimliği          | Tamamlandı         | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
+| Faz 3 — Statik mimari            | Tamamlandı         | Static export, Git içerik kaynakları ve dört gerçek konum                           |
+| Faz 4.1 — CMS ön hazırlık        | Yerel hazırlık     | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
+| Faz 4.2-a — Bağlantı hazırlığı   | Yerelde tamamlandı | Git ingress/merge negatif testleri, güncel izin/plan ve ilk push hazırlığı          |
+| Faz 4.2-b — İlk push ön kontrolü | Tamamlandı         | Dış servisler kullanıcı tarafından doğrulandı; local checkpoint ac62779             |
+| Faz 4.2-c — İlk GitHub push      | Tamamlandı         | Public main ac62779; kullanıcı tarafından kabul edildi                              |
+| Faz 4.2-d — Main/CI planı        | Yerel plan         | Exact ruleset ve trusted CI güven sınırı; uzak ayar yok                             |
+| Faz 4.2-E1 — Bootstrap doğrulama | Tamamlandı         | Kullanıcının ruleset 26805718 ayarları/effective main salt API ile doğrulandı       |
+| Faz 4.2-E2 — Yerel trusted CI    | Yerelde tamamlandı | Yerel workflow/observer/Docker; uzak run veya attester yok                          |
+| Faz 4.2-E3–4.5 — Kurulum/yayın   | Başlatılmadı       | Ayrı push/PR/run/App/CMS/Pages yetkisi gerekir                                      |
+| Faz 5 — Gerçek varlıklar         | Başlatılmadı       | Logo ve gerçek fotoğraflar                                                          |
+| Faz 6 — Kesin bilgiler           | Başlatılmadı       | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
+| Faz 7 — Kurumsal yayın           | Başlatılmadı       | Domain/SEO/HTTPS ve yayın onayı                                                     |
+| Faz 8 — Bakım                    | Başlatılmadı       | İzleme ve iki ayrı geri alma süreci                                                 |
 
 ## 3. Faz 1 — Neler yapıldı?
 
@@ -1975,3 +1976,115 @@ Bu kontroller gerçek GitHub enforcement testi değildir. Main-bootstrap çekird
 ayarlarındaki makine fark listesi boş; stale-review/conditional alanlar WARNING.
 Son durum GET tekrarında aynı ruleset/effective rules/SHA doğrulanır; ayar değişimi
 veya E2 uygulaması yapılmaz. Local main ac62779, belgeler uncommitted kalır.
+
+## 26. Faz 4.2-E2 — Yerel trusted GitHub Actions CI
+
+### 26.1. Yetki ve başlangıç
+
+8 Kasım 2026. E1 kabul edildi; yalnız yerel workflow/driver geliştirme, teknik branch
+ve başarılı yerel commit yetkisi verildi. Push, PR, GitHub run/ayar, required check,
+App/token/secret, CMS/davet, Cloudflare ve otomatik merge/yayın yetkisi verilmedi.
+Kaynak/diff başlangıcı `/private/tmp/bal-phase42e2/source-before.tar.gz` ve before.diff.
+
+main ve origin/main ac62779e3a5a8ad0de76dd4c040c32387bd1c474 olarak korundu.
+`chore/trusted-ci-bootstrap` oluşturuldu; önceden commit edilmemiş D/E1 belgeleri
+ayrı `cd9c1c62b6576cabdf5d3b6cd5888fa9fbb06b26` checkpoint'inde kaydedildi.
+Önce/sonra GET: Public repo, active main-bootstrap 26805718, aynı üç effective kural,
+bypass=[]; yalnız uzak main ref'i, workflow 0, deployment 0. Ruleset JSON'u birebir aynı.
+Python CA deposu bir GET denemesini durdurdu; TLS gevşetilmeden Node HTTPS ile doğrulandı.
+
+### 26.2. Uygulama
+
+İki yerel YAML: pr-diagnostics ve trusted-candidate. scripts/ci observer/validator
+wrapper'ları ve src/ci API/Git/content/sandbox/probe/inside katmanları eklendi.
+Mevcut publishing policy, Git blob envanteri, CMS adaptörü ve canonical üç yönlü
+merge yeniden kullanılır; ikinci içerik kaynağı veya yeni dependency oluşturulmadı.
+M/C/H API'den, B gerçek Git nesnelerinden gelir. Sonunda tekrar API drift denetimi
+vardır. Kod/workflow/env/dependency, bozuk JSON/ref/medya, merge conflict ve stale
+kimlik içerik doğrulamasını geçemez. Ayrıntılar TRUSTED_CI_IMPLEMENTATION.md içinde.
+
+Host job yalnız read token ile API GET yapar. PR kodu credential'sız non-root,
+network:none, readonly root/Git mount ve cap-drop Docker sınırında kalır. Onaylı
+M dependency'leri tmpfs'e kopyalanır; tool cache'i host/imaj üstüne yazmaz. Action
+SHA'ları ve MCR image digest'i resmî kaynaklardan doğrulandı, provenance.json'a
+kaydedildi. Setup-node otomatik cache'i dahil tüm cache kullanımı kapalıdır.
+
+Native diagnostics/check yeşili authority değildir; aynı isim/App spoofing, skipped,
+neutral ve eski SHA sonucu yayın izni üretmez. V1'de candidateCommitSha null,
+authoritative/checkWritten false; attester/writer/merge yoktur. Fork ve teknik
+package/lock değişiklikleri ayrı quarantine gerektirdiğinden v1'de reddedilir.
+M'de driver yokken H'den fallback yok; ilk teknik PR ayrı incelemeli bootstrap ister.
+
+### 26.3. Koruma ve doğrulama kaydı
+
+Mevcut içerik, UI, CMS/publishing, eski testler, paket/lock, strict TS, Next ve .pages
+kaynaklarından 164 dosya baseline ile byte eşit; iki eski test yalnız içerik beklentilerinin
+CMS ile düzenlenebilir olması için güncellendi. Dört koordinat aynı. Değişen mevcut
+teknik dosyalar tsconfig.media.json (CI derleme girişi) ve vitest.config.ts (dosya
+paralelliği kapalı, Git/görsel işlemleri için testTimeout 15 saniye). Assertion
+kapıları korunur; zaman bütçesi 5 saniyeyi aşan gerçek Git/decode işlemlerine göre
+ayarlanır. Hero unit ve ana sayfa E2E sabit metin yerine yayınlanan JSON
+başlık/CTA alanlarını denetler; test amacı ve senaryo sayısı korunur.
+
+İlk eşzamanlı Docker build/host QA turunda üç, ikinci serial host turunda bir eski/Git
+fixture 5 saniye timeout verdi. Son test sonuçları kalite raporuna ayrı kaydedilir;
+bu erken turlar başarılı sayılmaz. Docker ilk gerçek koşuda izolasyon probe'unu geçti,
+Vite readonly dependency cache yazmasında durdu; onaylı dependency'lerin geçici tmpfs
+kopyasıyla düzeltildi. Kopyada /work/node_modules yolu, relative .bin symlink
+koruması ve yalnız /work için exec gerekir; /tmp noexec, nosuid/nodev ve readonly
+host sınırları korunur. Sonraki gerçek koşuda 507 test geçti, fakat canonical JSON
+anahtar sırası CMS config eşitliğini bozdu. Karşılaştırma yalnız fields sırasını ve
+nesne anahtar sırasını önemsiz sayacak şekilde düzeltildi; tüm alan değerleri
+ve upstream schema/hash denetimi korunur. Dört regresyon testi eklendi; .pages.yml
+değişmedi. Host yeniden kontrolü 511/511, CMS config, build ve HTTP geçti.
+Docker Node 26.13.0, workflow host Node 24.22.2 ve yerel host Node 20.20.0
+ölçümleri birbirinden ayrılır; tümü mevcut engine aralığında. Kaynak veya host
+mount yazılabilir yapılmadı.
+
+Kanıt/loglar `/private/tmp/bal-phase42e2/`; preservation.json, remote-before/after.json,
+audit ve QA logları oradadır. Docker fixture'ları ayrı geçici Git reposundadır;
+sentetik metin/görseller gerçek içeriğe yazılmaz. ARM macOS üzerinde amd64 emülasyonu
+native Ubuntu GitHub runner testi sayılmaz. Güncel toplu sonuç QUALITY_REPORT'tadır.
+
+### 26.4. Sonraki ayrı izinler — başlatılmadı
+
+Teknik branch push'u ve teknik PR için ayrı açık onay gerekir. İlk PR diff'i ve
+bootstrap ayrı incelenir; M'de driver yokken PR script'i hostta çalıştırılmaz.
+Gerçek GitHub workflow/run/attempt/SHA, Docker native runner, bağımsız dar attester,
+exact candidate commit/tree ve required check geçişi sonraki işlerdir. Ruleset'e
+henüz olmayan context eklenmez; main koruması gevşetilmez. Content-edit/CMS kurulumu,
+Ali Bey daveti ve gerçek Cloudflare kabulü bu turda yapılmaz. E3'e geçilmedi.
+
+E2 kod commit'i: `d4f5538da2fd8c1cf1e465b9e54d3a67ab9e1150` —
+feat: add read-only trusted CI observers and isolated validation. Önceki checkpoint
+cd9c1c6 ve main ac62779 korunur. Belgeler ayrı commit'e alınır.
+Son host npm run check 512/512, CMS config, static export 67 ve HTTP 3/3 geçti.
+86 yeni CI testi vardır; 426 önceki test senaryosu korunur. Docker tam koşusu
+511 testlik snapshot'tadır; son nullable config metadata testi ayrıca aynı
+Linux Node26 imajında 5/5 hedefli doğrulandı. Tek-worker E2E, mevcut PID/memory
+limitlerini değiştirmeden çalışır; eski 5-worker koşusunda pids.events max=185,
+OOM=0 gözlendi. Yerel gitref'ler ve gerçek uygulama kaynakları korunur.
+
+### 26.5. Kesin sonuç ve teslim
+
+PASS: host npm run check 512/512 Vitest (31 dosya), strict/lint/Prettier/CMS config,
+67 dosya statik export ve 3/3 HTTP; host Chrome 51/51, round-trip PASS, candidate
+2/2 ve media 5/5. Gerçek Docker tam reçetesi 511 Vitest/51 Chrome + aynı build/HTTP
+ve CMS/candidate/media adımlarını geçti. Son saf optional CMS metadata düzeltmesi
+Linux Node26 üzerinde ayrıca 5/5, tüm host suite 512/512 ile doğrulandı.
+Docker fixture: /var/folders/wx/ytc9nkq5201247n6818stsd80000gn/T/bal-ci-runtime-plNDxF.
+Non-root/no-token/readonly/cap-drop/seccomp/network-denied probe PASS; Git ref'leri
+aynı, sadece oluşturduğu container/tag temizlendi. Gerçek GitHub run değildir.
+
+WARNING: actual GitHub workflow/run/token izinleri, native Ubuntu runner, App/attester,
+exact candidate commit ve required checks/otomatik aktarım kanıtlanmadı. Son code
+commit sonrası reachable history audit 11 commit / 419 blob, bulgu 0; kaynak raster 0.
+Mevcut dev lint zincirinde npm audit 8 moderate (exit 1), high/critical 0; force fix
+yapılmadı. Son QA reçetesinde açık FAIL yok. İlk başarısız denemeler kanıtlarda korunur.
+
+Final GET: Public main ac62779, yalnız uzak main ref'i, workflow/deployment 0; ruleset
+26805718 ve effective üç kural başlangıçla birebir aynı/bypass=[]. Hiçbir uzak
+mutasyon yapılmadı. Belgeler ayrı `docs: record trusted CI implementation and runtime evidence`
+commit'ine alınır; nihai HEAD teslim yanıtında raporlanır. E3/push/PR/run/App/CMS
+ve deployment başlatılmadı. Teknik branch push'u/PR ve sonraki kurulumlar için ayrı
+açık onay beklenir. Ali Bey'in gerçek CMS→Cloudflare üç kabul akışı hâlâ PENDING.

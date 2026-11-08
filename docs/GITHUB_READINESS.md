@@ -1,5 +1,11 @@
 # Faz 4.2-a — GitHub ve gerçek Pages CMS bağlantı hazırlığı
 
+**8 Kasım 2026 / E2 güncellemesi:** Yerel workflow/GET observer/Git gate/Docker
+validator uygulaması [TRUSTED_CI_IMPLEMENTATION](TRUSTED_CI_IMPLEMENTATION.md)
+içinde kayıtlıdır. Main-bootstrap değişmedi; uzak workflow/run, attester, required
+check ve otomatik aktarım kurulmadı. Yerel ve gerçek GitHub kabulü ayrıdır.
+Aşağıdaki E1 ve daha eski bölümler tarihsel aşamaların kayıtlarıdır.
+
 7 Kasım 2026. **Salt okunur uzak kontroller + yerel hazırlık. Push, görünürlük/App/
 davet/secret/Cloudflare değişikliği yapılmadı.** Bu belge otomasyonun kurulmuş olduğu
 anlamına gelmez. Tasarım [AUTOMATION_DESIGN](AUTOMATION_DESIGN.md), gerçek panel

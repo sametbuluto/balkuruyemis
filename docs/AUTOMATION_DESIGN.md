@@ -1,5 +1,11 @@
 # Güvenli içerik yayını — Faz 4.2-a hazırlığı
 
+**8 Kasım 2026 / E2 güncellemesi:** Yerel workflow/GET observer/Git gate/Docker
+validator uygulaması [TRUSTED_CI_IMPLEMENTATION](TRUSTED_CI_IMPLEMENTATION.md)
+içinde kayıtlıdır. Main-bootstrap değişmedi; uzak workflow/run, attester, required
+check ve otomatik aktarım kurulmadı. Yerel ve gerçek GitHub kabulü ayrıdır.
+Aşağıdaki E1 ve daha eski bölümler tarihsel aşamaların kayıtlarıdır.
+
 7 Kasım 2026. **Yerel Git/candidate araçları ve negatif testler çalışır; GitHub
 Actions/korumalar/App tokenları ve Cloudflare kurulmadı.** Gerçek kurulum kapıları
 [GITHUB_READINESS](GITHUB_READINESS.md) içinde. Normal site static export kalır.

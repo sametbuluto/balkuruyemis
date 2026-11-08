@@ -184,3 +184,13 @@ plan §24, MAIN_PROTECTION_PLAN ve TRUSTED_CI_PLAN. Yerel belgeler uncommitted;
 
 Yerel belgeler uncommitted; çalışma kaydı plan §25 ve MAIN_BOOTSTRAP_VERIFICATION.
 Bu tur uzak ayar veya yeni workflow/commit oluşturulmadı.
+
+## Faz 4.2-E2 — Yerel trusted CI
+
+- Yerel teknik branch üzerinde iki workflow, read-only API observer, gerçek Git
+  data-only gate ve credential'sız Docker doğrulayıcı hazırlandı.
+- Native check'ler authority değildir; App/attester, exact candidate commit,
+  gerçek GitHub run/required check ve otomatik aktarım henüz yok.
+- Push/teknik PR/merge/Actions ayarı ve sonraki E3 ayrıca açık onay gerektirir.
+
+Ayrıntı: [TRUSTED_CI_IMPLEMENTATION](TRUSTED_CI_IMPLEMENTATION.md), master plan §26.
