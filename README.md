@@ -314,3 +314,22 @@ PUSH_AUTHORIZED=NO kalır. Authentication/dry-run henüz çalıştırılmadı.
 [Güncel kontrol ve main-only plan](docs/PUSH_PREFLIGHT.md),
 [son kalite raporu](docs/QUALITY_REPORT.md), master plan §22.9 güncel kayıtlardır.
 Yeni tam HEAD teslim yanıtında/git log'da raporlanır; önceki UNKNOWN kayıtları tarihseldir.
+
+## Faz 4.2-d — Main/CI planı
+
+İlk push kabul edildi; main ac62779e3a5a8ad0de76dd4c040c32387bd1c474 yerel/uzak eşit.
+Main koruması veya workflow henüz yok. Bu tur yalnız
+[main ruleset planı](docs/MAIN_PROTECTION_PLAN.md),
+[trusted CI sözleşmesi](docs/TRUSTED_CI_PLAN.md) ve
+[başlangıç JSON payload'u](docs/github/main-bootstrap.ruleset.json) hazırlandı.
+Dosyalar yerel öneridir; .github/workflows oluşturulmadı, yeni push/ayar yok.
+Yeni ayarlar veya CI yayını için ayrı açık onay gerekir. Public/Free hedefi korunur;
+hesap API'sindeki pro gözlemi ve gerçek admin yetkisi plan/kalite raporunda ayrıdır.
+
+## Faz 4.2-E1 — Main bootstrap doğrulaması
+
+Kullanıcının kurduğu main-bootstrap ruleset'i **26805718** ID ile gerçek API'den
+Active/etkin doğrulandı; main protected=true, bypass=[]/admin=never, approvals=0.
+Required CI henüz yok. Yerel/uzak main ac62779 aynı. Stale-review farkı dahil
+[doğrulama ve E2 geliştirme planı](docs/MAIN_BOOTSTRAP_VERIFICATION.md) güncel kayıttır.
+Salt okunur inceleme yapıldı; ruleset/workflow/push/PR/hesap/deployment değiştirilmedi.

@@ -7,20 +7,21 @@ Bu dosya proje kökünün ve tüm alt klasörlerin geliştirme kurallarını tan
 
 - Proje bir kurumsal tanıtım sitesidir. Sepet, ödeme veya sipariş ekleme.
 - Güncel ürün kararı Master Prompt V5.0'dır; önceki CMS yasağını değiştirir.
-- Faz 3 ve 4.1-a/b/c1/c2/c3/c4/c5 kabul edildi. Kabul edilen teknik checkpoint aa1ea3e.
-  Aktif kapsam Faz 4.2-b ilk push öncesi son kontrol ve yerel belgelerdir.
-  Kesin karar Public repository + GitHub Free; Pro/Team yükseltmesi yok.
-  Dış servis yokluğu kullanıcı UI doğrulamasıyla tamamlandı; yerel belge commit
-  yetkisi verildi. Remote/dry-run hazırlığı incelenir; gerçek push ve dış kurulum
-  yapılmaz. Yeni HEAD için ayrıca açık ilk push izni beklenir.
-  Deployment tetikleyicisi doğrulanamazsa PUSH_READY=BLOCKED, DEPLOYMENT_TRIGGER=UNKNOWN.
-  Tam SHA için ayrı açık push onayı bekle; 4.2-c'ye kendiliğinden geçme.
+- Faz 4.2-c ilk push kabul edildi; local/remote main ac62779e3a5a8ad0de76dd4c040c32387bd1c474.
+  Aktif kapsam yalnız Faz 4.2-E1: kullanıcının kurduğu main-bootstrap ruleset'ini
+  GET/detail/effective-main ile salt okunur doğrula ve E2 planını hazırla.
+  Gözlenen ruleset 26805718 Active, hedef refs/heads/main, bypass=[], admin bypass=never;
+  approvals=0, deletion/non_fast_forward/pull_request etkin. Stale review temizliği
+  false; önceki true taslağından farkı raporla, otomatik değiştirme.
+  Public + Free özellik sınırı korunur. Ruleset/Actions ayarı, workflow/script,
+  branch/commit/push/PR/run, App/token/CMS/davet/deployment başlatma/değiştirme.
+  Önceki uncommitted belgeleri koru; E2 uygulaması için ayrı açık onay bekle.
 - Hedef: hosted Pages CMS + GitHub + Actions + Cloudflare Pages. Site static export
   kalır; uygulamaya DB/PostgreSQL/Prisma/özel API/custom admin kurulmaz. CMS hizmetinin
   kendi kimlik doğrulaması/veri altyapısı bu yasakla karıştırılmaz.
 - Bu tur tasarım değiştirme; ürün/fotoğraf/logoları uydurma. Logo ve gerçek medya Faz 5,
   kesin şube/sosyal bilgiler Faz 6, domain/SEO Faz 7, bakım/rollback Faz 8 hedefidir.
-- Plan ve rapor kaynakları: plan.md §22, docs/PUSH_PREFLIGHT.md, docs/CMS_SETUP.md, SECURITY.md,
+- Plan ve rapor kaynakları: plan.md §25, docs/MAIN_BOOTSTRAP_VERIFICATION.md, docs/TRUSTED_CI_PLAN.md, SECURITY.md,
   DEPLOYMENT.md, ROLLBACK.md ve EDITOR_GUIDE.md. PHASE4_PLAN eski görsel plandır.
 - Push, CMS App yetkilendirmesi, hesap/davet/izin, GitHub ayarları, ödeme/domain ve
   deployment ayrı kullanıcı onayı gerektirir. Salt okunur bağlantı incelemesi yapılabilir.

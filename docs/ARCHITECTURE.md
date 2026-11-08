@@ -8,7 +8,7 @@ mimarisine taşıdı; 4.1-c2 dört şubeyi de JSON kaynağına aldı.** Galeri c
 Bugün kategori/ürün/şube/galeri JSON → strict Node/RSC loader → published server props → statik
 sayfa/client filtresi akışı kullanılır. Üretilmiş manifest bu pilotta gerekmemiştir. Diğer türlere
 geçiş ayrı 4.1-c işleridir. Detaylar [CMS_SETUP](CMS_SETUP.md), [CONTENT_GUIDE](CONTENT_GUIDE.md)
-ve [SECURITY](SECURITY.md); ana kayıt plan.md §22. Güvenlik policy kodu hâlâ aktif CI değildir.
+ve [SECURITY](SECURITY.md); ana kayıt plan.md §25. Güvenlik policy kodu hâlâ aktif CI değildir.
 
 Aşağıdaki Faz 3/2.1 kayıtları tarihsel olarak korunur; önceki CMS yasağı ve V5'in
 ilk aşamasındaki manifest önerisi güncel kategori pilotunun önüne geçmez.
@@ -426,3 +426,26 @@ Public ve boş. Yalnız belge checkpoint'i oluşturulur; uygulama/JSON/test/conf
 mimarisi değişmez. PUSH_READY teknik hazır oluşu, PUSH_AUTHORIZED ayrı kullanıcı
 iznini belirtir. Actual auth/dry-run ve tüm dış kurulumlar bekler. Güncel sözleşme
 PUSH_PREFLIGHT ve plan §22.9'dur; eski UNKNOWN bulguları tarihsel olarak korunur.
+
+## Faz 4.2-d — Planlanan iki aşamalı güven sınırı
+
+Başlangıç Active main ruleset: PR zorunlu, approvals=0, deletion/non-fast-forward
+engeli, bypass=[]; hayalî required check yok. Tam aşama, bağımsız güvenilir App
+kaynaklı exact-H check/strict güncellik ve teknik onay sınırı ister. Ortak verdict
+bal/trusted-validation henüz öneridir; eski content simülatörünün context'i bu tur
+değişmedi. Workflow_run sinyali trusted main controller'ı uyandırır; H/C kodu
+attester'da çalışmaz. Content M lockfile/driver + strict veridir; teknik kod ayrı
+credential'sız sandbox ve inceleme ister. Native PR job yeşili kaynak kanıtı değildir.
+
+Plan MAIN_PROTECTION_PLAN/TRUSTED_CI_PLAN ve docs/github/main-bootstrap.ruleset.json
+altında; gerçek .github workflow'u/API connector veya uygulama değişikliği yok.
+Main canary testleri henüz yapılmadı; salt API gözlemi gerçek push reddi sayılmaz.
+
+## Faz 4.2-E1 — Etkin bootstrap, CI henüz yok
+
+Kullanıcı main-bootstrap ruleset'ini oluşturdu. Salt GET doğrulaması ID 26805718,
+active, exact main, bypass=[]/admin never ve üç effective rule'ü kanıtladı.
+Stale approval dismiss=false; taslak true önerisi değişmedi, gerçek fark ayrı
+raporlandı. Branch protected=true; classic protection 404 ruleset'i geçersiz kılmaz.
+Uygulama/JSON/şube/medya mimarisi değişmedi; required CI/source attester hâlâ plan.
+MAIN_BOOTSTRAP_VERIFICATION E2 küçük adımları ve ayrı izin kapılarını tutar.

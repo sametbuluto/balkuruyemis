@@ -5,6 +5,26 @@ davet/secret/Cloudflare değişikliği yapılmadı.** Bu belge otomasyonun kurul
 anlamına gelmez. Tasarım [AUTOMATION_DESIGN](AUTOMATION_DESIGN.md), gerçek panel
 kabulü [CMS_ACCEPTANCE](CMS_ACCEPTANCE.md) içinde.
 
+## Faz 4.2-E1 — Kullanıcının kurduğu gerçek bootstrap doğrulandı
+
+8 Kasım 2026 GET: ruleset **26805718** main-bootstrap Active; exact main, bypass=[],
+mevcut admin current_user_can_bypass=never. Effective main'de deletion,
+non_fast_forward ve pull_request(approvals=0); branch protected=true. Local/remote
+SHA ac62779 aynı. Required check/workflow yok. Stale-review false taslaktan farklı
+ve WARNING; değiştirilmedi. Bu güncel kayıt eski korunmuyor ifadelerinden önceliklidir.
+[Gerçek doğrulama/E2 planı](MAIN_BOOTSTRAP_VERIFICATION.md). Salt okuma dışında
+uzak işlem veya E2 implementasyonu yapılmadı.
+
+## Faz 4.2-d — Güncel güvenlik yapılandırma planı
+
+Faz 4.2-c ilk push kabul edildi; yerel/uzak main **ac62779e3a5a8ad0de76dd4c040c32387bd1c474**.
+Yeni GET incelemesinde admin rolü doğrulandı; main protected=false, effective rules/
+rulesets/workflow listeleri boş. Actions açık, default token read ve PR approval
+false. /user.plan.name=pro gözlendi; ücret kanıtı veya Free hedefinden sapma değildir.
+Hiçbir hesap/uzak ayar değiştirilmedi. Güncel [MAIN_PROTECTION_PLAN](MAIN_PROTECTION_PLAN.md)
+ve [TRUSTED_CI_PLAN](TRUSTED_CI_PLAN.md) önceki boş-repo/push-bekliyor ifadelerinden
+önceliklidir. Başlangıç payload'u yalnız yerel docs/github altındadır; uygulanmadı.
+
 ## Faz 4.2-b — Son dış servis doğrulaması ve commit hazırlığı
 
 Ürün sahibi webhook'ların boşluğunu, Railway/Vercel Apps'in kaldırıldığını ve

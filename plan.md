@@ -1,6 +1,6 @@
 # BAL KURUYEMİŞ — Master uygulama ve faz planı
 
-Son güncelleme: **7 Kasım 2026**. Aktif durum: **Faz 4.2-b — Dış servisler kullanıcı tarafından doğrulandı; son yerel kontroller başarılı, belge checkpoint adayı; gerçek push izni bekleniyor**.
+Son güncelleme: **8 Kasım 2026**. Aktif durum: **Faz 4.2-E1 — Kullanıcının main-bootstrap ruleset'i API ile doğrulandı; E2 için ayrı onay bekleniyor**.
 
 Bu belge her fazda güncellenir. Yapılan işler, sıradaki işler, teknik kararlar,
 doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte tutulur.
@@ -19,20 +19,23 @@ doğrulama sonuçları, içerik eksikleri ve kapsam sınırları burada birlikte
 
 ## 2. Fazların durumu
 
-| Faz                              | Durum              | Sonuç / hedef                                                                       |
-| -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| Faz 1 — Proje altyapısı          | Tamamlandı         | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
-| Faz 2 — Kurumsal tasarım         | Tamamlandı         | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
-| Faz 2.1 — Marka kimliği          | Tamamlandı         | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
-| Faz 3 — Statik mimari            | Tamamlandı         | Static export, Git içerik kaynakları ve dört gerçek konum                           |
-| Faz 4.1 — CMS ön hazırlık        | Yerel hazırlık     | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
-| Faz 4.2-a — Bağlantı hazırlığı   | Yerelde tamamlandı | Git ingress/merge negatif testleri, güncel izin/plan ve ilk push hazırlığı          |
-| Faz 4.2-b — İlk push ön kontrolü | Kontrol tamamlandı | Public/Free; tetikleyici UNKNOWN, PUSH_READY BLOCKED; henüz push izni yok           |
-| Faz 4.2-c–4.5 — Gerçek CMS/yayın | Başlatılmadı       | Koruma/CI/App/Pages ve gerçek kabul; ayrı yetki gerekir                             |
-| Faz 5 — Gerçek varlıklar         | Başlatılmadı       | Logo ve gerçek fotoğraflar                                                          |
-| Faz 6 — Kesin bilgiler           | Başlatılmadı       | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
-| Faz 7 — Kurumsal yayın           | Başlatılmadı       | Domain/SEO/HTTPS ve yayın onayı                                                     |
-| Faz 8 — Bakım                    | Başlatılmadı       | İzleme ve iki ayrı geri alma süreci                                                 |
+| Faz                               | Durum              | Sonuç / hedef                                                                       |
+| --------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
+| Faz 1 — Proje altyapısı           | Tamamlandı         | Next.js, tasarım temeli, temel rotalar, testler ve yerel Git                        |
+| Faz 2 — Kurumsal tasarım          | Tamamlandı         | Ana sayfa bölümleri, kategori arayüzü, örnek şubeler, galeri ve iletişim            |
+| Faz 2.1 — Marka kimliği           | Tamamlandı         | Tabela kimliğiyle uyumlu kırmızı/siyah/beyaz görsel revizyon ve kalite düzeltmeleri |
+| Faz 3 — Statik mimari             | Tamamlandı         | Static export, Git içerik kaynakları ve dört gerçek konum                           |
+| Faz 4.1 — CMS ön hazırlık         | Yerel hazırlık     | Audit, uyum/risk planı ve testli izin politikası; dış entegrasyon yok               |
+| Faz 4.2-a — Bağlantı hazırlığı    | Yerelde tamamlandı | Git ingress/merge negatif testleri, güncel izin/plan ve ilk push hazırlığı          |
+| Faz 4.2-b — İlk push ön kontrolü  | Tamamlandı         | Dış servisler kullanıcı tarafından doğrulandı; local checkpoint ac62779             |
+| Faz 4.2-c — İlk GitHub push       | Tamamlandı         | Public main ac62779; kullanıcı tarafından kabul edildi                              |
+| Faz 4.2-d — Main/CI planı         | Yerel plan         | Exact ruleset ve trusted CI güven sınırı; uzak ayar yok                             |
+| Faz 4.2-E1 — Bootstrap doğrulama  | Tamamlandı         | Kullanıcının ruleset 26805718 ayarları/effective main salt API ile doğrulandı       |
+| Faz 4.2-E2–4.5 — CI/kurulum/yayın | Başlatılmadı       | Ayrı workflow/PR/run/App/CMS/Pages yetkisi gerekir                                  |
+| Faz 5 — Gerçek varlıklar          | Başlatılmadı       | Logo ve gerçek fotoğraflar                                                          |
+| Faz 6 — Kesin bilgiler            | Başlatılmadı       | Şube kimlik/adres/saat ve sosyal hesaplar                                           |
+| Faz 7 — Kurumsal yayın            | Başlatılmadı       | Domain/SEO/HTTPS ve yayın onayı                                                     |
+| Faz 8 — Bakım                     | Başlatılmadı       | İzleme ve iki ayrı geri alma süreci                                                 |
 
 ## 3. Faz 1 — Neler yapıldı?
 
@@ -1771,3 +1774,204 @@ commit'i sonrası final audit/temiz ağaç kontrol edilir ve tam SHA teslim edil
 Teknik PUSH_READY=YES ile PUSH_AUTHORIZED=NO ayrıdır; sonraki işlem yalnız açık
 ilk push onayını bekler. Bu görevde izole candidate export veya yeni tarayıcı
 motoru/hosted CMS/deployment testleri yeniden çalıştırılmadı.
+
+## 23. Faz 4.2-c — Kabul edilen ilk GitHub push kaydı
+
+Kullanıcı yalnız ac62779e3a5a8ad0de76dd4c040c32387bd1c474 main commit'i için tek ilk
+push yetkisi verdi. Clean main/SHA/Public/boş refs ve reachable audit yeniden geçti.
+Origin doğru HTTPS hedefe eklendi. Gerçek main:main dry-run başarılı; koşullar yeniden
+GET/ls-remote ile denetlenip yalnız main normal push ile oluşturuldu. Geçici pre-push
+hook gerçek advertised remote SHA'nın sıfır ve local SHA'nın onaylı olması şartını
+kontrol etti; başka ref/force/tag/mirror yoktu, hook kalıcı config'e yazılmadı.
+
+Sonuç: uzak main=yerel ac62779; HEAD→main; başka dal/tag yok. GitHub recursive ağacın
+220 dosyası/sha/mode'u onaylı local tree ile eşit, forbidden path yok. 9 commit/378
+reachable blob audit'inde bilinen secret/raster/EXIF/büyük/atlanmış blob bulgusu 0.
+İlk ref karşılaştırması HEAD alias'ını ek dal saymıştı; yalnız okuma karşılaştırması
+symref ayrımıyla düzeltildi, ikinci gerçek push yapılmadı. API'de rulesets/workflow/
+deployment 0, main protected=false. Çalışma ağacı temiz; yeni commit yoktu.
+Kanıt /private/tmp/bal-first-github-push-20261107/RESULT.json ve GET/log dosyalarında.
+Bu fazda plan dosyası değiştirilmedi; kullanıcı exact SHA ve yeni commit yasağını
+korumak için sonuç şimdi sonraki yetkili yerel belge işinde kaydediliyor.
+
+## 24. Faz 4.2-d — Main ruleset ve trusted CI güvenlik yapılandırma planı
+
+### 24.1. Kapsam ve gerçek salt okunur kanıt
+
+Kullanıcı 4.2-c'yi kabul etti; bu tur yalnız uygulanacak ayarlar ve CI planı istendi.
+Yerel başlangıç main/ac62779 temiz, origin doğru; uzak aynı SHA ve yalnız main/HEAD.
+Source-before.tar /private/tmp/bal-phase42d içinde. Yeni push/remote branch/PR/run,
+ruleset/Actions ayarı, App/token/secret, Pages CMS/davet veya deployment yetkisi yok.
+
+Mevcut Git credential'ı memory içinde yalnız sabit GitHub GET'lerine kullanıldı;
+değeri log/proje dosyasına yazılmadı. /user login=sametbuluto; repo.permissions
+admin/maintain/push/triage/pull=true. /user.plan.name **pro**; bu ödeme/fatura kanıtı
+değildir. Kullanıcı hedefi Public + Free; yalnız bu modelin resmî destekleri seçilir,
+plan/hesap/ücret değişikliği yapılmaz. UI admin rolü görüldü, API Administration:write
+mutasyonu denenmedi. Önceki anonim plan-bilinmiyor durumu bu gerçek GET ile güncellendi.
+
+Main protected=false; classic protection 404 Branch not protected; rulesets ve
+effective main rules 200 boş. Workflow/deployment 0. Actions enabled=true,
+allowed_actions=all, sha_pinning_required=false; default_workflow_permissions=read,
+can_approve_pull_request_reviews=false. Bunların hiçbiri değiştirilmedi.
+
+### 24.2. İncelenebilir öneriler ve kesin ayarlar
+
+Yeni docs/MAIN_PROTECTION_PLAN.md ve docs/TRUSTED_CI_PLAN.md; gerçek JSON taslağı
+docs/github/main-bootstrap.ruleset.json. Başlangıç tam ref refs/heads/main, Active,
+bypass=[], pull_request(approvals=0, stale dismiss=true, codeowner/lastpush/thread
+zorunlulukları=false), deletion ve non_fast_forward. Required status check yok;
+Restrict updates/creations veya ücretli push rule/Enterprise workflow eklenmez.
+Payload parse/alan kontrolü yereldir; GitHub server validation veya uygulanmış
+ruleset değildir. UI Settings→Rules→Rulesets→New branch ruleset; sonra gereken
+Actions/Environments yolları ilgili belgelerde tam listelidir.
+
+Başlangıç PR/force/delete engelidir, içerik güvenliği değildir. Checksiz ve sıfır
+approval aşamasında write yetkilisi PR merge edebilir; CMS/bot/Cloudflare bağlanmaz.
+Tam aşama gerçek trusted Check Run/context/App + strict + exact H ve teknik onay
+ister. Check oluşmadan hayalî ad/ID required yapılmaz. Native skipped/neutral kabulü
+kendi başına success garantisi değildir; trusted attester bu durumları success'e
+çeviremez. Ortak önerilen bal/trusted-validation iki PR türünü farklı modda inceler;
+eski content-candidate/trusted-validation yerel simülatörü bu tur değişmez.
+
+### 24.3. CI dosyaları, izinleri ve teknik/içerik ayrımı
+
+Önerilen fakat oluşturulmayan dosyalar: pr-diagnostics.yml (sırsız yardımcı PR CI),
+trusted-candidate.yml (workflow_run/main dispatch/push-main controller), ileride
+content-intake.yml sinyali ve ayrıca yetkili promote-content.yml writer. Gerçek
+.github/workflows dosyası bu tur yok. Action pinleri tam SHA olarak gelecekteki
+onaylı diff'te bağlanır; sahte sürüm/hash uydurulmaz. Linux Chrome/Node/pin/sandbox
+kurulumu gerçek CI'da henüz denenmedi.
+
+Content kontrol M kodu/M package-lock ile yalnız strict normalize C verisini alır;
+code/workflow/env değişikliği otomasyona girmez. Yerel adapter/Git ingress/3-way ve
+kimlik/verified/koordinat kapıları korunur. Teknik PR'da H kodu credential'sız
+sandbox'ta M driver'la, ayrı insan teknik inceleme akışıyla sınanır. İçerik için
+manuel approval yoktur. PR'ın değiştirdiği workflow yeşili veya ortak GitHub
+Actions App kimliği tek başına trusted kanıt olamaz.
+
+Validator permissions:{}, custom secret/environment yok; metadata controller yalnız
+gereken contents/pull-requests/actions read. Attester ayrı main-only environment ve
+ayrı dar checks:write App; writer ayrıca contents/PR write, checks/admin/bypass yok.
+Mevcut kişisel Git credential'ı CI'ya taşınmaz. Source artifact/cache/log/SHA beyanına
+güvenilmez; API/Git/run/attempt/workflow subject ve H/M/C yeniden bağlanır. App veya
+sandbox kanıtı yoksa tam otomatik kapı açılmaz; planı uygulama gibi raporlamayız.
+
+Teknik onay için exact SHA yetkili review veya tek owner/self-review sınırında
+main-ref actor doğrulamalı teknik sign-off önerildi; bu alternatifin uygulanması
+ve negatif testleri ayrı iştir. Global CODEOWNERS/label güvenliği varsayılmadı.
+
+### 24.4. Güvenli enforcement testi ve izin sınırları
+
+Main'e gerçek force/delete/değişik commit göndererek test yapılmaz. GET active
+rules/effective main/classic protection ve bypass analizi yapılandırma kanıtıdır;
+gerçek ret değildir. Ayrı açık izinli disposable canary policy/ref/PR testleriyle
+admin/force/delete/failure-check/yanlış App-SHA davranışı sınanabilir. Canary ret
+main'de gerçekleşmiş ret gibi sunulmaz. No-op/dry-run server enforcement testi değil.
+
+Kod-as-content, malformed JSON/image/category, merge conflict, stale M/C testleri
+mevcut yerel testlere dayanır; uzak enforcement henüz PENDING. Gerçek App bypass
+ret testi App kurulumu olmadan yapılmış sayılamaz. Bir kapı eksikse writer/auto-merge/
+CMS kapalı kalır; CI hatası diye koruma kaldırılmaz. Ayrı izin sırası: exact bootstrap
+ruleset → teknik branch/CI diff/commit/push/PR/run → canary/attester/environment →
+gerçek context/App/strict ruleset geçişi; sonra ayrıca CMS/davet/Cloudflare.
+
+### 24.5. Doğrulama, dosyalar ve Git
+
+Bu yerel planın son format/JSON/koruma/test sonuçları QUALITY_REPORT ve
+/private/tmp/bal-phase42d loglarında tutulur. Yeni uygulama özelliği veya test
+silme/dependency/config/veri değişikliği yok; dört koordinat korunur. AGENTS/README,
+master plan/mimari/roadmap/güvenlik/CMS/yayın/kalite belgeleri güncellenir. Yerel
+belgeler uncommitted; HEAD/local/remote main ac62779 ve dokuz commit kalır.
+Gerçek workflow veya JSON payload'u GitHub'a gönderilmedi; 4.2-e başlamaz.
+
+Son yerel sonuçlar: npm run check PASS; 426/426 Vitest (27 dosya), CMS config,
+strict/lint/Prettier, 67 dosya noindex export ve 3/3 HTTP. Chrome E2E 51/51;
+320/393/768/1280 regresyonları mevcut testlerde geçti. Ruleset JSON parse + yerel
+ayar invariant'ları PASS, GitHub server schema/enforcement testi yapılmadı.
+200 korunan kaynak byte eşit ve gerçek .github/workflows yok. Yerel Git main
+ac62779 aynı; plan değişiklikleri uncommitted. Son uzak read-only kontrol ve
+koruma raporu QA dizinindedir. App/secret/canary/required checks/teknik sign-off
+ve CI sandbox uygulamaları bu turun sonucu değildir. Tek bir main/source atomik
+kilidi varsayılmadı; queue/eski run/son source ve strict base testleri gelecekte gerekir.
+
+## 25. Faz 4.2-E1 — Gerçek main-bootstrap ruleset doğrulaması
+
+8 Kasım 2026: kullanıcı main-bootstrap ruleset'ini kurduğunu bildirdi. Bu görev
+salt okunur doğrulama ve E2 geliştirme planıdır; yeni uzak ayar veya E2 uygulaması
+yetkisi yok. Önceki 4.2-d uncommitted belgeleri ve uygulama korundu. Git main/HEAD
+ac62779e3a5a8ad0de76dd4c040c32387bd1c474; origin doğru, remote SHA eşit.
+
+### 25.1. Gerçek GitHub kanıtı
+
+Repo ID 1439737232 Public. Yetkili mevcut Git kimliği yalnız GET için kullanıldı,
+credential değeri log/projeye yazılmadı. Ruleset listesinde yalnız **26805718**
+main-bootstrap; detail 200 active/branch, source doğru repo. Conditions include
+refs/heads/main, exclude=[]; bypass_actors=[] ve current_user_can_bypass=never.
+Branch API protected=true. Effective rules endpoint'i deletion/non_fast_forward/
+pull_request üçlüsünü aynı ruleset ID ile döndürdü. PR required approvals=0,
+required_reviewers=[], Code Owner/last push approval/thread resolution false.
+Required status check/restrict updates/restrict creations veya başka kural yok.
+
+Classic protection GET 404 Branch not protected döndürdü; bu endpoint farklı
+koruma türüdür. Ruleset detail + protected flag + effective rules kanıtı nedeniyle
+koruma yokluğu diye raporlanmadı. Workflow/deployment 0; ls-remote yalnız main ve
+HEAD→main. Force/delete/different-commit push/no-op/dry-run testi yapılmadı; API
+koruma konfigürasyonu canlı ret deneyi değildir.
+
+### 25.2. Eksik ve beklenmeyen alan analizi
+
+Çekirdek kullanıcı gereksinimi eksiksiz. Önceki yerel taslağın
+**dismiss_stale_reviews_on_push=true** alanı gerçekte **false**. Approval=0 olduğu
+şimdiki bootstrap için engel değil; teknik onayın ileride exact SHA'ya bağlanması
+ve eski review'a güvenilmemesi gerekir. Bu fark WARNING ve otomatik düzeltilmedi;
+docs/github/main-bootstrap.ruleset.json taslak olarak aynı kaldı.
+
+API ayrıca require_extra_approval_for_unattributed_changes=true (nonzero approval
+count koşulunda anlamlı), allowed_merge_methods=[merge,squash,rebase] ve
+required_reviewers=[] döndürdü. Şu an ek insan onayı gerektirmiyor. İleride review
+ayarları değişirse conditional alan yeniden değerlendirilmeli. H ile merged main
+SHA'sı farklı olabildiğinden tree/kanıt zinciri gereği korunur.
+
+### 25.3. Bootstrap sınırı ve E2 planı
+
+Bootstrap doğrudan main yazma/force/delete engeli olarak aktif yapılandırılmıştır;
+required CI değildir. Approvals=0/check yokken yetkili aktör bozuk/başarısız testli
+PR merge edebilir. Adminin policy ayarı değiştirme yetkisi ortadan kalkmaz. CMS/
+automatic writer/Cloudflare bağlanmaz; App bypass reddi henüz canlı test değildir.
+
+Yeni MAIN_BOOTSTRAP_VERIFICATION.md gerçek alanları, farkları ve somut E2 sırasını
+tutar. E2 önerisi: ayrı chore/trusted-ci-bootstrap branch'i (ayrı izin), mevcut
+belgeleri koruyarak CI driver/wrapper ve ilk iki YAML'i yerelde hazırlama; M kodu/
+M lockfile, read-only metadata, sırsız validator, full-SHA action pin/Chrome-Linux
+reçetesi. Teknik değişiklikler ayrı sandbox ve SHA bağlı inceleme; data-only yolu
+trusted schema/media/kimlik kapısından geçer. Gerçek workflow main'e teknik PR ile
+alınır; sonra run/attempt/workflow/app/head kanıtı görülür. Context/App/strict geçişi
+ve dar attester kurulumu ayrıca yetki ister; native untrusted job yeşili trusted
+verdict sayılmaz. Henüz content-edit/CMS branch'i veya yeni App şartı kurulmaz.
+
+E2 için izin yerel uygulama, commit/branch/push/PR/run kapsamlarını açıkça ayırmalı.
+Gerçek check oluşmadan ruleset 26805718'e required context eklenmez. Ali Bey'in
+content save akışında manuel teknik onay/JSON/terminal/piksel ihtiyacı yaratılmaz.
+Bu görevde hiçbir E2 script/YAML/PR/branch veya deployment oluşturulmadı.
+
+### 25.4. Doğrulama, Git ve teslim
+
+API yanıtları/önceki diff/status, observed-summary ve verification.json
+/private/tmp/bal-phase42e1-20261108 altında. Yerel makine karşılaştırması çekirdek
+alanlarda PASS; stale-review ve conditional default alanları WARNING. 200 korunan
+kaynak byte eşit; .pages/paket/strict/veri/tasarım ve dört koordinat değişmedi.
+Önceki uncommitted belgeler korundu; yeni doğrulama kaydı ve plan/rehberler güncellendi.
+Local/remote commit ve Git history değişmedi; yeni commit/push/ayar yok.
+
+Bu görevin yeniden çalıştırılmış yerel QA sonuçları QUALITY_REPORT ve QA loglarında
+ayrı tutulur. Uygulama testleri gerçek GitHub enforcement olarak sunulmaz. Sonraki
+E2 veya ruleset değişikliği ayrıca açık kullanıcı onayını bekler.
+
+E1 son yerel QA: npm run check PASS; 426/426 Vitest (27 dosya), CMS config,
+strict/lint/Prettier, 67 dosya noindex static export ve 3/3 HTTP; Chrome E2E 51/51
+(320/393/768/1280 regresyonları). Son belge format/whitespace kontrolü geçti.
+Bu kontroller gerçek GitHub enforcement testi değildir. Main-bootstrap çekirdek
+ayarlarındaki makine fark listesi boş; stale-review/conditional alanlar WARNING.
+Son durum GET tekrarında aynı ruleset/effective rules/SHA doğrulanır; ayar değişimi
+veya E2 uygulaması yapılmaz. Local main ac62779, belgeler uncommitted kalır.
