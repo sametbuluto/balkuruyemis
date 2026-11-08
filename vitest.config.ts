@@ -11,5 +11,9 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     clearMocks: true,
+    // Git subprocess/image integration fixtures need headroom on CI/emulated Linux.
+    // Assertions remain unchanged; this is a bounded runtime budget, not a gate bypass.
+    fileParallelism: false,
+    testTimeout: 15_000,
   },
 });

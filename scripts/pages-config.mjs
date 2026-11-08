@@ -1,4 +1,24 @@
 import { readFileSync } from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
+
+// Canonical JSON may reorder object keys. Field order controls CMS presentation,
+// not its data contract; keep every name/type/label/option in the comparison.
+export function samePagesConfig(left, right) {
+  const normalize = (value, key = '') => {
+    if (Array.isArray(value)) {
+      const items = value.map((item) => normalize(item));
+      return key === 'fields'
+        ? items.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+        : items;
+    }
+    if (value && typeof value === 'object')
+      return Object.fromEntries(
+        Object.entries(value).map(([name, item]) => [name, normalize(item, name)]),
+      );
+    return value;
+  };
+  return isDeepStrictEqual(normalize(left), normalize(right));
+}
 
 const labels = {
   seo: 'Arama ve paylaşım metinleri',
@@ -121,7 +141,7 @@ function image(media, name = 'image', multiple = false) {
     ],
   };
 }
-function copyFields(value, parent = '') {
+export function copyFields(value, parent = '') {
   return Object.entries(value)
     .filter(([name]) => !['verified', 'phoneVerified', 'emailVerified'].includes(name))
     .map(([name, entry]) => {
@@ -135,7 +155,8 @@ function copyFields(value, parent = '') {
           required: true,
           fields: copyFields(entry, name),
         };
-      const optional = entry === null;
+      // Optionality belongs to the contract, not the currently stored value.
+      const optional = ['phone', 'email', 'url'].includes(name);
       const max =
         parent === 'seo'
           ? name === 'description'

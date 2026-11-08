@@ -14,7 +14,8 @@
   "include": [
     "src/content/media-cli.ts",
     "src/cms/adapter-cli.ts",
-    "src/publishing/cli.ts"
+    "src/publishing/cli.ts",
+    "src/ci/cli.ts"
   ],
   "exclude": ["node_modules", ".generated", "**/*.test.*"]
 }

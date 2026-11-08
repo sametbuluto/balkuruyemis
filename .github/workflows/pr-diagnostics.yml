@@ -1,0 +1,35 @@
+name: PR diagnostics (non-authoritative)
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions: {}
+concurrency:
+  group: pr-diagnostics-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  diagnostics:
+    name: Credential-free sandbox diagnostics (not a required verdict)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/heads/main
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.2'
+          package-manager-cache: false
+      - name: Require reviewed main driver (no PR fallback)
+        run: test -f scripts/ci/run-content-validation.mjs
+      - run: npm ci --ignore-scripts
+      - name: Run PR code only inside sandbox
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: node scripts/ci/run-content-validation.mjs diagnostics "$PR_NUMBER"
